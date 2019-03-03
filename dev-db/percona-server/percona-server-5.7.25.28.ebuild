@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
-MY_EXTRAS_VER="20190126-1919Z"
+MY_EXTRAS_VER="20190303-1852Z"
 
 CMAKE_MAKEFILE_GENERATOR=emake
 
@@ -64,7 +64,7 @@ PATCHES=(
 	"${MY_PATCH_DIR}"/20007_all_cmake-debug-werror-5.7.patch
 	"${MY_PATCH_DIR}"/20009_all_mysql_myodbc_symbol_fix-5.7.10.patch
 	"${MY_PATCH_DIR}"/20018_all_percona-server-5.7.23-without-clientlibs-tools.patch
-	"${MY_PATCH_DIR}"/20018_all_percona-server-5.7.23-fix-libressl-support.patch
+	"${MY_PATCH_DIR}"/20018_all_percona-server-5.7.25-fix-libressl-support.patch
 	"${MY_PATCH_DIR}"/20018_all_mysql-5.7.23-add-missing-gcc-8-fix.patch
 	"${MY_PATCH_DIR}"/20018_all_mysql-5.7.23-fix-grant_user_lock-a-root.patch
 	"${MY_PATCH_DIR}"/20018_all_mysql-5.7.23-round-off-test-values-for-same-output-on-all-architectures.patch
@@ -606,6 +606,7 @@ src_test() {
 	# rocksdb.prefix_extractor_override:                https://jira.percona.com/browse/PS-5199
 	# rpl.rpl_innodb_info_tbl_slave_tmp_tbl_mismatch:   https://bugs.mysql.com/bug.php?id=89223
 	# rpl.rpl_multi_source_mts_reset_worker_info:       https://jira.percona.com/browse/PS-3786
+	# tokudb.bugs.5733_tokudb:                          https://jira.percona.com/browse/PS-4274
 	# x.crud_insert_cast:                               https://jira.percona.com/browse/PS-5032
 	# x.insert_table_bad_column:                        https://jira.percona.com/browse/PS-5032
 	# x.insert_table_bad_numcolumns:                    https://jira.percona.com/browse/PS-5032
@@ -625,6 +626,7 @@ src_test() {
 		rocksdb.prefix_extractor_override \
 		rpl.rpl_innodb_info_tbl_slave_tmp_tbl_mismatch \
 		rpl.rpl_multi_source_mts_reset_worker_info \
+		tokudb.bugs.5733_tokudb \
 		x.crud_insert_cast \
 		x.insert_table_bad_column \
 		x.insert_table_bad_numcolumns \
