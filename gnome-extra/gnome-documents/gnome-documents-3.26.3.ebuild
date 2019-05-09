@@ -10,13 +10,14 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Documents"
 LICENSE="GPL-2+"
 SLOT="0"
 IUSE=""
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 
 # cairo-1.14 for cairo_surface_set_device_scale check and usage
 COMMON_DEPEND="
 	>=app-text/evince-3.13.3[introspection]
 	>=net-libs/webkit-gtk-2.6:4[introspection]
 	>=dev-libs/gjs-1.48.0
+	<dev-libs/gjs-1.53
 	>=dev-libs/glib-2.39.3:2
 	>=dev-libs/gobject-introspection-1.31.6:=
 	>=x11-libs/gtk+-3.22.15:3[introspection]

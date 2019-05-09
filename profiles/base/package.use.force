@@ -1,5 +1,10 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Andreas K. Hüttel <dilfridge@gentoo.org> (14 Apr 2019)
+# Make sure glibc static libs are installed for now. Not installing
+# them is an experimental feature and needs testing.
+sys-libs/glibc static-libs
 
 # Mart Raudsepp <leio@gentoo.org> (14 Dec 2018)
 # Security is not optional if available for the architecture/kernel.
@@ -49,10 +54,6 @@ dev-lang/python threads
 # Workaround until resolved upstream (bug #586840)
 >=dev-games/simgear-2016.2.1 dns
 
-# Lars Wendler <polynomial-c@gentoo.org> (11 Sep 2015)
-# Package fails to build with dbus USE flag being disabled (bug #560208)
-=x11-wm/afterstep-2.2.12 dbus
-
 # Justin Lecher <jlec@gentoo.org> (10 Aug 2014)
 # Doesn't work without acl support
 # No patch yet, #516626
@@ -72,7 +73,6 @@ app-shells/bash:0 readline
 # Force-enable all PYTHON_TARGETS for python-exec to avoid using private
 # API. Please remember to keep it in sync with python_targets.desc.
 dev-lang/python-exec python_targets_python2_7
-dev-lang/python-exec python_targets_python3_4
 dev-lang/python-exec python_targets_python3_5
 dev-lang/python-exec python_targets_python3_6
 dev-lang/python-exec python_targets_python3_7

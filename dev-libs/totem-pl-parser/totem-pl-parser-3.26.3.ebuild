@@ -10,7 +10,7 @@ HOMEPAGE="https://developer.gnome.org/totem-pl-parser/stable/"
 LICENSE="LGPL-2+"
 SLOT="0/18"
 IUSE="archive crypt gtk-doc +introspection +quvi test"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~x86-fbsd"
 
 RDEPEND="
 	>=dev-libs/glib-2.36:2
@@ -20,7 +20,8 @@ RDEPEND="
 	crypt? ( dev-libs/libgcrypt:0= )
 	introspection? ( >=dev-libs/gobject-introspection-1.54:= )
 "
-DEPEND="${RDEPEND}
+DEPEND="${RDEPEND}"
+BDEPEND="
 	dev-util/glib-utils
 	gtk-doc? (
 		>=dev-util/gtk-doc-1.14

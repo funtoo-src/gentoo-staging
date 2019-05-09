@@ -2,6 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
+VALA_MIN_API_VERSION="0.40"
 inherit gnome.org gnome2-utils meson xdg vala
 
 DESCRIPTION="Turn off all the lights"
@@ -9,7 +10,7 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Lightsoff"
 
 LICENSE="GPL-2+ CC-BY-SA-3.0"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~x86"
+KEYWORDS="amd64 ~arm ~x86"
 IUSE=""
 
 RDEPEND="

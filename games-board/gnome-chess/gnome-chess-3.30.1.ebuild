@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
-VALA_MIN_API_VERSION="0.36"
+VALA_MIN_API_VERSION="0.40"
 
 inherit gnome.org gnome2-utils meson readme.gentoo-r1 vala xdg
 
@@ -11,7 +11,7 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Chess"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+KEYWORDS="amd64 ~arm ~arm64 ~x86"
 IUSE=""
 
 RDEPEND="

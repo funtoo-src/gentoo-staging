@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{4,5,6} )
+PYTHON_COMPAT=( python2_7 python3_{5,6} )
 
 inherit meson python-r1 vala xdg-utils
 
@@ -20,7 +20,7 @@ fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="gtk-doc +introspection python static-libs test vala"
+IUSE="gtk-doc +introspection python static-libs test +vala"
 
 REQUIRED_USE="
 	python? ( introspection ${PYTHON_REQUIRED_USE} )
