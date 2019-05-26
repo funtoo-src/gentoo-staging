@@ -7,6 +7,26 @@
 # This file is only for generic masks. For arch-specific masks (i.e.
 # mask everywhere, unmask on arch/*) use arch/base.
 
+# James Le Cuirot <chewi@gentoo.org> (21 May 2019)
+# Doesn't support ffmpeg-4. Portage takes a long time to report the
+# conflict and the feature is half broken anyway. See
+# https://github.com/visualboyadvance-m/visualboyadvance-m/issues/179.
+games-emulation/vbam ffmpeg
+
+# Ulrich Müller <ulm@gentoo.org> (18 May 2019)
+# Firmware images without a known license. Most likely, upstream
+# redistribution may conflict with the licenses or lack thereof
+# on the images. Check the WHENCE file in the package for specific
+# terms. Masked to prevent accidental installation of these files,
+# bug #318841#c20.
+sys-kernel/linux-firmware unknown-license
+
+# Andreas K. Hüttel <dilfridge@gentoo.org> (11 May 2019)
+# app-accessibility/festival:
+# Outdated, EAPI=2, unmaintained, segfaults immediately.
+# See bug 634928 and bug 612980. Removal in 30 days.
+media-radio/xastir festival
+
 # Virgil Dupras <vdupras@gentoo.org> (29 Apr 2019)
 # Docs are temporarily broken. See bug #680014
 dev-python/pandas doc
@@ -30,10 +50,6 @@ app-cdr/xbiso ftp
 # Michał Górny <mgorny@gentoo.org> (10 Apr 2019)
 # media-sound/aacplusenc is slated for removal.
 media-video/h264enc aac
-
-# Michał Górny <mgorny@gentoo.org> (31 Mar 2019)
-# dev-libs/grok is slated for removal.
-app-admin/rsyslog grok
 
 # Michał Górny <mgorny@gentoo.org> (21 Mar 2019)
 # x11-wm/afterstep is slated for removal.

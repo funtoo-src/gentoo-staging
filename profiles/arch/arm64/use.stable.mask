@@ -4,13 +4,13 @@
 # This file requires eapi 5 or later. New entries go on top.
 # Please use the same syntax as in use.mask
 
+# Aaron Bauman <bman@gentoo.org> (20 May 2019)
+# Does not build on arm64
+ocamlopt
+
 # Andreas Sturmlechner <asturm@gentoo.org> (20 Apr 2019)
 # sys-auth/consolekit will not be stabilised anymore.
 consolekit
-
-# Mart Raudsepp <leio@gentoo.org> (07 Feb 2019)
-# app-misc/tracker not stable yet
-tracker
 
 # Mart Raudsepp <leio@gentoo.org> (07 Feb 2019)
 # media-sound/musepack-tools not stable yet
@@ -20,18 +20,6 @@ musepack
 # media-libs/portaudio not stable yet
 portaudio
 
-# Mart Raudsepp <leio@gentoo.org> (07 Feb 2019)
-# net-fs/samba not stable yet
-samba
-
-# Mart Raudsepp <leio@gentoo.org> (07 Feb 2019)
-# x11-misc/colord not stable yet
-colord
-
-# Mart Raudsepp <leio@gentoo.org> (18 Jan 2019)
-# x11-libs/libva not stable yet
-vaapi
-
 # Mart Raudsepp <leio@gentoo.org> (27 Nov 2018)
 # x11-libs/fltk not stable yet
 fltk
@@ -40,26 +28,6 @@ fltk
 # dev-lang/python:3.7 is not stable.
 python_targets_python3_7
 python_single_target_python3_7
-
-# Mart Raudsepp <leio@gentoo.org> (06 May 2018)
-# net-print/cups not stable yet
-cups
-
-# Michał Górny <mgorny@gentoo.org> (16 Apr 2018)
-# Not stable yet.
-vala
-
-# Mart Raudsepp <leio@gentoo.org> (02 Mar 2018)
-# app-crypt/libsecret and co not marked stable yet
-gnome-keyring
-
-# Michał Górny <mgorny@gentoo.org> (19 Feb 2018)
-# virtual/{jdk,jre} are not stable here.
-java
-
-# Michał Górny <mgorny@gentoo.org> (19 Feb 2018)
-# dev-db/postgresql is not stable here.
-postgres
 
 # Michał Górny <mgorny@gentoo.org> (19 Feb 2018)
 # dev-lang/tk is not stable here.
@@ -72,7 +40,3 @@ subversion
 # Mart Raudsepp <leio@gentoo.org> (28 Jan 2017)
 # sys-auth/skey not marked stable yet
 skey
-
-# Ben de Groot <yngwin@gentoo.org> (24 Aug 2015)
-# Not yet stable, bug #543326
-qt5

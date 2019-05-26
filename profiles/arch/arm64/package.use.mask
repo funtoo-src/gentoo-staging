@@ -1,6 +1,10 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Aaron Bauman <bman@gentoo.org> (20 May 2019)
+# doc USE ultimately pulls in dev-lang/ocaml[ocamlopt]
+media-gfx/enblend doc
+
 # Patrick McLean <chutzpah@gentoo.org> (15 Apr 2019)
 # pending re-keyword request, bug 615400
 net-analyzer/rrdtool rados
@@ -10,11 +14,6 @@ www-servers/uwsgi uwsgi_plugins_rados
 # Aaron Bauman <bman@gentoo.org> (8 Apr 2019)
 # app-text/dblatex not keyword yet
 net-firewall/nftables doc
-
-# Roy Bamford <neddyseagoon@gentoo.org> (19 Mar 2019)
-# Let kde-apps/akonadi use mysql.
-dev-qt/qtsql -mysql
-kde-apps/akonadi -mysql
 
 # Mart Raudsepp <leio@gentoo.org> (11 Mar 2019)
 # media-libs/bcg729 not keyworded yet
@@ -36,10 +35,6 @@ kde-plasma/discover firmware
 # Jimi Huotari <chiitoo@gentoo.org> (10 Mar 2019)
 # dev-qt/qttranslations is not yet keyworded, bug #680082
 lxqt-base/lxqt-meta nls
-
-# Mart Raudsepp <leio@gentoo.org> (23 Feb 2019)
-# x11-libs/libXTrap not keyworded yet
-x11-misc/x11vnc xtrap
 
 # Roy Bamford <neddyseagoon@gentoo.org> (24 Feb 19)
 # sdl is in use.mask and lots of things remain untested with USE=sdl
@@ -65,11 +60,6 @@ virtual/ffmpeg -sdl
 # It builds OK but is not yet in ::gentoo. bug #678404
 kde-apps/cantor lua
 
-# Davide Pesavento <pesa@gentoo.org> (27 Dec 2018)
-# The corresponding Qt5 modules are not keyworded on arm64, and we don't want to
-# keyword them solely because of PyQt5 while there are no other in-tree users.
-dev-python/PyQt5 networkauth
-
 # Dirkjan Ochtman <djc@gentoo.org> (29 Sep 2018)
 # Upstream doesn't build docs for tier 2 and lower architectures.
 # Bug #660512.
@@ -87,14 +77,6 @@ sci-electronics/kicad occ oce ngspice
 <app-editors/emacs-24.5-r7:24 imagemagick
 <app-editors/emacs-25.3-r6:25 imagemagick
 <app-editors/emacs-26.1-r3:26 imagemagick
-
-# Andreas Sturmlechner <asturm@gentoo.org> (01 Sep 2018)
-# media-libs/dav1d is not yet keyworded
-media-video/vlc dav1d
-
-# Tomáš Mózes <hydrapolic@gmail.com> (10 Aug 2018)
-# Needs dev-libs/libmaxminddb which isn't keyworded
-app-admin/syslog-ng geoip2
 
 # Matthew Thode <prometheanfire@gentoo.org> (18 Jul 2018)
 # dev-python/pandas not keyworded and test uses pandas
@@ -267,7 +249,7 @@ app-office/libreoffice coinmp
 
 # Michał Górny <mgorny@gentoo.org> (08 Aug 2017)
 # Required VIDEO_CARDS=i965/radeonsi, both masked in this profile.
-media-libs/mesa vulkan
+media-libs/mesa vulkan vulkan-overlay
 
 # Alexis Ballier <aballier@gentoo.org> (31 Jul 2017)
 # Passes -mfpu=neon with neon enabled
@@ -311,13 +293,6 @@ media-libs/devil nvtt
 # Alexis Ballier <aballier@gentoo.org> (10 Jul 2017)
 # Virtualbox is x86 only
 app-emulation/libvirt virtualbox
-
-# Alexis Ballier <aballier@gentoo.org> (7 Jul 2017)
-# nautilus pulls in gnome-extra/sushi -> dev-libs/gjs -> dev-lang/spidermonkey:24
-# Older spidermonkey does not work on arm64.
-# This should be revised when gjs is updated.
-gnome-base/nautilus previewer
-app-crypt/libsecret test
 
 # Michał Górny <mgorny@gentoo.org> (28 Jun 2017)
 # app-misc/dtach & dev-tcltk/tcllib are not keyworded, and tests are
@@ -369,7 +344,7 @@ app-portage/g-sorcery bson
 
 # Thomas Deutschmann <whissi@gentoo.org> (01 Mar 2017)
 # Unkeyworded depedencies
-app-admin/rsyslog grok kafka kubernetes mongodb normalize rabbitmq
+app-admin/rsyslog kafka kubernetes mongodb normalize rabbitmq
 
 # Michael Weber <xmw@gentoo.org> (01 Mar 2017)
 # untested dependencies
@@ -493,10 +468,6 @@ dev-util/dbus-test-runner test
 # Alexandre Rostovtsev <tetromino@gentoo.org> (27 Dec 2012)
 # remove mask when >=app-editors/gedit-3.6 is keyworded here
 dev-util/devhelp gedit
-
-# Alexandre Rostovtsev <tetromino@gentoo.org> (27 Dec 2012)
-# remove mask when app-crypt/libsecret is keyworded here
->=gnome-base/gvfs-1.14 gnome-keyring
 
 # Markus Meier <maekke@gentoo.org> (25 Dez 2012)
 # unkeyworded deps for app-accessibility/speech-dispatcher

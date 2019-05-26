@@ -25,10 +25,6 @@ dev-python/async_timeout test
 dev-lang/erlang hipe
 net-im/ejabberd hipe
 
-# Andreas Sturmlechner <asturm@gentoo.org> (28 Feb 2019)
-# media-libs/dav1d is not yet keyworded
-media-video/vlc dav1d
-
 # Andreas Sturmlechner <asturm@gentoo.org> (25 Feb 2019)
 # (SM)BIOS/Thunderbolt outside of amd64/x86? - citation needed
 sys-apps/fwupd dell thunderbolt
@@ -45,10 +41,6 @@ www-servers/uwsgi pypy
 # The corresponding Qt5 modules are not keyworded on arm, and we don't want to
 # keyword them solely because of PyQt5 while there are no other in-tree users.
 dev-python/PyQt5 networkauth
-
-# Anthony G. Basile <blueness@gentoo.org> (24 Dec 2018)
-# asm broken on arm, bug #673580
-=dev-libs/libressl-2.9.0 asm
 
 # Aaron W. Swenson <titanofold@gentoo.org> (19 Oct 2018)
 # Requires sys-devel/clang which isn’t keyworded for ARM.
@@ -147,7 +139,7 @@ dev-python/ipython test
 
 # Michał Górny <mgorny@gentoo.org> (08 Aug 2017)
 # Required VIDEO_CARDS=i965/radeonsi, both masked in this profile.
-media-libs/mesa vulkan
+media-libs/mesa vulkan vulkan-overlay
 
 # Michał Górny <mgorny@gentoo.org> (08 Aug 2017)
 # Requires USE=opencl that is masked in this profile.
