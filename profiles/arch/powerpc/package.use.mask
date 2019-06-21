@@ -1,6 +1,10 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Georgy Yakovlev <gyakovlev@gentoo.org> (01 June 2019)
+# not yet keyworded
+dev-java/openjdk javafx
+
 # Patrick McLean <chutzpah@gentoo.org> (15 Apr 2019)
 # deps not available on platform
 sys-cluster/ceph babeltrace lttng
@@ -14,10 +18,6 @@ www-servers/uwsgi uwsgi_plugins_rados
 # Virgil Dupras <vdupras@gentoo.org> (03 Mar 2019)
 # Tests fail with jpeg2k flag. Bug #662686
 dev-python/pillow jpeg2k
-
-# Andreas Sturmlechner <asturm@gentoo.org> (28 Feb 2019)
-# media-libs/dav1d is not yet keyworded
-media-video/vlc dav1d
 
 # Thomas Deutschmann <whissi@gentoo.org> (26 Feb 2019)
 # nginx_modules_http_lua requires USE=luajit which requires

@@ -1,6 +1,18 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Patrick McLean <chutzpah@gentoo.org> (14 June 2019)
+# test deps not keyworded
+dev-util/bcc test
+
+# Georgy Yakovlev <gyakovlev@gentoo.org> (01 June 2019)
+# not yet keyworded
+dev-java/openjdk javafx
+
+# Aaron Bauman <bman@gentoo.org> (27 May 2019)
+# plasma is not stable yet
+kde-frameworks/purpose kaccounts
+
 # Aaron Bauman <bman@gentoo.org> (20 May 2019)
 # doc USE ultimately pulls in dev-lang/ocaml[ocamlopt]
 media-gfx/enblend doc
@@ -293,6 +305,13 @@ media-libs/devil nvtt
 # Alexis Ballier <aballier@gentoo.org> (10 Jul 2017)
 # Virtualbox is x86 only
 app-emulation/libvirt virtualbox
+
+# Alexis Ballier <aballier@gentoo.org> (7 Jul 2017)
+# nautilus pulls in gnome-extra/sushi -> dev-libs/gjs -> dev-lang/spidermonkey:24
+# Older spidermonkey does not work on arm64.
+# This should be revised when gjs is updated.
+gnome-base/nautilus previewer
+app-crypt/libsecret test
 
 # Michał Górny <mgorny@gentoo.org> (28 Jun 2017)
 # app-misc/dtach & dev-tcltk/tcllib are not keyworded, and tests are
