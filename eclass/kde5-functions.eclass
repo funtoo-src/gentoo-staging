@@ -38,32 +38,33 @@ case ${CATEGORY} in
 		[[ ${KDE_BUILD_TYPE} = live ]] && : ${FRAMEWORKS_MINIMAL:=9999}
 		;;
 	kde-plasma)
-		[[ ${PV} = 5.15.5 ]] && : ${QT_MINIMAL:=5.11.1}
-		[[ ${PV} = 5.16* ]] && : ${FRAMEWORKS_MINIMAL:=5.58.0}
+		if [[ ${PV} = 5.15.5 ]]; then
+			: ${FRAMEWORKS_MINIMAL:=5.57.0}
+			: ${QT_MINIMAL:=5.11.1}
+		fi
 		[[ ${KDE_BUILD_TYPE} = live ]] && : ${FRAMEWORKS_MINIMAL:=9999}
-		: ${QT_MINIMAL:=5.12.3}
 		;;
 esac
 
 # @ECLASS-VARIABLE: QT_MINIMAL
 # @DESCRIPTION:
 # Minimum version of Qt to require. This affects add_qt_dep.
-: ${QT_MINIMAL:=5.11.1}
+: ${QT_MINIMAL:=5.12.3}
 
 # @ECLASS-VARIABLE: FRAMEWORKS_MINIMAL
 # @DESCRIPTION:
 # Minimum version of Frameworks to require. This affects add_frameworks_dep.
-: ${FRAMEWORKS_MINIMAL:=5.57.0}
+: ${FRAMEWORKS_MINIMAL:=5.60.0}
 
 # @ECLASS-VARIABLE: PLASMA_MINIMAL
 # @DESCRIPTION:
 # Minimum version of Plasma to require. This affects add_plasma_dep.
-: ${PLASMA_MINIMAL:=5.14.5}
+: ${PLASMA_MINIMAL:=5.15.5}
 
 # @ECLASS-VARIABLE: KDE_APPS_MINIMAL
 # @DESCRIPTION:
 # Minimum version of KDE Applications to require. This affects add_kdeapps_dep.
-: ${KDE_APPS_MINIMAL:=18.12.3}
+: ${KDE_APPS_MINIMAL:=19.04.3}
 
 # @ECLASS-VARIABLE: KDE_GCC_MINIMAL
 # @DEFAULT_UNSET

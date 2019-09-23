@@ -89,6 +89,7 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-kernel/linux-headers-4.11
 	dev-python/lxml[${PYTHON_USEDEP}]
 	x86? ( sys-devel/dev86
+		system-ipxe? ( sys-firmware/ipxe[qemu] )
 		sys-power/iasl )
 	pam? ( dev-python/pypam[${PYTHON_USEDEP}] )
 	api? ( dev-libs/libxml2
@@ -414,13 +415,13 @@ src_install() {
 		XEN_PYTHON_NATIVE_INSTALL=y install-tools
 
 	# Created at runtime
-	rm -rv "${ED%/}/var/run" || die
+	rm -rv "${ED}/var/run" || die
 
 	# Fix the remaining Python shebangs.
 	python_fix_shebang "${D}"
 
 	# Remove RedHat-specific stuff
-	rm -rf "${D}"tmp || die
+	rm -rf "${D}"/tmp || die
 
 	if use doc; then
 		emake DESTDIR="${D}" DOCDIR="/usr/share/doc/${PF}" install-docs
@@ -450,7 +451,7 @@ src_install() {
 
 	# For -static-libs wrt Bug 384355
 	if ! use static-libs; then
-		rm -f "${D}"usr/$(get_libdir)/*.a "${D}"usr/$(get_libdir)/ocaml/*/*.a
+		rm -f "${D}"/usr/$(get_libdir)/*.a "${D}"/usr/$(get_libdir)/ocaml/*/*.a
 	fi
 
 	# for xendomains

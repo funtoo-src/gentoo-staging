@@ -16,7 +16,7 @@ if [[ $PV == *9999 ]]; then
 	EGIT_REPO_URI="git://xenbits.xen.org/${REPO}"
 	S="${WORKDIR}/${REPO}"
 else
-	KEYWORDS="amd64 ~arm ~arm64 ~x86"
+	KEYWORDS="amd64 ~arm ~arm64 x86"
 	UPSTREAM_VER=2
 	SECURITY_VER=
 	# xen-tools's gentoo patches tarball
@@ -83,6 +83,7 @@ DEPEND="${COMMON_DEPEND}
 	>=sys-kernel/linux-headers-4.11
 	dev-python/lxml[${PYTHON_USEDEP}]
 	x86? ( sys-devel/dev86
+		sys-firmware/ipxe[qemu]
 		sys-power/iasl )
 	pam? ( dev-python/pypam[${PYTHON_USEDEP}] )
 	api? ( dev-libs/libxml2
@@ -397,13 +398,13 @@ src_install() {
 		XEN_PYTHON_NATIVE_INSTALL=y install-tools
 
 	# Created at runtime
-	rm -rv "${ED%/}/var/run" || die
+	rm -rv "${ED}/var/run" || die
 
 	# Fix the remaining Python shebangs.
 	python_fix_shebang "${D}"
 
 	# Remove RedHat-specific stuff
-	rm -rf "${D}"tmp || die
+	rm -rf "${D}"/tmp || die
 
 	if use doc; then
 		emake DESTDIR="${D}" DOCDIR="/usr/share/doc/${PF}" install-docs
@@ -433,7 +434,7 @@ src_install() {
 
 	# For -static-libs wrt Bug 384355
 	if ! use static-libs; then
-		rm -f "${D}"usr/$(get_libdir)/*.a "${D}"usr/$(get_libdir)/ocaml/*/*.a
+		rm -f "${D}"/usr/$(get_libdir)/*.a "${D}"/usr/$(get_libdir)/ocaml/*/*.a
 	fi
 
 	# for xendomains

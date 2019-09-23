@@ -11,10 +11,11 @@ inherit python-r1 gnome2-utils meson xdg-utils
 DESCRIPTION="Modern music player for GNOME"
 HOMEPAGE="https://wiki.gnome.org/Apps/Lollypop"
 SRC_URI="https://gitlab.gnome.org/World/${PN}/uploads/${HASH}/${P}.tar.xz"
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 
 LICENSE="GPL-3"
 SLOT="0"
+REQUIRED_USE=${PYTHON_REQUIRED_USE}
 
 DEPEND="${PYTHON_DEPS}
 	dev-libs/appstream-glib[introspection]

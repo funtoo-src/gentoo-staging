@@ -27,6 +27,7 @@ COMMON_DEPS="
 	>=media-libs/harfbuzz-1.5.0:=
 	sys-apps/dbus
 	sys-libs/zlib
+	media-libs/libcanberra
 	media-libs/libpng:0=
 	media-libs/freetype:2
 	media-libs/fontconfig
@@ -46,7 +47,7 @@ RDEPEND="
 	imagemagick? ( virtual/imagemagick-tools )
 "
 DEPEND="${RDEPEND}
-	media-libs/mesa
+	media-libs/mesa[X(+)]
 	sys-libs/ncurses
 	virtual/pkgconfig
 "
@@ -54,7 +55,7 @@ DEPEND="${RDEPEND}
 
 PATCHES=(
 	"${FILESDIR}"/${P}-flags.patch
-	"${FILESDIR}"/${PN}-0.11.0-svg-icon.patch
+	"${FILESDIR}"/${P}-svg-icon.patch
 )
 
 src_prepare() {

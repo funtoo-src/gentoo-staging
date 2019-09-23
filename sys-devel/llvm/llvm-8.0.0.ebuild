@@ -38,7 +38,7 @@ IUSE="debug doc exegesis gold libedit +libffi ncurses test xar xml
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	sys-libs/zlib:0=
+	sys-libs/zlib:0=[${MULTILIB_USEDEP}]
 	exegesis? ( dev-libs/libpfm:= )
 	gold? (
 		|| (
@@ -77,8 +77,7 @@ RDEPEND="${RDEPEND}
 PDEPEND="sys-devel/llvm-common
 	gold? ( >=sys-devel/llvmgold-${SLOT} )"
 
-REQUIRED_USE="${PYTHON_REQUIRED_USE}
-	|| ( ${ALL_LLVM_TARGETS[*]} )"
+REQUIRED_USE="|| ( ${ALL_LLVM_TARGETS[*]} )"
 
 S=${WORKDIR}/${P/_/}.src
 

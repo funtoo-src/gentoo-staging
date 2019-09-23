@@ -32,7 +32,7 @@ SLOT="0/5-9" # vlc - vlccore
 IUSE="a52 alsa altivec aom archive aribsub bidi bluray cddb chromaprint chromecast
 	dav1d dbus dc1394 debug directx dts +dvbpsi dvd +encode faad fdk +ffmpeg flac
 	fluidsynth fontconfig +gcrypt gme gnome-keyring gstreamer ieee1394 jack jpeg kate
-	libass libav libcaca libnotify libplacebo +libsamplerate libtar libtiger linsys lirc
+	libass libav libcaca libnotify +libsamplerate libtar libtiger linsys lirc
 	live lua macosx-notifications mad matroska modplug mp3 mpeg mtp musepack ncurses
 	neon nfs ogg omxil opencv optimisememory opus png postproc projectm pulseaudio
 	+qt5 rdp run-as-root samba sdl-image sftp shout sid skins soxr speex srt ssl
@@ -130,7 +130,6 @@ RDEPEND="
 		x11-libs/gtk+:3
 		x11-libs/libnotify
 	)
-	libplacebo? ( media-libs/libplacebo )
 	libsamplerate? ( media-libs/libsamplerate )
 	libtar? ( dev-libs/libtar )
 	libtiger? ( media-libs/libtiger )
@@ -140,10 +139,10 @@ RDEPEND="
 	lua? ( >=dev-lang/lua-5.1:0= )
 	mad? ( media-libs/libmad )
 	matroska? (
-		dev-libs/libebml:=
+		>=dev-libs/libebml-1.3.6:=
 		media-libs/libmatroska:=
 	)
-	modplug? ( media-libs/libmodplug )
+	modplug? ( >=media-libs/libmodplug-0.8.9.0 )
 	mp3? ( media-sound/mpg123 )
 	mpeg? ( media-libs/libmpeg2 )
 	mtp? ( media-libs/libmtp:= )
@@ -330,7 +329,6 @@ src_configure() {
 		$(use_enable libass)
 		$(use_enable libcaca caca)
 		$(use_enable libnotify notify)
-		$(use_enable libplacebo)
 		$(use_enable libsamplerate samplerate)
 		$(use_enable libtar)
 		$(use_enable libtiger tiger)
@@ -406,6 +404,7 @@ src_configure() {
 		--disable-goom
 		--disable-kai
 		--disable-kva
+		--disable-libplacebo
 		--disable-macosx-qtkit
 		--disable-maintainer-mode
 		--disable-merge-ffmpeg

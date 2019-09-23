@@ -13,6 +13,7 @@ consolekit
 dbus
 elogind
 emacs
+fontconfig
 fuse
 gtk
 gtk2
@@ -30,3 +31,7 @@ slang
 sqlite
 systemtap
 X
+
+# Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com> (2019‑08‑31)
+# Dependencies not keyworded.
+ayatana

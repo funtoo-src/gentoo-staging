@@ -13,7 +13,7 @@ SRC_URI="https://github.com/TeXworks/texworks/archive/release-${PV}.tar.gz -> ${
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="lua python"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -21,6 +21,7 @@ RDEPEND="app-text/hunspell:=
 	app-text/poppler[qt5]
 	dev-qt/designer:5
 	dev-qt/qtcore:5
+	dev-qt/qtconcurrent:5
 	dev-qt/qtdbus:5
 	dev-qt/qtgui:5
 	dev-qt/qtscript:5[scripttools]

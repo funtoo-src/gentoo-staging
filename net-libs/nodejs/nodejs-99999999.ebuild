@@ -4,7 +4,7 @@
 EAPI=7
 PYTHON_COMPAT=( python2_7 )
 PYTHON_REQ_USE="threads"
-inherit bash-completion-r1 flag-o-matic git-r3 pax-utils python-single-r1 toolchain-funcs
+inherit bash-completion-r1 flag-o-matic git-r3 pax-utils python-any-r1 toolchain-funcs
 
 DESCRIPTION="A JavaScript runtime built on Chrome's V8 JavaScript engine"
 HOMEPAGE="https://nodejs.org/"
@@ -15,16 +15,15 @@ SLOT="0"
 KEYWORDS=""
 IUSE="cpu_flags_x86_sse2 debug doc icu inspector +npm +snapshot +ssl systemtap test"
 REQUIRED_USE="
-	${PYTHON_REQUIRED_USE}
 	inspector? ( icu ssl )
 	npm? ( ssl )
 "
 
 RDEPEND="
-	>=dev-libs/libuv-1.29.1:=
+	>=dev-libs/libuv-1.30.1:=
 	>=net-dns/c-ares-1.15.0
 	>=net-libs/http-parser-2.8.0:=
-	>=net-libs/nghttp2-1.38.0
+	>=net-libs/nghttp2-1.39.1
 	sys-libs/zlib
 	icu? ( >=dev-libs/icu-64.2:= )
 	ssl? ( >=dev-libs/openssl-1.1.1:0= )
@@ -133,7 +132,7 @@ src_install() {
 	local LIBDIR="${ED}/usr/$(get_libdir)"
 	default
 
-	pax-mark -m "${ED}"usr/bin/node
+	pax-mark -m "${ED}"/usr/bin/node
 
 	# set up a symlink structure that node-gyp expects..
 	dodir /usr/include/node/deps/{v8,uv}

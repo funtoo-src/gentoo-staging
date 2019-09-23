@@ -10,7 +10,7 @@ SRC_URI="mirror://alsaproject/utils/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0.9"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc ~x86"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sh sparc ~x86"
 IUSE="bat doc +libsamplerate +ncurses nls selinux"
 
 CDEPEND=">=media-libs/alsa-lib-${PV}
@@ -25,6 +25,7 @@ BDEPEND="virtual/pkgconfig"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.1.8-missing_header.patch
+	"${FILESDIR}"/${P}-axfer-test-fix-invalid-comparison-of-64-bit-storage-.patch
 )
 
 src_configure() {
@@ -48,7 +49,7 @@ src_install() {
 	default
 	dodoc seq/*/README.*
 
-	newinitd "${FILESDIR}"/alsasound.initd-r7 alsasound
+	newinitd "${FILESDIR}"/alsasound.initd-r8 alsasound
 	newconfd "${FILESDIR}"/alsasound.confd-r4 alsasound
 
 	insinto /etc/modprobe.d

@@ -9,7 +9,7 @@ DESCRIPTION="Shared audio recording server"
 HOMEPAGE="https://bisqwit.iki.fi/source/erec.html"
 SRC_URI="https://bisqwit.iki.fi/src/arch/${P}.tar.bz2"
 
-KEYWORDS="~amd64 ~ppc ~sparc ~x86"
+KEYWORDS="amd64 ~ppc sparc x86"
 LICENSE="GPL-2+"
 SLOT="0"
 
@@ -20,7 +20,7 @@ HTML_DOCS=( README.html )
 
 src_prepare() {
 	sed -i \
-		-e "s:BINDIR=/usr/local/bin:BINDIR=${D}usr/bin:" \
+		-e "s:BINDIR=/usr/local/bin:BINDIR=${D}/usr/bin:" \
 		-e "s:^\\(ARGHLINK.*-L.*\\):#\\1:" \
 		-e "s:^#\\(ARGHLINK=.*a\\)$:\\1:" \
 		-e "s:\$(CXX):\$(CXX) \$(CXXFLAGS) -I\"${S}\"/argh:g" \

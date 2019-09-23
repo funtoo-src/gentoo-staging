@@ -4,6 +4,7 @@
 # @ECLASS: kde5.eclass
 # @MAINTAINER:
 # kde@gentoo.org
+# @SUPPORTED_EAPIS: 6 7
 # @BLURB: Support eclass for packages that follow KDE packaging conventions.
 # @DESCRIPTION:
 # This eclass is intended to streamline the creation of ebuilds for packages
@@ -61,12 +62,6 @@ EXPORT_FUNCTIONS pkg_setup pkg_nofetch src_unpack src_prepare src_configure src_
 # and kde-frameworks/extra-cmake-modules:5. Additionally, required blockers may
 # be set depending on the value of CATEGORY.
 : ${KDE_AUTODEPS:=true}
-
-# @ECLASS-VARIABLE: KDE_BLOCK_SLOT4
-# @DESCRIPTION:
-# This variable only has any effect when when CATEGORY = "kde-apps" and
-# KDE_AUTODEPS is also set. If set to "true", add RDEPEND block on kde-apps/${PN}:4
-: ${KDE_BLOCK_SLOT4:=true}
 
 # @ECLASS-VARIABLE: KDE_DEBUG
 # @DESCRIPTION:
@@ -212,7 +207,11 @@ case ${KDE_DESIGNERPLUGIN} in
 	false)  ;;
 	*)
 		IUSE+=" designer"
-		BDEPEND+=" designer? ( $(add_frameworks_dep kdesignerplugin) )"
+		if [[ ${CATEGORY} = kde-frameworks ]]; then
+			BDEPEND+=" designer? ( $(add_qt_dep designer) )"
+		else
+			BDEPEND+=" designer? ( $(add_frameworks_dep kdesignerplugin) )"
+		fi
 esac
 
 case ${KDE_EXAMPLES} in
@@ -262,7 +261,7 @@ case ${EAPI} in
 	6) DEPEND+=" ${BDEPEND}" ;;
 esac
 
-DEPEND+=" ${COMMONDEPEND} dev-util/desktop-file-utils"
+DEPEND+=" ${COMMONDEPEND}"
 RDEPEND+=" ${COMMONDEPEND}"
 unset COMMONDEPEND
 
@@ -295,12 +294,16 @@ _calculate_src_uri() {
 
 	case ${PN} in
 		kdelibs4support | \
+		kdewebkit | \
 		khtml | \
 		kjs | \
 		kjsembed | \
 		kmediaplayer | \
 		kross)
 			_kmname="portingAids/${_kmname}"
+			;;
+		kdesignerplugin)
+			[[ ${PV} = 5.6[01].* ]] || _kmname="portingAids/${_kmname}"
 			;;
 	esac
 
@@ -495,7 +498,10 @@ kde5_src_prepare() {
 	fi
 
 	# enable only the requested translations when required
-	if [[ -v LINGUAS ]] ; then
+	# always install unconditionally for kconfigwidgets - if you use language
+	# X as system language, and there is a combobox with language names, the
+	# translated language name for language Y is taken from /usr/share/locale/Y/kf5_entry.desktop
+	if [[ -v LINGUAS && ${PN} != kconfigwidgets ]] ; then
 		local po
 		for po in ${KDE_PO_DIRS}; do
 		if [[ -d ${po} ]] ; then
@@ -597,8 +603,12 @@ kde5_src_configure() {
 		cmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_KF5DocTools=ON )
 	fi
 
-	if in_iuse designer && ! use designer && [[ ${KDE_DESIGNERPLUGIN} != false ]] ; then
-		cmakeargs+=( -DCMAKE_DISABLE_FIND_PACKAGE_KF5DesignerPlugin=ON )
+	if in_iuse designer && [[ ${KDE_DESIGNERPLUGIN} != false ]] ; then
+		if [[ ${CATEGORY} = kde-frameworks ]]; then
+			cmakeargs+=( -DBUILD_DESIGNERPLUGIN=$(usex designer) )
+		else
+			cmakeargs+=( $(cmake-utils_use_find_package designer KF5DesignerPlugin) )
+		fi
 	fi
 
 	if [[ ${KDE_QTHELP} != false ]]; then
@@ -671,17 +681,6 @@ kde5_src_install() {
 	debug-print-function ${FUNCNAME} "$@"
 
 	cmake-utils_src_install
-
-	# We don't want QCH and tags files to be compressed, because then
-	# cmake can't find the tags and qthelp viewers can't find the docs
-	local p=$(best_version dev-qt/qtcore:5)
-	local pv=$(echo ${p/%-r[0-9]*/} | rev | cut -d - -f 1 | rev)
-	if [[ ${pv} = 5.11* ]]; then
-		#todo: clean up trailing slash check when EAPI <7 is removed
-		if [[ -d ${ED%/}/usr/share/doc/qt-${pv} ]]; then
-			docompress -x /usr/share/doc/qt-${pv}
-		fi
-	fi
 
 	if [[ ${EAPI} = 6 ]]; then
 		# We don't want /usr/share/doc/HTML to be compressed,

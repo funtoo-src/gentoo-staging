@@ -58,6 +58,9 @@ src_prepare() {
 
 	default
 
+	# echo -n is not POSIX compliant
+	sed 's@echo -n@printf@' -i configure || die
+
 	sed -i \
 		-e '/^CC :\?=/d' \
 		-e "/^LIBDIR/s:=.*:=/$(get_libdir):" \
@@ -129,6 +132,7 @@ src_install() {
 
 	emake \
 		DESTDIR="${D}" \
+		PREFIX="${EPREFIX}/usr" \
 		LIBDIR="${EPREFIX}"/$(get_libdir) \
 		SBINDIR="${EPREFIX}"/sbin \
 		CONFDIR="${EPREFIX}"/etc/iproute2 \

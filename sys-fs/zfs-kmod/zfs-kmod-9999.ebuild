@@ -13,7 +13,7 @@ if [[ ${PV} == "9999" ]]; then
 	EGIT_REPO_URI="https://github.com/zfsonlinux/zfs.git"
 else
 	SRC_URI="https://github.com/zfsonlinux/zfs/releases/download/zfs-${PV}/zfs-${PV}.tar.gz"
-	KEYWORDS="~amd64"
+	KEYWORDS="~amd64 ~arm64 ~ppc64"
 	S="${WORKDIR}/zfs-${PV}"
 	ZFS_KERNEL_COMPAT="5.1"
 fi
@@ -63,7 +63,9 @@ pkg_setup() {
 			DEVTMPFS
 	"
 
-	use arm64 && CONFIG_CHECK="${CONFIG_CHECK} !PREEMPT"
+	if use arm64; then
+		kernel_is -ge 5 && CONFIG_CHECK="${CONFIG_CHECK} !PREEMPT"
+	fi
 
 	kernel_is -lt 5 && CONFIG_CHECK="${CONFIG_CHECK} IOSCHED_NOOP"
 

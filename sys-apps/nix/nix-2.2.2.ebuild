@@ -11,9 +11,8 @@ HOMEPAGE="https://nixos.org/nix"
 SRC_URI="http://nixos.org/releases/${PN}/${P}/${P}.tar.xz"
 LICENSE="LGPL-2.1"
 SLOT="0"
-#keywords are blocked by boost-1.66
-#KEYWORDS="~amd64 ~x86"
-IUSE="+etc_profile +gc doc s3 +sodium"
+KEYWORDS="~amd64 ~x86"
+IUSE="+etc-profile +gc doc s3 +sodium"
 
 # sys-apps/busybox is needed for sandbox mount of /bin/sh
 RDEPEND="
@@ -129,15 +128,15 @@ src_install() {
 
 	newinitd "${FILESDIR}"/nix-daemon.initd nix-daemon
 
-	if ! use etc_profile; then
+	if ! use etc-profile; then
 		rm "${ED}"/etc/profile.d/nix.sh || die
 		rm "${ED}"/etc/profile.d/nix-daemon.sh || die
 	fi
 }
 
 pkg_postinst() {
-	if ! use etc_profile; then
-		ewarn "${EROOT}etc/profile.d/nix.sh was removed (due to USE=-etc_profile)."
+	if ! use etc-profile; then
+		ewarn "${EROOT}/etc/profile.d/nix.sh was removed (due to USE=-etc-profile)."
 	fi
 
 	readme.gentoo_print_elog

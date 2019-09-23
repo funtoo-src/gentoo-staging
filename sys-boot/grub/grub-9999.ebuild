@@ -42,7 +42,7 @@ PATCHES=(
 )
 
 DEJAVU=dejavu-sans-ttf-2.37
-UNIFONT=unifont-12.0.01
+UNIFONT=unifont-12.1.02
 SRC_URI+=" fonts? ( mirror://gnu/unifont/${UNIFONT}/${UNIFONT}.pcf.gz )
 	themes? ( mirror://sourceforge/dejavu/${DEJAVU}.zip )"
 
@@ -52,7 +52,7 @@ HOMEPAGE="https://www.gnu.org/software/grub/"
 # Includes licenses for dejavu and unifont
 LICENSE="GPL-3 fonts? ( GPL-2-with-font-exception ) themes? ( BitstreamVera )"
 SLOT="2/${PVR}"
-IUSE="debug device-mapper doc efiemu +fonts mount nls static sdl test +themes truetype libzfs"
+IUSE="device-mapper doc efiemu +fonts mount nls sdl test +themes truetype libzfs"
 
 GRUB_ALL_PLATFORMS=( coreboot efi-32 efi-64 emu ieee1275 loongson multiboot qemu qemu-mips pc uboot xen xen-32 )
 IUSE+=" ${GRUB_ALL_PLATFORMS[@]/#/grub_platforms_}"
@@ -92,12 +92,10 @@ BDEPEND="
 	)
 	truetype? ( virtual/pkgconfig )
 "
-COMMON_DEPEND="
+DEPEND="
 	app-arch/xz-utils
 	>=sys-libs/ncurses-5.2-r5:0=
-	debug? (
-		sdl? ( media-libs/libsdl )
-	)
+	sdl? ( media-libs/libsdl )
 	device-mapper? ( >=sys-fs/lvm2-2.02.45 )
 	libzfs? ( sys-fs/zfs )
 	mount? ( sys-fs/fuse:0 )
@@ -107,18 +105,7 @@ COMMON_DEPEND="
 	grub_platforms_xen? ( app-emulation/xen-tools:= )
 	grub_platforms_xen-32? ( app-emulation/xen-tools:= )
 "
-DEPEND="${COMMON_DEPEND}
-	static? (
-		app-arch/xz-utils[static-libs(+)]
-		truetype? (
-			app-arch/bzip2[static-libs(+)]
-			media-libs/freetype[static-libs(+)]
-			sys-libs/zlib[static-libs(+)]
-			virtual/pkgconfig
-		)
-	)
-"
-RDEPEND="${COMMON_DEPEND}
+RDEPEND="${DEPEND}
 	kernel_linux? (
 		grub_platforms_efi-32? ( sys-boot/efibootmgr )
 		grub_platforms_efi-64? ( sys-boot/efibootmgr )
@@ -127,11 +114,12 @@ RDEPEND="${COMMON_DEPEND}
 	nls? ( sys-devel/gettext )
 "
 
-RESTRICT="strip !test? ( test )"
+RESTRICT="!test? ( test )"
 
-QA_EXECSTACK="usr/bin/grub*-emu* usr/lib/grub/*"
-QA_WX_LOAD="usr/lib/grub/*"
+QA_EXECSTACK="usr/bin/grub-emu* usr/lib/grub/*"
+QA_PRESTRIPPED="usr/lib/grub/.*"
 QA_MULTILIB_PATHS="usr/lib/grub/.*"
+QA_WX_LOAD="usr/lib/grub/*"
 
 src_unpack() {
 	if [[ ${PV} == 9999 ]]; then
@@ -211,14 +199,13 @@ grub_configure() {
 		--program-prefix=
 		--libdir="${EPREFIX}"/usr/lib
 		--htmldir="${EPREFIX}"/usr/share/doc/${PF}/html
-		$(use_enable debug mm-debug)
 		$(use_enable device-mapper)
 		$(use_enable mount grub-mount)
 		$(use_enable nls)
 		$(use_enable themes grub-themes)
 		$(use_enable truetype grub-mkfont)
 		$(use_enable libzfs)
-		$(use sdl && use_enable debug grub-emu-sdl)
+		$(use_enable sdl grub-emu-sdl)
 		${platform:+--with-platform=}${platform}
 
 		# Let configure detect this where supported
@@ -247,8 +234,6 @@ src_configure() {
 	export HOST_CPPFLAGS=${CPPFLAGS}
 	export HOST_LDFLAGS=${LDFLAGS}
 	unset CCASFLAGS CFLAGS CPPFLAGS LDFLAGS
-
-	use static && HOST_LDFLAGS+=" -static"
 
 	tc-ld-disable-gold #439082 #466536 #526348
 	export TARGET_LDFLAGS="${TARGET_LDFLAGS} ${LDFLAGS}"
@@ -288,6 +273,9 @@ src_install() {
 
 	insinto /etc/default
 	newins "${FILESDIR}"/grub.default-3 grub
+
+	# https://bugs.gentoo.org/231935
+	dostrip -x /usr/lib/grub
 }
 
 pkg_postinst() {

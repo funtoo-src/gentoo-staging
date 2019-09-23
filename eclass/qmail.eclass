@@ -69,7 +69,7 @@ dospp() {
 }
 
 # @FUNCTION: dosupervise
-# @USAGE: dosupervise <service> [<runfile> <logfile>]
+# @USAGE: <service> [<runfile> <logfile>]
 # @DESCRIPTION:
 # Install runfiles for services and logging to supervise directory
 dosupervise() {
@@ -102,31 +102,7 @@ qmail_set_cc() {
 
 	echo "${cc} ${CFLAGS} ${CPPFLAGS}"  > ./conf-cc || die 'Patching conf-cc failed.'
 	echo "${ld} ${LDFLAGS}" > ./conf-ld || die 'Patching conf-ld failed.'
-}
-
-# @FUNCTION: qmail_create_groups
-# @DESCRIPTION:
-# Keep qmail groups in sync across ebuilds
-qmail_create_groups() {
-	einfo "Creating qmail groups"
-	enewgroup nofiles 200
-	enewgroup qmail 201
-}
-
-# @FUNCTION: qmail_create_users
-# @DESCRIPTION:
-# Keep qmail users in sync across ebuilds
-qmail_create_users() {
-	qmail_create_groups
-
-	einfo "Creating qmail users"
-	enewuser alias 200 -1  "${QMAIL_HOME}"/alias 200
-	enewuser qmaild 201 -1 "${QMAIL_HOME}" 200
-	enewuser qmaill 202 -1 "${QMAIL_HOME}" 200
-	enewuser qmailp 203 -1 "${QMAIL_HOME}" 200
-	enewuser qmailq 204 -1 "${QMAIL_HOME}" 201
-	enewuser qmailr 205 -1 "${QMAIL_HOME}" 201
-	enewuser qmails 206 -1 "${QMAIL_HOME}" 201
+	sed -e "s#'ar #'$(tc-getAR) #" -e "s#'ranlib #'$(tc-getRANLIB) #" -i make-makelib.sh
 }
 
 genqmail_src_unpack() {
@@ -226,12 +202,6 @@ qmail_config_install() {
 
 qmail_man_install() {
 	einfo "Installing manpages and documentation"
-
-	# those are tagged for section 8 but named for
-	# section 9 (which does not exist anyway)
-	for i in *.9; do
-		mv ${i} ${i/.9/.8}
-	done
 
 	into /usr
 	doman *.[1578]

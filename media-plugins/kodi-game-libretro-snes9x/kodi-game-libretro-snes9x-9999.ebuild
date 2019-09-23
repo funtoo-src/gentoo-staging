@@ -1,7 +1,7 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=7
 
 inherit cmake-utils kodi-addon
 
@@ -15,8 +15,9 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 else
 	KEYWORDS="~amd64 ~x86"
-	SRC_URI="https://github.com/kodi-game/game.libretro.snes9x/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	S="${WORKDIR}/game.libretro.snes9x-${PV}"
+	CODENAME="Leia"
+	SRC_URI="https://github.com/kodi-game/game.libretro.snes9x/archive/${PV}-${CODENAME}.tar.gz -> ${P}.tar.gz"
+	S="${WORKDIR}/game.libretro.snes9x-${PV}-${CODENAME}"
 fi
 
 LICENSE="GPL-2"
@@ -33,5 +34,5 @@ RDEPEND="
 	"
 src_prepare() {
 	echo 'find_library(SNES9X_LIB NAMES snes9x_libretro${CMAKE_SHARED_LIBRARY_SUFFIX} PATH_SUFFIXES libretro)' > "${S}/Findlibretro-snes9x.cmake" || die
-	default
+	cmake-utils_src_prepare
 }
