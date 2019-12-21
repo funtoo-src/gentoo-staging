@@ -15,8 +15,9 @@ SRC_URI="mirror://pypi/${PN:0:1}/${MYPN}/${MYP}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~x86 ~x86-fbsd ~amd64-linux ~x86-linux"
+KEYWORDS="~amd64 ~x86 ~amd64-linux ~x86-linux"
 IUSE="examples test"
+RESTRICT="!test? ( test )"
 
 RDEPEND="
 	dev-python/astropy[${PYTHON_USEDEP}]
@@ -32,7 +33,7 @@ S="${WORKDIR}/${MYP}"
 DOCS=( CHANGES.rst README.rst )
 
 python_test() {
-	virtx nosetests --verbose || die
+	virtx nosetests --verbose
 }
 
 python_install_all() {

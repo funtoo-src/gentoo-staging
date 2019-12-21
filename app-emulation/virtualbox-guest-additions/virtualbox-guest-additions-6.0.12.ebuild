@@ -71,6 +71,10 @@ src_prepare() {
 	eend
 	popd &>/dev/null || die
 
+	pushd src/VBox &>/dev/null || die
+	eapply "${FILESDIR}"/virtualbox-guest-additions-6.0.12-linux-5.3+-compatibility.patch
+	popd &>/dev/null || die
+
 	# PaX fixes (see bug #298988)
 	pushd "${VBOX_MOD_SRC_DIR}" &>/dev/null || die
 	eapply "${FILESDIR}"/vboxguest-6.0.6-log-use-c99.patch
@@ -168,8 +172,8 @@ src_install() {
 	doins "${FILESDIR}"/vboxclient.desktop
 
 	# sample xorg.conf
-	insinto /usr/share/doc/${PF}
-	doins "${FILESDIR}"/xorg.conf.vbox
+	dodoc "${FILESDIR}"/xorg.conf.vbox
+	docompress -x "${ED}"/usr/share/doc/${PF}/xorg.conf.vbox
 
 	systemd_dounit "${FILESDIR}/${PN}.service"
 }

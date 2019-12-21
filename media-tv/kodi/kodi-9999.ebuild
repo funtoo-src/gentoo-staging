@@ -10,17 +10,15 @@ LIBDVDNAV_VERSION="6.0.0-Leia-Alpha-3"
 FFMPEG_VERSION="4.0.4"
 CODENAME="Leia"
 FFMPEG_KODI_VERSION="18.4"
+PYTHON_COMPAT=( python3_{5,6,7,8} )
 SRC_URI="https://github.com/xbmc/libdvdcss/archive/${LIBDVDCSS_VERSION}.tar.gz -> libdvdcss-${LIBDVDCSS_VERSION}.tar.gz
 	https://github.com/xbmc/libdvdread/archive/${LIBDVDREAD_VERSION}.tar.gz -> libdvdread-${LIBDVDREAD_VERSION}.tar.gz
 	https://github.com/xbmc/libdvdnav/archive/${LIBDVDNAV_VERSION}.tar.gz -> libdvdnav-${LIBDVDNAV_VERSION}.tar.gz
 	!system-ffmpeg? ( https://github.com/xbmc/FFmpeg/archive/${FFMPEG_VERSION}-${CODENAME}-${FFMPEG_KODI_VERSION}.tar.gz -> ffmpeg-${PN}-${FFMPEG_VERSION}-${CODENAME}-${FFMPEG_KODI_VERSION}.tar.gz )"
-
 if [[ ${PV} == *9999 ]] ; then
-	PYTHON_COMPAT=( python2_7 python3_{5,6,7} )
 	EGIT_REPO_URI="https://github.com/xbmc/xbmc.git"
 	inherit git-r3
 else
-	PYTHON_COMPAT=( python2_7 )
 	MY_PV=${PV/_p/_r}
 	MY_PV=${MY_PV/_alpha/a}
 	MY_PV=${MY_PV/_beta/b}
@@ -51,6 +49,7 @@ REQUIRED_USE="
 	udisks? ( dbus )
 	upower? ( dbus )
 "
+RESTRICT="!test? ( test )"
 
 COMMON_DEPEND="${PYTHON_DEPS}
 	airplay? (
@@ -59,7 +58,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	)
 	alsa? ( >=media-libs/alsa-lib-1.1.4.1 )
 	bluetooth? ( net-wireless/bluez )
-	bluray? ( >=media-libs/libbluray-1.0.2 )
+	bluray? ( >=media-libs/libbluray-1.1.2 )
 	caps? ( sys-libs/libcap )
 	dbus? ( sys-apps/dbus )
 	dev-db/sqlite
@@ -73,7 +72,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	>=dev-libs/lzo-2.04
 	dev-libs/tinyxml[stl]
 	dev-python/pillow[${PYTHON_USEDEP}]
-	$(python_gen_cond_dep 'dev-python/pycryptodome[${PYTHON_USEDEP}]' 'python3*')
+	dev-python/pycryptodome[${PYTHON_USEDEP}]
 	>=dev-libs/libcdio-0.94
 	>=dev-libs/libfmt-3.0.1
 	dev-libs/libfstrcmp
@@ -103,7 +102,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	!libressl? ( >=dev-libs/openssl-1.0.2l:0= )
 	libressl? ( dev-libs/libressl:0= )
 	raspberry-pi? (
-		|| ( media-libs/raspberrypi-userland media-libs/raspberrypi-userland-bin media-libs/mesa[egl,gles2,vc4] )
+		|| ( media-libs/raspberrypi-userland media-libs/raspberrypi-userland-bin media-libs/mesa[egl,gles2,video_cards_vc4] )
 	)
 	pulseaudio? ( media-sound/pulseaudio )
 	samba? ( >=net-fs/samba-3.4.6[smbclient(+)] )
@@ -127,7 +126,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 		media-libs/mesa[wayland]
 		>=dev-libs/wayland-protocols-1.7
 	)
-	webserver? ( >=net-libs/libmicrohttpd-0.9.55[messages] )
+	webserver? ( >=net-libs/libmicrohttpd-0.9.55[messages(+)] )
 	X? (
 		x11-libs/libX11
 		x11-libs/libXrandr
@@ -175,14 +174,6 @@ pkg_setup() {
 
 src_unpack() {
 	if [[ ${PV} == *9999 ]] ; then
-		if python_is_python3; then
-			EGIT_BRANCH="feature_python3"
-			ewarn "Using the experimental Python 3 branch!"
-			ewarn "See https://kodi.wiki/view/Migration_to_Python_3 for more information."
-			ewarn "To use the non-experimental Python 2 version:"
-			ewarn "echo '~${CATEGORY}/${P} PYTHON_TARGETS: -* python2_7 PYTHON_SINGLE_TARGET: -* python2_7' >> /etc/portage/package.use"
-			ewarn "then re-merge using: emerge -a =${CATEGORY}/${PF}"
-		fi
 		git-r3_src_unpack
 	else
 		default
@@ -238,7 +229,6 @@ src_configure() {
 		-DENABLE_LCMS2=$(usex lcms)
 		-DENABLE_LIRCCLIENT=$(usex lirc)
 		-DENABLE_MARIADBCLIENT=$(usex mariadb)
-		-DENABLE_MYSQLCLIENT=$(usex mysql)
 		-DENABLE_MICROHTTPD=$(usex webserver)
 		-DENABLE_MYSQLCLIENT=$(usex mysql)
 		-DENABLE_NFS=$(usex nfs)
@@ -285,7 +275,10 @@ src_configure() {
 	fi
 
 	if use X; then
-		mycmakeargs+=( -DCORE_PLATFORM_NAME="x11" )
+		mycmakeargs+=(
+			-DCORE_PLATFORM_NAME="x11"
+			-DX11_RENDER_SYSTEM="$(usex opengl gl gles)"
+		)
 	fi
 
 	cmake-utils_src_configure
@@ -302,11 +295,11 @@ src_test() {
 src_install() {
 	cmake-utils_src_install
 
-	pax-mark Em "${ED%/}"/usr/$(get_libdir)/${PN}/${PN}.bin
+	pax-mark Em "${ED}"/usr/$(get_libdir)/${PN}/${PN}.bin
 
 	newicon media/icon48x48.png kodi.png
 
-	rm "${ED%/}"/usr/share/kodi/addons/skin.estuary/fonts/Roboto-Thin.ttf || die
+	rm "${ED}"/usr/share/kodi/addons/skin.estuary/fonts/Roboto-Thin.ttf || die
 	dosym ../../../../fonts/roboto/Roboto-Thin.ttf \
 		usr/share/kodi/addons/skin.estuary/fonts/Roboto-Thin.ttf
 

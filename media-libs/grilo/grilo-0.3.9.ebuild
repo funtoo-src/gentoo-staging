@@ -12,7 +12,7 @@ HOMEPAGE="https://wiki.gnome.org/Projects/Grilo"
 
 LICENSE="LGPL-2.1+"
 SLOT="0.3/0" # subslot is libgrilo-0.3 soname suffix
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc x86"
 
 IUSE="gtk gtk-doc +introspection +network +playlist test vala"
 REQUIRED_USE="vala? ( introspection )"
@@ -42,6 +42,12 @@ BDEPEND="
 	test? ( sys-apps/dbus )
 	vala? ( $(vala_depend) )
 "
+
+PATCHES=(
+	# Will be fixed in 0.3.11
+	# https://gitlab.gnome.org/GNOME/grilo/commit/60d135ef64f16671bb0ab4079ecbc59bdc32cbc7
+	"${FILESDIR}"/${PN}-0.3.9-totem-pl-parser.patch
+)
 
 src_prepare() {
 	sed -i -e "s:'GETTEXT_PACKAGE', meson.project_name():'GETTEXT_PACKAGE', 'grilo-${SLOT%/*}':" meson.build || die

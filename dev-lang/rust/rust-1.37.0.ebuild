@@ -18,7 +18,7 @@ else
 	SLOT="stable/${ABI_VER}"
 	MY_P="rustc-${PV}"
 	SRC="${MY_P}-src.tar.xz"
-	KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
+	KEYWORDS="amd64 arm64 ppc64 x86"
 fi
 
 RUST_STAGE0_VERSION="1.$(($(ver_cut 2) - 1)).0"
@@ -92,7 +92,6 @@ PATCHES=(
 	"${FILESDIR}"/1.34.2-fix-custom-libdir.patch
 	"${FILESDIR}"/1.35.0-revert-commits-triggering-multiple-llvm-rebuilds.patch
 	"${FILESDIR}"/1.36.0-libressl.patch
-	"${FILESDIR}"/1.36.0-libressl3.patch
 )
 
 S="${WORKDIR}/${MY_P}-src"
@@ -313,7 +312,7 @@ pkg_postinst() {
 	ewarn "This might have resulted in a dangling symlink for /usr/bin/cargo on some"
 	ewarn "systems. This can be resolved by calling 'sudo eselect rust set ${P}'."
 
-	if has_version app-editors/emacs || has_version app-editors/emacs-vcs; then
+	if has_version app-editors/emacs; then
 		elog "install app-emacs/rust-mode to get emacs support for rust."
 	fi
 

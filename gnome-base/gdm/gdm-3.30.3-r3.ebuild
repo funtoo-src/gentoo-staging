@@ -22,6 +22,7 @@ LICENSE="
 SLOT="0"
 
 IUSE="accessibility audit bluetooth-sound branding elogind fprint +introspection ipv6 plymouth selinux smartcard systemd tcpd test wayland xinerama"
+RESTRICT="!test? ( test )"
 REQUIRED_USE="^^ ( elogind systemd )"
 
 KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sh x86"
@@ -51,7 +52,7 @@ COMMON_DEPEND="
 	x11-libs/libxcb
 	>=x11-misc/xdg-utils-1.0.2-r3
 
-	virtual/pam
+	sys-libs/pam
 	elogind? ( >=sys-auth/elogind-239.3[pam] )
 	systemd? ( >=sys-apps/systemd-186:0=[pam] )
 

@@ -14,7 +14,7 @@ else
 	DOCKER_GITCOMMIT="039a7df"
 	MY_PV=${PV/_/-}
 	SRC_URI="https://${EGO_PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64"
+	KEYWORDS="amd64 ~arm ~arm64"
 	[ "$DOCKER_GITCOMMIT" ] || die "DOCKER_GITCOMMIT must be added manually for each bump!"
 	inherit golang-vcs-snapshot
 fi
@@ -235,7 +235,7 @@ src_compile() {
 		VERSION="$(cat ../../VERSION)" \
 		GITCOMMIT="${DOCKER_GITCOMMIT}" \
 		DISABLE_WARN_OUTSIDE_CONTAINER=1 \
-		dynbinary || die
+		dynbinary
 
 	# build man pages
 	go build -o gen-manpages github.com/docker/cli/man || die

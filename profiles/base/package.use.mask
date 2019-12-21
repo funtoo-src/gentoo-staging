@@ -1,16 +1,106 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# This file requires >=portage-2.1.1
 # New entries go on top.
 
 # This file is only for generic masks. For arch-specific masks (i.e.
 # mask everywhere, unmask on arch/*) use arch/base.
 
+# Brian Evans <grknight@gentoo.org> (2019-12-19)
+# PHP 7.1 is end of life and has security issues Bug 703326
+# Associated packages are not ready for new versions tracked in bug 702110
+dev-libs/ossp-uuid php
+www-servers/nginx-unit php7-1
+
+# Michał Górny <mgorny@gentoo.org> (2019-12-16)
+# Requires old x11-libs/fox:1.6 slot.
+dev-games/openscenegraph fox
+dev-libs/hidapi fox
+sci-mathematics/gsl-shell fox
+sys-libs/gwenhywfar fox
+
+# Ulrich Müller <ulm@gentoo.org> (2019-12-11)
+# Depends on last-rited app-i18n/man-pages-da.
+sys-apps/man-pages l10n_da
+
+# James Le Cuirot <chewi@gentoo.org> (2019-12-10)
+# The JIT feature only works on amd64 and x86.
+app-emulation/aranym jit
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2019-12-07)
+# dev-python/flask-cors is PMASKED.
+media-sound/beets webserver
+
+# Michał Górny <mgorny@gentoo.org> (2019-12-04)
+# Python 2.7 only packages optionally needing dev-python/ipython.
+app-misc/gourmet ipython
+dev-python/restkit cli
+
+# Michał Górny <mgorny@gentoo.org> (2019-12-04)
+# Packages requiring dev-python/ipython to build the docs and still
+# supporting Python 2.7.  This can be resolved long term via either
+# using any-r1 API to build docs or cond-deps.
+dev-python/matplotlib doc
+dev-python/pandas doc
+<dev-python/pandas-0.24.2 full-support test
+dev-python/pandas-datareader doc
+dev-python/patsy doc
+dev-python/statsmodels doc
+
+# Haelwenn (lanodan) Monnier <contact@hacktivis.me> (2019-12-01)
+# broken static-linking in glibc and maybe others
+>app-shells/mksh-57-r1 static
+
+# Michał Górny <mgorny@gentoo.org> (2019-11-29)
+# Requires dev-python/astropy that's being removed.
+sci-visualization/veusz fits
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2019-11-28)
+# sci-visualization/visit is on the way out, bug #657952
+sci-libs/libgeodecomp visit
+
+# Michał Górny <mgorny@gentoo.org> (2019-11-25)
+# Requires old version of dev-python/sphinx that's being removed.
+~dev-python/fabric-2.3.1 doc
+<dev-python/hacking-1.1.0 doc
+<dev-python/pycadf-2.7.0 doc
+
+# Michał Górny <mgorny@gentoo.org> (2019-11-09)
+# eMovix is being removed.
+kde-apps/k3b emovix
+
+# Patrick McLean <chutzpah@gentoo.org> (2910-11-07)
+# Collides with sys-libc/glibc[crypt]
+sys-libs/libxcrypt system
+
+# Michał Górny <mgorny@gentoo.org> (2019-10-05)
+# net-libs/openslp is being removed.
+net-nds/openldap slp
+sys-block/open-iscsi slp
+sys-block/open-isns slp
+
+# Ben Kohler <bkohler@gentoo.org> (2019-10-03)
+# iwd backend for connman hasn't kept up with iwd releases/API, mask 
+# until it catches up.
+net-misc/connman iwd
+
+# Brian Evans <grknight@gentoo.org> (2019-10-01)
+# PHP support is broken with current version
+# Mask USE until they are fixed
+=dev-libs/xapian-bindings-1.2.25 php
+media-gfx/exact-image php
+sci-geosciences/mapserver php
+www-servers/nginx-unit php5-6
+
+# Michał Górny <mgorny@gentoo.org> (2019-09-28)
+# media-fonts/hkscs-ming is slated for removal.
+app-i18n/xcin unicode
+
 # Craig Andrews <candrews@gentoo.org> (2019-09-12)
 # OpenSSL (as of version 1.1.1) doesn't have APIs for QUIC support
 # see https://github.com/openssl/openssl/pull/8797
 net-libs/ngtcp2 ssl
+net-misc/curl nghttp3
 
 # Michał Górny <mgorny@gentoo.org> (2019-09-08)
 # LLVM 5 is being removed.
@@ -34,10 +124,6 @@ games-fps/doomsday fmod
 www-client/elinks guile
 
 # Michał Górny <mgorny@gentoo.org> (2019-08-27)
-# sci-libs/grib_api is slated for removal.
-dev-lang/gdl grib
-
-# Michał Górny <mgorny@gentoo.org> (2019-08-27)
 # net-misc/tokyotyrant is slated for removal.
 app-metrics/collectd collectd_plugins_tokyotyrant
 
@@ -58,28 +144,6 @@ sys-kernel/linux-firmware initramfs
 # Lars Wendler <polynomial-c@gentoo.org> (2019-07-26)
 # Requires dev-libs/gumbo which is only keyworded for amd64 and x86
 mail-client/claws-mail litehtml
-
-# David Seifert <soap@gentoo.org> (2019-07-14)
-# media-libs/jasper will be removed in 30 days, bug #689784
-dev-games/openscenegraph jpeg2k
-dev-python/weasyprint jpeg2k
-dev-qt/qtimageformats jpeg2k
-media-gfx/dcraw jpeg2k
-media-gfx/digikam jpeg2k
-media-gfx/exact-image jpeg2k
-media-gfx/fim jpeg2k
-<media-gfx/gimp-2.10 jpeg2k
-media-gfx/graphicsmagick jpeg2k
-media-gfx/ufraw jpeg2k
-media-libs/devil jpeg2k
-media-libs/gegl jpeg2k
-media-libs/libraw jpeg2k
-media-libs/netpbm jpeg2k
-media-libs/opencv jpeg2k
-media-libs/simage jpeg2k
-net-proxy/ziproxy jpeg2k
-sci-libs/grib_api jasper jpeg2k
-x11-libs/gdk-pixbuf jpeg2k
 
 # James Le Cuirot <chewi@gentoo.org> (2019-05-21)
 # Doesn't support ffmpeg-4. Portage takes a long time to report the
@@ -105,11 +169,6 @@ dev-python/pandas doc
 # with Gentoo install media. Mask the l10n_ja flag until a better
 # solution is found, e.g., transition to a free font package.
 app-text/ghostscript-gpl l10n_ja
-
-# Georgy Yakovlev <gyakovlev@gentoo.org> (2019-04-17)
-# Mask jre useflags for use as system java-vm until it's proven to work
-dev-java/openjdk-jre-bin:8 gentoo-vm
-dev-java/openjdk-jre-bin:11 gentoo-vm
 
 # Michał Górny <mgorny@gentoo.org> (2019-04-10)
 # media-sound/aacplusenc is slated for removal.
@@ -137,11 +196,6 @@ dev-db/mariadb-connector-c mysqlcompat
 # Not keyworded on non-x86 arches
 app-admin/conserver freeipmi
 
-# Georgy Yakovlev <gyakovlev@gentoo.org> (2019-01-17)
-# Mask openjdk:8 for use as system java-vm until it's proven to work
-dev-java/openjdk:8 gentoo-vm
-dev-java/openjdk-bin:8 gentoo-vm
-
 # William Hubbs <williamh@gentoo.org> (2019-01-13)
 # For memtest86+ mask the floppy use flag since it requires grub:0 which
 # is being removed
@@ -151,15 +205,6 @@ sys-apps/memtest86+ floppy
 # Brian Evans <grknight@gentoo.org> (2019-01-11)
 # Depend on the EOL PHP 7.0
 dev-libs/Ice php
-
-# Michał Górny <mgorny@gentoo.org> (2018-12-01)
-# Moved from use.mask to specific packages.
-# Andreas Sturmlechner <asturm@gentoo.org> (2018-05-10)
-# media-sound/mumble is masked/not keyworded at this point, bug #656826.
-games-fps/quake3 mumble
-games-fps/turtlearena mumble
-games-fps/urbanterror mumble
-games-rpg/manaplus mumble
 
 # Michał Górny <mgorny@gentoo.org> (2018-11-28)
 # Requires last-rited games-server/ut2003-ded.
@@ -232,7 +277,6 @@ app-emulation/fuse backend-svga
 # Brian Evans <grknight@gentoo.org> (2018-03-05)
 # Mask embedded USE on virtual/mysql and friends to transition it to be obsolete
 virtual/mysql embedded
-dev-perl/DBD-mysql embedded
 
 # Brian Evans <grknight@gentoo.org> (2018-02-28)
 # Mask client-libs USE to force users to install alternative standard pacakges
@@ -258,13 +302,10 @@ media-video/ffmpeg appkit
 # gentoo-vm flag allows us to provide it without it breaking Gentoo
 # packages. Those who wish to experiment with it as a fully recognised
 # Gentoo JVM can unmask the flag.
+dev-java/openjdk-jre-bin:11 gentoo-vm
 dev-java/oracle-jdk-bin:11 gentoo-vm
 dev-java/openjdk-bin:11 gentoo-vm
 dev-java/openjdk:11 gentoo-vm
-
-# Andreas K. Hüttel <dilfridge@gentoo.org> (2017-11-04)
-# Requires audacious, which is masked. Bug 632513
-media-libs/freeverb3 jack
 
 # Andreas K. Huettel <dilfridge@gentoo.org> (2017-09-09)
 # Potentially destructive. Use it only if you know what you're doing.
@@ -299,18 +340,13 @@ sys-boot/refind custom-cflags
 # depenencies.
 >=app-arch/snappy-1.1.5 static-libs
 
-# Ilya Tumaykin <itumaykin+gentoo@gmail.com> (2017-06-18)
-# Libav is basically unsupported by mpv, see upstream issues 3923, 3925.
-# Needs patch to even build, subs are broken and not supported anymore.
-media-video/mpv libav
-
 # Andreas K. Hüttel <dilfridge@gentoo.org> (2017-05-29)
 # Does not build
 sci-libs/linux-gpib php
 
 # Michał Górny <mgorny@gentoo.org> (2017-05-15)
 # Mask ruby20-only compatible packages
-=media-libs/libcaca-0.99_beta19 ruby
+~media-libs/libcaca-0.99_beta19 ruby
 
 # Matthias Maier <tamiko@gentoo.org> (2017-05-11)
 # Globally mask pie use flag. Selectively unmask on specific profiles.

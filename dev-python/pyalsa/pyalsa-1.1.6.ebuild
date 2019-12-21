@@ -9,11 +9,11 @@ inherit distutils-r1 flag-o-matic
 
 DESCRIPTION="Python bindings for ALSA library"
 HOMEPAGE="https://alsa-project.org/"
-SRC_URI="mirror://alsaproject/pyalsa/${P}.tar.bz2"
+SRC_URI="https://www.alsa-project.org/files/pub/pyalsa/${P}.tar.bz2"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="alpha amd64 ~hppa ~mips ppc ppc64 sparc x86"
+KEYWORDS="alpha amd64 ~hppa ia64 ~mips ppc ppc64 sparc x86"
 IUSE=""
 
 RDEPEND="media-libs/alsa-lib"

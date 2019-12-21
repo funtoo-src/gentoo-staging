@@ -13,11 +13,12 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GObjectIntrospection"
 LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
 IUSE="cairo doctool test"
+RESTRICT="!test? ( test )"
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	test? ( cairo )
 "
-KEYWORDS="alpha amd64 arm arm64 ~hppa ~ia64 ~mips ppc ppc64 s390 ~sh ~sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="alpha amd64 arm arm64 hppa ~ia64 ~mips ppc ppc64 s390 ~sh sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 
 # virtual/pkgconfig needed at runtime, bug #505408
 RDEPEND="
@@ -35,7 +36,9 @@ DEPEND="${RDEPEND}
 	>=dev-util/gtk-doc-am-1.19
 	sys-devel/bison
 	sys-devel/flex
-	test? ( x11-libs/cairo[glib] )
+	test? (
+		x11-libs/cairo[glib]
+		dev-python/markdown[${PYTHON_USEDEP}] )
 " # autoreconf needs autoconf-archive
 # PDEPEND to avoid circular dependencies, bug #391213; but needed for tests, thus test DEPEND as well
 PDEPEND="cairo? ( x11-libs/cairo[glib] )"

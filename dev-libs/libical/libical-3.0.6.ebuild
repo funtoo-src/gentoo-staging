@@ -13,27 +13,28 @@ SRC_URI="https://github.com/${PN}/${PN}/releases/download/v${PV}/${P}.tar.gz"
 
 LICENSE="|| ( MPL-2.0 LGPL-2.1 )"
 SLOT="0/3"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
+KEYWORDS="alpha amd64 arm arm64 ~hppa ia64 ~mips ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos ~x86-solaris"
 IUSE="berkdb doc examples introspection static-libs test vala"
+RESTRICT="!test? ( test )"
 REQUIRED_USE="vala? ( introspection )"
 
 BDEPEND="
 	dev-lang/perl
 	virtual/pkgconfig
 	doc? ( app-doc/doxygen )
+	introspection? ( dev-libs/gobject-introspection )
 	test? ( ${PYTHON_DEPS} )
 	vala? ( $(vala_depend) )
 "
-DEPEND="
+COMMON_DEPEND="
 	dev-libs/icu:=
 	berkdb? ( sys-libs/db:= )
-	introspection? (
-		dev-libs/glib:2
-		dev-libs/gobject-introspection:=
-		dev-libs/libxml2:2
-	)
+	introspection? ( dev-libs/glib:2 )
 "
-RDEPEND="${DEPEND}
+DEPEND="${COMMON_DEPEND}
+	introspection? ( dev-libs/libxml2:2 )
+"
+RDEPEND="${COMMON_DEPEND}
 	sys-libs/timezone-data
 "
 

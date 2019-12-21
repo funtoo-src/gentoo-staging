@@ -7,15 +7,15 @@ inherit fcaps flag-o-matic multilib python-r1 qmake-utils user xdg-utils cmake-u
 
 DESCRIPTION="A network protocol analyzer formerly known as ethereal"
 HOMEPAGE="https://www.wireshark.org/"
-SRC_URI="${HOMEPAGE}download/src/all-versions/${P/_/}.tar.xz"
+SRC_URI="https://www.wireshark.org/download/src/all-versions/${P/_/}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0/${PV}"
 KEYWORDS="alpha amd64 arm ~arm64 hppa ia64 ppc64 x86"
 IUSE="
 	adns androiddump bcg729 +capinfos +captype ciscodump +dftest doc dpauxmon
-	+dumpcap +editcap kerberos libxml2 lua lz4 maxminddb +mergecap +netlink
-	nghttp2 +pcap +qt5 +randpkt +randpktdump +reordercap sbc selinux +sharkd
+	+dumpcap +editcap http2 kerberos libxml2 lua lz4 maxminddb +mergecap
+	+netlink +pcap +qt5 +randpkt +randpktdump +reordercap sbc selinux +sharkd
 	smi snappy spandsp sshdump ssl sdjournal +text2pcap tfshark +tshark
 	+udpdump zlib
 "
@@ -29,13 +29,13 @@ CDEPEND="
 	bcg729? ( media-libs/bcg729 )
 	ciscodump? ( >=net-libs/libssh-0.6 )
 	filecaps? ( sys-libs/libcap )
+	http2? ( net-libs/nghttp2 )
 	kerberos? ( virtual/krb5 )
 	libxml2? ( dev-libs/libxml2 )
 	lua? ( >=dev-lang/lua-5.1:* )
 	lz4? ( app-arch/lz4 )
 	maxminddb? ( dev-libs/libmaxminddb )
 	netlink? ( dev-libs/libnl:3 )
-	nghttp2? ( net-libs/nghttp2 )
 	pcap? ( net-libs/libpcap )
 	qt5? (
 		dev-qt/qtcore:5
@@ -146,7 +146,7 @@ src_configure() {
 		-DBUILD_tshark=$(usex tshark)
 		-DBUILD_udpdump=$(usex udpdump)
 		-DBUILD_wireshark=$(usex qt5)
-		-DCMAKE_INSTALL_DOCDIR="${EROOT%/}/usr/share/doc/${PF}"
+		-DCMAKE_INSTALL_DOCDIR="${EROOT}/usr/share/doc/${PF}"
 		-DDISABLE_WERROR=yes
 		-DENABLE_BCG729=$(usex bcg729)
 		-DENABLE_CAP=$(usex filecaps caps)
@@ -157,7 +157,7 @@ src_configure() {
 		-DENABLE_LUA=$(usex lua)
 		-DENABLE_LZ4=$(usex lz4)
 		-DENABLE_NETLINK=$(usex netlink)
-		-DENABLE_NGHTTP2=$(usex nghttp2)
+		-DENABLE_NGHTTP2=$(usex http2)
 		-DENABLE_PCAP=$(usex pcap)
 		-DENABLE_SBC=$(usex sbc)
 		-DENABLE_SMI=$(usex smi)

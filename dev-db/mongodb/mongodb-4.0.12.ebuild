@@ -20,8 +20,9 @@ SRC_URI="https://fastdl.mongodb.org/src/${MY_P}.tar.gz"
 
 LICENSE="Apache-2.0 SSPL-1"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 IUSE="debug kerberos libressl lto mms-agent ssl test +tools"
+RESTRICT="!test? ( test )"
 
 RDEPEND=">=app-arch/snappy-1.1.3
 	>=dev-cpp/yaml-cpp-0.5.3:=

@@ -6,7 +6,7 @@ EAPI=6
 inherit libtool pam
 
 DESCRIPTION="Utilities to deal with user accounts"
-HOMEPAGE="https://github.com/shadow-maint/shadow http://pkg-shadow.alioth.debian.org/"
+HOMEPAGE="https://github.com/shadow-maint/shadow"
 SRC_URI="https://github.com/shadow-maint/shadow/releases/download/${PV}/${P}.tar.gz"
 
 LICENSE="BSD GPL-2"
@@ -19,7 +19,7 @@ LANGS=( cs da de es fi fr hu id it ja ko pl pt_BR ru sv tr zh_CN zh_TW )
 RDEPEND="acl? ( sys-apps/acl:0= )
 	audit? ( >=sys-process/audit-2.6:0= )
 	cracklib? ( >=sys-libs/cracklib-2.7-r3:0= )
-	pam? ( virtual/pam:0= )
+	pam? ( sys-libs/pam:0= )
 	skey? ( sys-auth/skey:0= )
 	selinux? (
 		>=sys-libs/libselinux-1.28:0=

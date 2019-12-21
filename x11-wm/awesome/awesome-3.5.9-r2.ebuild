@@ -10,7 +10,7 @@ SRC_URI="http://awesome.naquadah.org/download/${P}.tar.xz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm ppc ppc64 x86 ~x86-fbsd"
+KEYWORDS="amd64 arm ppc ppc64 x86"
 IUSE="dbus doc elibc_FreeBSD gnome"
 
 COMMON_DEPEND="
@@ -86,7 +86,7 @@ src_install() {
 		(
 			cd "${CMAKE_BUILD_DIR}"/doc
 			mv html doxygen
-			dohtml -r doxygen || die
+			dohtml -r doxygen
 		)
 	fi
 	rm -rf "${ED}"/usr/share/doc/${PN} || die "Cleanup of dupe docs failed"
@@ -98,12 +98,12 @@ src_install() {
 	if use gnome ; then
 		# GNOME session
 		insinto /usr/share/gnome-session/sessions
-		newins "${FILESDIR}/${PN}-gnome-3.session" "${PN}-gnome.session" || die
+		newins "${FILESDIR}/${PN}-gnome-3.session" "${PN}-gnome.session"
 		# Application launcher
 		domenu "${FILESDIR}/${PN}-gnome.desktop" || die
 		# X Session
 		insinto /usr/share/xsessions/
-		doins "${FILESDIR}/${PN}-gnome-xsession.desktop" || die
+		doins "${FILESDIR}/${PN}-gnome-xsession.desktop"
 	fi
 }
 

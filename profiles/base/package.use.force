@@ -1,6 +1,20 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Michał Górny <mgorny@gentoo.org> (2019-12-06)
+# Non-initramfs builds do not work with the default .config.  Force
+# the mask, so that users don't brick their systems.  If somebody wants
+# to avoid initramfs, he needs to use a custom .config and unforce
+# the flag.
+sys-kernel/vanilla-kernel initramfs
+
+# Sergei Trofimovich <slyfox@gentoo.org> (2019-11-06)
+# Upstream plans to drop libcrypt.so.1/crypt.h from glibc
+# distribution and rely on external providers lke libxcrypt.
+# Gentoo will follow the suit but today we are not ready.
+# Unmask at your risk. Bug #699422 tracks the effort.
+sys-libs/glibc crypt
+
 # Matt Turner <mattst88@gentoo.org> (2019-09-01)
 # <dev-scheme/guile-2 is package.mask'd, so force USE=guile2
 media-sound/lilypond guile2
@@ -16,13 +30,14 @@ sys-devel/gcc cxx
 # them is an experimental feature and needs testing.
 sys-libs/glibc static-libs
 
-# Michał Górny <mgorny@gentoo.org> (22 Mar 2019)
+# Michał Górny <mgorny@gentoo.org> (2019-03-22)
 # Force building separate tinfo to maintain stable library API.  This
 # is backwards-compatible with packages linked to -lncurses, so neither
 # installed packages nor pre-built software should be negatively
 # affected.  On the other hand, disabling USE=tinfo is capable of
 # breaking installed packages.
 sys-libs/ncurses tinfo
+sys-libs/ncurses-compat tinfo
 
 # Mart Raudsepp <leio@gentoo.org> (2018-12-14)
 # Security is not optional if available for the architecture/kernel.
@@ -89,6 +104,7 @@ dev-lang/python-exec python_targets_python2_7
 dev-lang/python-exec python_targets_python3_5
 dev-lang/python-exec python_targets_python3_6
 dev-lang/python-exec python_targets_python3_7
+dev-lang/python-exec python_targets_python3_8
 dev-lang/python-exec python_targets_jython2_7
 dev-lang/python-exec python_targets_pypy
 dev-lang/python-exec python_targets_pypy3

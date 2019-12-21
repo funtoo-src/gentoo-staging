@@ -12,8 +12,8 @@ SRC_URI="
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ~arm64 hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~x86-fbsd ~amd64-linux ~x86-linux ~x64-solaris ~x86-solaris"
-IUSE="gdm jpeg new-login offensive opengl pam +perl selinux suid xinerama"
+KEYWORDS="~alpha amd64 ~arm ~arm64 hppa ~ia64 ~mips ~ppc ~ppc64 ~sh ~sparc x86 ~amd64-linux ~x86-linux ~x64-solaris ~x86-solaris"
+IUSE="caps gdm jpeg new-login offensive opengl pam +perl selinux suid xinerama"
 
 COMMON_DEPEND="
 	>=gnome-base/libglade-2
@@ -32,6 +32,7 @@ COMMON_DEPEND="
 	x11-libs/libXt
 	x11-libs/libXxf86misc
 	x11-libs/libXxf86vm
+	caps? ( sys-libs/libcap )
 	jpeg? ( virtual/jpeg:0 )
 	new-login? (
 		gdm? ( gnome-base/gdm )
@@ -41,7 +42,7 @@ COMMON_DEPEND="
 		virtual/glu
 		virtual/opengl
 	)
-	pam? ( virtual/pam )
+	pam? ( sys-libs/pam )
 	xinerama? ( x11-libs/libXinerama )
 "
 # For USE="perl" see output of `qlist xscreensaver | grep bin | xargs grep '::'`
@@ -102,6 +103,7 @@ src_configure() {
 	export RPM_PACKAGE_VERSION=no #368025
 
 	econf \
+		$(use_with caps setcap-hacks) \
 		$(use_with jpeg) \
 		$(use_with new-login login-manager) \
 		$(use_with opengl gl) \

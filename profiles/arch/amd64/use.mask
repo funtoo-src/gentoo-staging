@@ -6,9 +6,10 @@
 
 # SECTION: Unmask
 
-# Andreas Sturmlechner <asturm@gentoo.org> (2018-11-17)
-# media-sound/audacious is keyworded on amd64
--audacious
+# Michał Górny <mgorny@gentoo.org> (2019-11-13)
+# Python 3.8 has reasonably keyworded packages here.
+-python_targets_python3_8
+-python_single_target_python3_8
 
 # Matt Turner <mattst88@gentoo.org> (2018-11-11)
 # d3d9 works on amd64

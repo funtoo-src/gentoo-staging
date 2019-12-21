@@ -1,13 +1,22 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# Andreas Sturmlechner <asturm@gentoo.org> (2019-08-18)
-# media-video/pipewire is not keyworded yet
-dev-libs/weston pipewire
-kde-apps/krfb wayland
-kde-plasma/xdg-desktop-portal-kde screencast
-sys-apps/xdg-desktop-portal screencast
-x11-wm/mutter screencast
+# Tomáš Mózes <hydrapolic@gmail.com> (2019-12-19)
+# dev-libs/criterion is not keyworded yet
+app-admin/syslog-ng test
+
+# Robin H. Johnson <robbat2@gentoo.org> (2019-12-06)
+# PPS should work on all arches, but only keyworded on some arches
+>=net-misc/ntp-4.2.6_p3-r1 -parse-clocks
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2019-11-28)
+# >=sci-libs/vtk-8 is not keyworded, bug #649054
+media-libs/opencv vtk
+sci-libs/pcl vtk
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2019-10-29)
+# Neither sys-apps/bolt nor kde-plasma/plasma-thunderbolt are keyworded
+kde-plasma/plasma-meta thunderbolt
 
 # Michał Górny <mgorny@gentoo.org> (2019-07-13)
 # app-forensics/libewf is not keyworded here.
@@ -120,11 +129,10 @@ net-p2p/deluge geoip
 
 # Amy Liffey <amynka@gentoo.org (2018-01-21)
 # dev-libs/cereal not keyworded for arm
-media-libs/opencv contrib_dnn
+media-libs/opencv contribdnn
 
 # Michał Górny <mgorny@gentoo.org> (2017-12-30)
 # Moved from use.mask since they are flags local to one package.
-dev-cpp/xsd ace
 media-tv/tvheadend hdhomerun
 
 # Michał Górny <mgorny@gentoo.org> (2017-11-29)
@@ -134,11 +142,6 @@ app-doc/doxygen clang
 # Thomas Deutschmann <whissi@gentoo.org> (2017-11-28)
 # Requires dev-libs/mongo-c-driver which isn't keyworded
 >=app-admin/rsyslog-8.31 mongodb
-
-# Andreas Sturmlechner <asturm@gentoo.org> (2017-10-11)
-# Required dependency dev-qt/qtspeech is not keyworded, bug #675340
-kde-frameworks/knotifications speech
-kde-frameworks/ktextwidgets speech
 
 # Patrice Clement <monsieurp@gentoo.org> (2017-09-24)
 # Unmask Raspberry Pi support on arm.
@@ -515,10 +518,6 @@ dev-qt/qtwebkit -jit
 # Markus Meier <maekke@gentoo.org> (2011-09-05)
 # unkeyworded deps for bug 379657 and bug 379651
 app-admin/packagekit-base entropy
-
-# Robin H. Johnson <robbat2@gentoo.org> (2011-09-03)
-# Remove this for your arch after you keyword dev-utils/google-perftools and virtual/gsasl (bug #381737)
-dev-libs/libmemcached sasl
 
 # Sebastian Pipping <sping@gentoo.org> (2011-02-22)
 # No media-sound/lilypond here, yet (bug #356069)

@@ -11,7 +11,7 @@ HOMEPAGE="https://wiki.gnome.org/Design/Apps/Contacts"
 LICENSE="GPL-2+"
 SLOT="0"
 IUSE="telepathy v4l"
-KEYWORDS="~amd64 ~arm64"
+KEYWORDS="amd64 ~arm64 ~ppc ~ppc64 ~sparc x86"
 
 VALA_DEPEND="
 	$(vala_depend)
@@ -45,6 +45,10 @@ DEPEND="${RDEPEND}
 	>=sys-devel/gettext-0.19.8
 	virtual/pkgconfig
 "
+
+PATCHES=(
+	"${FILESDIR}"/${PV}-libhandy-0.0.10-compat.patch # compatibility with libhandy-0.0.10+
+)
 
 src_prepare() {
 	xdg_src_prepare

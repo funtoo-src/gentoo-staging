@@ -13,6 +13,7 @@ LICENSE="LGPL-2.1+"
 SLOT="2.4"
 
 IUSE="gssapi gtk-doc +introspection samba ssl test +vala"
+RESTRICT="!test? ( test )"
 REQUIRED_USE="vala? ( introspection )"
 
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~ppc ~ppc64 ~s390 ~sparc ~x86"
@@ -76,7 +77,7 @@ multilib_src_configure() {
 		-Dgnome=false
 		-Dintrospection=$(multilib_native_usex introspection true false)
 		-Dvapi=$(multilib_native_usex vala true false)
-		-Dgtk-doc=$(multilib_native_usex gtk-doc true false)
+		-Dgtk_doc=$(multilib_native_usex gtk-doc true false)
 		$(meson_use test tests)
 	)
 	meson_src_configure

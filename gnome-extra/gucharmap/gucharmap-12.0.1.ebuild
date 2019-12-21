@@ -11,9 +11,10 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Gucharmap"
 
 LICENSE="GPL-3+"
 SLOT="2.90"
-KEYWORDS="alpha amd64 ~arm arm64 ia64 ppc ppc64 ~sh sparc x86 ~x86-fbsd"
+KEYWORDS="alpha amd64 arm arm64 ia64 ppc ppc64 ~sh sparc x86"
 
 IUSE="debug +introspection test vala"
+RESTRICT="!test? ( test )"
 REQUIRED_USE="vala? ( introspection )"
 
 UNICODE_VERSION=$(ver_cut 1-2)

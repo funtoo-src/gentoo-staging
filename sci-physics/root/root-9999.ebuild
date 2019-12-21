@@ -19,6 +19,7 @@ IUSE="+X aqua +asimage +c++11 c++14 c++17 cuda +davix debug emacs
 	mysql odbc +opengl oracle postgres prefix pythia6 pythia8 +python
 	qt5 R +roofit root7 shadow sqlite +ssl +tbb test +tmva +unuran vc
 	vmc +xml xrootd"
+RESTRICT="!test? ( test )"
 
 if [[ ${PV} =~ "9999" ]] ; then
 	inherit git-r3
@@ -50,6 +51,7 @@ REQUIRED_USE="
 
 CDEPEND="
 	app-arch/lz4
+	app-arch/zstd
 	app-arch/xz-utils
 	fortran? ( dev-lang/cfortran )
 	dev-libs/libpcre:3
@@ -80,7 +82,7 @@ CDEPEND="
 	asimage? ( media-libs/libafterimage[gif,jpeg,png,tiff] )
 	cuda? ( >=dev-util/nvidia-cuda-toolkit-9.0 )
 	davix? ( net-libs/davix )
-	emacs? ( virtual/emacs )
+	emacs? ( >=app-editors/emacs-23.1:* )
 	fftw? ( sci-libs/fftw:3.0= )
 	fits? ( sci-libs/cfitsio:0= )
 	graphviz? ( media-gfx/graphviz )

@@ -1,6 +1,14 @@
 # Copyright 1999-2017 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
+# Sergei Trofimovich <slyfox@gentoo.org> (2019-12-02)
+# dev-util/systemtap is not keyworded on sh
+sys-libs/glibc systemtap
+
+# Sergei Trofimovich <slyfox@gentoo.org> (2019-12-02)
+# media-libs/gd is not keyworded on sh
+sys-libs/glibc gd
+
 # Hans de Graaff <graaff@gentoo.org> (2019-04-08)
 # Obsolete ruby version, no newer versions keyworded or stable.
 dev-vcs/subversion ruby
@@ -19,8 +27,7 @@ media-sound/pulseaudio native-headset ofono-headset
 
 # Matt Turner <mattst88@gentoo.org> (2017-02-25)
 # Needs libepoxy keywording, bug #510940
-x11-base/xorg-server glamor wayland
-x11-drivers/xf86-video-ati glamor
+x11-base/xorg-server wayland
 
 # Sergey Popov <pinkbyte@gentoo.org> (2015-10-24)
 # Not tested

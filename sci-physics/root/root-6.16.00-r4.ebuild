@@ -21,6 +21,7 @@ IUSE="+X aqua +asimage +c++11 c++14 c++17 cuda +davix debug emacs
 	oracle postgres prefix pythia6 pythia8 +python qt5 R +roofit root7
 	shadow sqlite +ssl table +tbb test +threads +tiff +tmva +unuran vc
 	xinetd +xml xrootd zeroconf"
+RESTRICT="!test? ( test )"
 
 SLOT="$(ver_cut 1-2)/$(ver_cut 3)"
 LICENSE="LGPL-2.1 freedist MSttfEULA LGPL-3 libpng UoI-NCSA"
@@ -70,7 +71,7 @@ CDEPEND="
 	zeroconf? ( net-dns/avahi[mdnsresponder-compat] )
 	cuda? ( >=dev-util/nvidia-cuda-toolkit-9.0 )
 	davix? ( net-libs/davix )
-	emacs? ( virtual/emacs )
+	emacs? ( >=app-editors/emacs-23.1:* )
 	fftw? ( sci-libs/fftw:3.0= )
 	fits? ( sci-libs/cfitsio:0= )
 	graphviz? ( media-gfx/graphviz )

@@ -75,6 +75,7 @@ KEYWORDS="~alpha amd64 ~arm ~ppc ~ppc64 x86"
 SLOT="0"
 LICENSE="MPL-2.0 GPL-2 LGPL-2.1"
 IUSE="+calendar +chatzilla +crypt +gmp-autoupdate +ipc jack minimal pulseaudio +roaming selinux test"
+RESTRICT="!test? ( test )"
 
 SRC_URI+="
 	https://dev.gentoo.org/~anarchy/mozilla/patchsets/${PATCHFF}.tar.xz
@@ -156,9 +157,6 @@ src_prepare() {
 	eapply "${WORKDIR}"/firefox
 	popd &>/dev/null || die
 
-	# gcc9 patch #685092
-	eapply "${FILESDIR}"/${PN}-gcc9.patch
-
 	if grep -q '^sdkdir.*$(MOZ_APP_NAME)-devel' mozilla/config/baseconfig.mk ; then
 		sed '/^sdkdir/s@-devel@@' \
 			-i mozilla/config/baseconfig.mk || die
@@ -182,6 +180,9 @@ src_prepare() {
 	eapply_user
 
 	local ms="${S}/mozilla"
+
+	# Don't error for format with gcc-9
+	grep -rl -- '-Werror=format' | xargs sed -i 's/error=format/no-&/' || die "sed failed"
 
 	# Enable gnomebreakpad
 	if use debug ; then

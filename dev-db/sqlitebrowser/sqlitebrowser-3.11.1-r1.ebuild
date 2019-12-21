@@ -13,6 +13,7 @@ LICENSE="GPL-3 MPL-2.0"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="test"
+RESTRICT="!test? ( test )"
 
 BDEPEND="
 	dev-qt/linguist-tools:5
@@ -48,7 +49,8 @@ src_prepare() {
 	sed -e "/^project/ s/\".*\"/sqlitebrowser/" -i CMakeLists.txt || die
 
 	if ! use test; then
-		sed -e "/qt5_use_modules/ s/ Test//" -i CMakeLists.txt || die
+		sed -e "/find_package/ s/ Test//" -i CMakeLists.txt || die
+		sed -e "/set/ s/ Qt5::Test//" -i CMakeLists.txt || die
 	fi
 }
 

@@ -18,7 +18,6 @@ IUSE="otr +perl selinux socks5 +proxy libressl"
 
 CDEPEND="sys-libs/ncurses:0=
 	>=dev-libs/glib-2.6.0
-	!net-irc/irssi-otr
 	!libressl? ( dev-libs/openssl:= )
 	libressl? ( dev-libs/libressl:= )
 	otr? (
@@ -39,8 +38,7 @@ DEPEND="
 
 RDEPEND="
 	${CDEPEND}
-	selinux? ( sec-policy/selinux-irc )
-	perl? ( !net-im/silc-client )"
+	selinux? ( sec-policy/selinux-irc )"
 
 src_prepare() {
 	sed -i -e /^autoreconf/d autogen.sh || die

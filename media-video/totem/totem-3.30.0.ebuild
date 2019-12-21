@@ -13,13 +13,14 @@ HOMEPAGE="https://wiki.gnome.org/Apps/Videos"
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
 IUSE="cdr gtk-doc +introspection lirc nautilus +python test vala"
+RESTRICT="!test? ( test )"
 # see bug #359379
 REQUIRED_USE="
 	python? ( introspection ${PYTHON_REQUIRED_USE} )
 	vala? ( introspection )
 "
 
-KEYWORDS="amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 x86 ~x86-fbsd"
+KEYWORDS="amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 x86"
 
 # FIXME:
 # Runtime dependency on gnome-session-2.91

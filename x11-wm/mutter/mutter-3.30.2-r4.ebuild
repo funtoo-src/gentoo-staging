@@ -13,6 +13,7 @@ LICENSE="GPL-2+"
 SLOT="0/3" # 0/libmutter_api_version - ONLY gnome-shell (or anything using mutter-clutter-<api_version>.pc) should use the subslot
 
 IUSE="debug elogind gles2 input_devices_wacom +introspection screencast systemd test udev wayland"
+RESTRICT="!test? ( test )"
 # native backend requires gles3 for hybrid graphics blitting support and a logind provider
 REQUIRED_USE="
 	wayland? ( ^^ ( elogind systemd ) )"
@@ -59,16 +60,16 @@ RDEPEND="
 
 	input_devices_wacom? ( >=dev-libs/libwacom-0.13 )
 	introspection? ( >=dev-libs/gobject-introspection-1.42:= )
-	udev? ( >=virtual/libgudev-232:= )
+	udev? ( >=dev-libs/libgudev-232:= )
 	screencast? ( >=media-video/pipewire-0.2.2:0/0.2 )
 	wayland? (
+		>=dev-libs/libgudev-232:=
 		>=dev-libs/libinput-1.4
 		>=dev-libs/wayland-1.13.0
 		>=dev-libs/wayland-protocols-1.16
 		>=media-libs/mesa-10.3[egl,gbm,wayland,gles2]
 		systemd? ( sys-apps/systemd )
 		elogind? ( sys-auth/elogind )
-		>=virtual/libgudev-232:=
 		>=virtual/libudev-136:=
 		x11-base/xorg-server[wayland]
 		x11-libs/libdrm:=
@@ -88,6 +89,8 @@ PATCHES=(
 	"${WORKDIR}"/patches/
 	# Hack to not fail USE="-wayland,-gles2" builds with no mesa[gles2]
 	"${FILESDIR}"/3.28.3-no-gles2-fix.patch # requires eautoreconf
+
+	"${FILESDIR}"/3.30-eglmesaext-include.patch
 )
 
 src_prepare() {

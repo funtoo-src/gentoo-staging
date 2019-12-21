@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools readme.gentoo-r1 systemd user
+inherit autotools linux-info readme.gentoo-r1 systemd user
 
 DESCRIPTION="GNU package manager (nix sibling)"
 HOMEPAGE="https://www.gnu.org/software/guix/"
@@ -90,6 +90,13 @@ Next steps:
 	guix package manager user manual: https://www.gnu.org/software/guix/manual/guix.html
 "
 
+pkg_pretend() {
+	# USER_NS is used to run builders in a default setting in linux
+	# and for 'guix environment --container'.
+	local CONFIG_CHECK="~USER_NS"
+	check_extra_config
+}
+
 pkg_setup() {
 	enewgroup guixbuild
 	for i in {1..10}; do
@@ -115,6 +122,7 @@ src_prepare() {
 	# loads system one (from potentially older version of guix).
 	# To work it around we bump last modification timestamp of
 	# '*.scm' files.
+	# http://debbugs.gnu.org/cgi/bugreport.cgi?bug=38112
 	find "${S}" -name "*.scm" -exec touch {} + || die
 
 	# Gentoo stores systemd unit files in lib, never in lib64: bug #689772

@@ -50,7 +50,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	dbus? ( dev-libs/dbus-glib )
 	exif? ( media-libs/libexif )
 	gnome? ( >=gnome-base/gnome-vfs-2.0 )
-	imagemagick? ( media-gfx/imagemagick:=[cxx] )
+	imagemagick? ( <media-gfx/imagemagick-7:=[cxx] )
 	jpeg? ( virtual/jpeg:0 )
 	lcms? ( media-libs/lcms:2 )
 	spell? (
@@ -98,6 +98,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.91_pre3-sk-man.patch"
 	"${FILESDIR}/${PN}-0.48.4-epython.patch"
 	"${FILESDIR}/${PN}-0.92.4-poppler-0.76.0.patch" #684246
+	"${FILESDIR}/${PN}-0.92.4-poppler-0.82.0.patch"
 )
 
 S="${WORKDIR}/${MY_P}"

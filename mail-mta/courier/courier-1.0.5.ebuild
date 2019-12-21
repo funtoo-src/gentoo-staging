@@ -27,7 +27,7 @@ DEPEND="
 	dev-libs/libpcre
 	app-misc/mime-types
 	fax? ( >=media-libs/netpbm-9.12 app-text/ghostscript-gpl >=net-dialup/mgetty-1.1.28 )
-	pam? ( virtual/pam )
+	pam? ( sys-libs/pam )
 	mysql? ( dev-db/mysql-connector-c )
 	ldap? ( >=net-nds/openldap-1.2.11 )
 	postgres? ( dev-db/postgresql:= )
@@ -242,7 +242,7 @@ src_install() {
 
 src_test() {
 	if [ `whoami` != 'root' ]; then
-		emake -j1 check || die "Make check failed."
+		emake -j1 check
 	else
 		einfo "make check skipped, can't run as root."
 		einfo "You can enable it with FEATURES=\"userpriv\""

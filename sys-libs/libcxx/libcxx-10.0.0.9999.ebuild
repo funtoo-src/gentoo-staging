@@ -3,21 +3,14 @@
 
 EAPI=7
 
-# Ninja provides better scalability and cleaner verbose output, and is used
-# throughout all LLVM projects.
-: ${CMAKE_MAKEFILE_GENERATOR:=ninja}
-# (needed due to CMAKE_BUILD_TYPE != Gentoo)
-CMAKE_MIN_VERSION=3.7.0-r1
 PYTHON_COMPAT=( python{2_7,3_{5,6,7}} )
-
-inherit cmake-multilib git-r3 llvm multiprocessing python-any-r1 \
+inherit cmake-multilib llvm llvm.org multiprocessing python-any-r1 \
 	toolchain-funcs
 
 DESCRIPTION="New implementation of the C++ standard library, targeting C++11"
 HOMEPAGE="https://libcxx.llvm.org/"
-SRC_URI=""
-EGIT_REPO_URI="https://git.llvm.org/git/libcxx.git
-	https://github.com/llvm-mirror/libcxx.git"
+LLVM_COMPONENTS=( libcxx )
+llvm.org_set_globals
 
 LICENSE="Apache-2.0-with-LLVM-exceptions || ( UoI-NCSA MIT )"
 SLOT="0"
@@ -100,7 +93,7 @@ src_configure() {
 multilib_src_configure() {
 	# we want -lgcc_s for unwinder, and for compiler runtime when using
 	# gcc, clang with gcc runtime (or any unknown compiler)
-	local extra_libs=() want_gcc_s=ON
+	local extra_libs=() want_gcc_s=ON want_compiler_rt=OFF
 	if use libunwind; then
 		# work-around missing -lunwind upstream
 		extra_libs+=( -lunwind )
@@ -111,6 +104,7 @@ multilib_src_configure() {
 			   ${LDFLAGS} -print-libgcc-file-name)
 			if [[ ${compiler_rt} == *libclang_rt* ]]; then
 				want_gcc_s=OFF
+				want_compiler_rt=ON
 				extra_libs+=( "${compiler_rt}" )
 			fi
 		fi
@@ -137,6 +131,7 @@ multilib_src_configure() {
 		-DLIBCXX_HAS_MUSL_LIBC=$(usex elibc_musl)
 		-DLIBCXX_HAS_GCC_S_LIB=${want_gcc_s}
 		-DLIBCXX_INCLUDE_TESTS=$(usex test)
+		-DLIBCXX_USE_COMPILER_RT=${want_compiler_rt}
 		-DCMAKE_SHARED_LINKER_FLAGS="${extra_libs[*]} ${LDFLAGS}"
 	)
 

@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Foundation
+# Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -14,6 +14,7 @@ LICENSE="GPL-3+"
 SLOT="0/0.2"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE="+av daemon ipv6 log-debug +log-error log-info log-trace log-warn static-libs test"
+RESTRICT="!test? ( test )"
 
 REQUIRED_USE="?? ( log-debug log-error log-info log-trace log-warn )"
 

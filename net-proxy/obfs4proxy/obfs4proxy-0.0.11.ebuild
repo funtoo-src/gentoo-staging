@@ -23,7 +23,7 @@ HOMEPAGE="https://gitlab.com/yawning/obfs4"
 SRC_URI="https://gitlab.com/yawning/obfs4/-/archive/${P}/obfs4-${P}.tar.gz -> ${P}.tar.gz
 	${EGO_VENDOR_URI}"
 
-LICENSE="BSD"
+LICENSE="BSD BSD-2 CC0-1.0 BZIP2 GPL-3+ MIT public-domain"
 SLOT="0"
 KEYWORDS="~amd64 ~arm ~x86"
 IUSE=""
@@ -43,8 +43,8 @@ src_compile() {
 
 src_install() {
 	default
-	dobin obfs4proxy || die "install failed"
+	dobin obfs4proxy
 	cd src/${EGO_SRC}
-	doman doc/obfs4proxy.1 || die "install failed"
-	dodoc README.md ChangeLog doc/obfs4-spec.txt || die "install failed"
+	doman doc/obfs4proxy.1
+	dodoc README.md ChangeLog doc/obfs4-spec.txt
 }

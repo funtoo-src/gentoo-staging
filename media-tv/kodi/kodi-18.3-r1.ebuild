@@ -42,6 +42,7 @@ SLOT="0"
 # it is _required_ for USB support. Otherwise they'll disable udev and
 # that's going to be worse.
 IUSE="airplay alsa bluetooth bluray caps cec +css dbus dvd gbm gles lcms libressl libusb lirc mariadb mysql nfs +opengl pulseaudio raspberry-pi samba systemd +system-ffmpeg test +udev udisks upnp upower vaapi vdpau wayland webserver +X +xslt zeroconf"
+RESTRICT="!test? ( test )"
 REQUIRED_USE="
 	${PYTHON_REQUIRED_USE}
 	|| ( gles opengl )
@@ -127,7 +128,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 		media-libs/mesa[wayland]
 		>=dev-libs/wayland-protocols-1.7
 	)
-	webserver? ( >=net-libs/libmicrohttpd-0.9.55[messages] )
+	webserver? ( >=net-libs/libmicrohttpd-0.9.55[messages(+)] )
 	X? (
 		x11-libs/libX11
 		x11-libs/libXrandr

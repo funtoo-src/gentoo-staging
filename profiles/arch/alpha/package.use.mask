@@ -1,6 +1,14 @@
 # Copyright 1999-2019 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Tomáš Mózes <hydrapolic@gmail.com> (2019-12-19)
+# dev-libs/criterion is not keyworded yet
+app-admin/syslog-ng test
+
+# Robin H. Johnson <robbat2@gentoo.org> (2019-12-06)
+# PPS should work on all arches, but only keyworded on some arches
+>=net-misc/ntp-4.2.6_p3-r1 -parse-clocks
+
 # Mart Raudsepp <leio@gentoo.org> (2019-08-18)
 # media-video/pipewire is not keyworded yet
 x11-wm/mutter screencast
@@ -27,10 +35,6 @@ app-admin/sudo sssd
 # Andreas Sturmlechner <asturm@gentoo.org> (2018-09-30)
 # Optional dependency blocking security cleanup, bug #627316
 media-sound/mpd wildmidi
-
-# Joonas Niilola <juippis@gentoo.org> (2018-06-17)
-# Optional dependency not available for this arch
-dev-libs/efl vlc
 
 # Thomas Deutschmann <whissi@gentoo.org> (2018-06-06)
 # Needs sys-apps/fakechroot which isn't keyworded
@@ -231,10 +235,6 @@ dev-python/urllib3 test
 # dev-lua/lgi lacks alpha keyword, bug #551540
 dev-libs/libpeas lua
 
-# Mike Frysinger <vapier@gentoo.org> (2015-03-16)
-# Needs sci-physics/bullet tested #499974
-dev-libs/efl physics
-
 # Michał Górny <mgorny@gentoo.org> (2015-02-22)
 # Dependency not keyworded for some reason.
 media-libs/gegl umfpack
@@ -267,10 +267,6 @@ dev-haskell/vector test
 # OpenCV likely will never work on Alpha
 media-video/vlc opencv
 media-gfx/shotwell opencv
-
-# Pacho Ramos <pacho@gentoo.org> (2014-11-11)
-# Missing keywords, bug #523686
->=dev-libs/libgdata-0.16.1 test
 
 # Tobias Klausmann <klausman@gentoo.org> (2014-10-11)
 # app-emulation/qemu is not keyworded on alpha, masking flag that triggers

@@ -12,13 +12,13 @@ SRC_URI="https://github.com/${PN}/${PN}/releases/download/${P}/${P}.tar.bz2"
 
 LICENSE="|| ( BSD GPL-2 )"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
+KEYWORDS="alpha amd64 ~arm arm64 ~hppa ~ia64 ~mips ppc ppc64 ~s390 ~sh sparc x86"
 IUSE="pam python static-libs"
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
 RDEPEND="
 	>=sys-libs/cracklib-2.8:=[static-libs(+)?]
-	pam? ( virtual/pam )
+	pam? ( sys-libs/pam )
 	python? ( ${PYTHON_DEPS} )
 "
 DEPEND="${RDEPEND}

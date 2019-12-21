@@ -47,7 +47,6 @@ RDEPEND="
 		dev-libs/libcdio:=
 		dev-libs/libcdio-paranoia
 	)
-	cue? ( media-libs/libcue )
 	curl? ( net-misc/curl )
 	dbus? ( dev-qt/qtdbus:5 )
 	enca? ( app-i18n/enca )
@@ -75,7 +74,7 @@ RDEPEND="
 	projectm? (
 		dev-qt/qtgui:5[-gles2]
 		dev-qt/qtopengl:5
-		media-libs/libprojectm
+		media-libs/libprojectm:=
 	)
 	pulseaudio? ( >=media-sound/pulseaudio-0.9.9 )
 	qtmedia? ( dev-qt/qtmultimedia:5 )

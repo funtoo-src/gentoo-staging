@@ -11,8 +11,9 @@ SRC_URI="http://untroubled.org/${PN}/archive/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~ppc ~x86 ~x64-cygwin"
+KEYWORDS="amd64 ~arm ppc x86 ~x64-cygwin"
 IUSE="ssl test"
+RESTRICT="!test? ( test )"
 
 DEPEND="
 	ssl? ( net-libs/gnutls:0= )
@@ -34,6 +35,12 @@ RDEPEND="
 	!mail-mta/sendmail
 	!mail-mta/ssmtp[mta(+)]
 "
+
+PATCHES=(
+	"${FILESDIR}/${P}-fix-test-racecondition.patch"
+	"${FILESDIR}/${P}-disable-dns-using-test.patch"
+	"${FILESDIR}/${P}-disable-smtp-auth-tests.patch"
+)
 
 pkg_setup() {
 	enewgroup nullmail 88

@@ -7,7 +7,9 @@ inherit autotools elisp-common eutils xdg-utils
 
 DESCRIPTION="Free computer algebra environment based on Macsyma"
 HOMEPAGE="http://maxima.sourceforge.net/"
-SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
+# the 5.43.0 tarball misses doc/info/de/include-maxima.de.texi #687244
+SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz
+	https://dev.gentoo.org/~ulm/distfiles/${P}-missing-texi-file.tar.gz"
 
 LICENSE="GPL-2 GPL-2+"
 SLOT="0"
@@ -23,6 +25,7 @@ CONF_FLAG=( .    .     .               ecl  ccl       .     )
 PATCH_V=(   2    1     .               3    3         1     )
 
 IUSE="emacs tk nls unicode X test ${LISPS[*]}"
+RESTRICT="!test? ( test )"
 
 # Languages
 LANGS="de es pt pt_BR"
@@ -35,7 +38,7 @@ RDEPEND="!app-emacs/imaxima
 	X? ( x11-misc/xdg-utils
 		 sci-visualization/gnuplot[gd]
 		 tk? ( dev-lang/tk:0 ) )
-	emacs? ( virtual/emacs
+	emacs? ( >=app-editors/emacs-23.1:*
 		virtual/latex-base
 		app-emacs/auctex
 		app-text/ghostscript-gpl
@@ -96,7 +99,7 @@ pkg_setup() {
 
 src_prepare() {
 	local n PATCHES v
-	PATCHES=( emacs-0 rmaxima-0 wish-2 xdg-utils-1 )
+	PATCHES=( emacs-0 rmaxima-0 wish-2 xdg-utils-1 texinfo-0 )
 
 	n=${#PATCHES[*]}
 	for ((n--; n >= 0; n--)); do

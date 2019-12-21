@@ -11,7 +11,7 @@ SRC_URI="mirror://sourceforge/nethack/${PN}-${MY_PV}-src.tgz"
 
 LICENSE="nethack"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~hppa ~x86 ~x86-fbsd"
+KEYWORDS="~amd64 ~arm ~hppa ~x86"
 IUSE="experimental X"
 
 RDEPEND="acct-group/gamestat
@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}
 	X? (
 		x11-base/xorg-proto
 		x11-apps/bdftopcf
-		x11-apps/mkfontdir
+		>=x11-apps/mkfontscale-1.2.0
 	)"
 
 BINDIR="/usr/bin"

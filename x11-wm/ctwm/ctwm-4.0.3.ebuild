@@ -6,11 +6,11 @@ inherit cmake-utils
 
 DESCRIPTION="A clean, light window manager"
 HOMEPAGE="https://ctwm.org/"
-SRC_URI="${HOMEPAGE}dist/${P}.tar.xz"
+SRC_URI="https://ctwm.org/dist/${P}.tar.xz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86 ~x86-fbsd"
+KEYWORDS="~amd64 ~ppc ~x86"
 
 RDEPEND="
 	x11-libs/libICE
