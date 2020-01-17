@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_{5,6} )
+PYTHON_COMPAT=( python3_6 )
 DISTUTILS_SINGLE_IMPL=true
 
 inherit distutils-r1 readme.gentoo-r1 virtualx
@@ -27,7 +27,6 @@ DEPEND="${RDEPEND}
 	sys-devel/gettext
 	doc? (
 		dev-python/sphinx[${PYTHON_USEDEP}]
-		python_targets_python2_7? ( dev-python/sphinxtogithub[$(python_gen_usedep 'python2*')] )
 		)
 	test? (
 		${VIRTUALX_DEPEND}

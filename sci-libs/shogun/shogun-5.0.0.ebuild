@@ -1,9 +1,9 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
 
-PYTHON_COMPAT=( python2_7 python3_{5,6} )
+PYTHON_COMPAT=( python3_6 )
 
 inherit cmake-utils flag-o-matic python-single-r1 toolchain-funcs versionator
 
@@ -11,7 +11,7 @@ MYPV=$(get_version_component_range 1-2)
 MYPD=${PN}-data-0.9
 
 DESCRIPTION="Large Scale Machine Learning Toolbox"
-HOMEPAGE="http://shogun-toolbox.org/"
+HOMEPAGE="https://shogun-toolbox.org/"
 SRC_URI="
 	ftp://shogun-toolbox.org/shogun/releases/${MYPV}/sources/${P}.tar.bz2
 	test? ( ftp://shogun-toolbox.org/shogun/data/${MYPD}.tar.bz2 )

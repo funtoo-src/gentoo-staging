@@ -1,4 +1,4 @@
-# Copyright 1999-2019 Gentoo Authors
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -72,7 +72,10 @@ COMMON_DEPEND="${PYTHON_DEPS}
 # install these so we could of course just not depend on those and rely
 # on that.
 RDEPEND="${COMMON_DEPEND}
-	dev-python/numpy[${PYTHON_USEDEP}]
+	|| (
+		dev-python/numpy-python2[${PYTHON_USEDEP}]
+		dev-python/numpy[${PYTHON_USEDEP}]
+	)
 	media-gfx/uniconvertor
 	dia? ( app-office/dia )
 	latex? (
@@ -99,6 +102,7 @@ PATCHES=(
 	"${FILESDIR}/${PN}-0.48.4-epython.patch"
 	"${FILESDIR}/${PN}-0.92.4-poppler-0.76.0.patch" #684246
 	"${FILESDIR}/${PN}-0.92.4-poppler-0.82.0.patch"
+	"${FILESDIR}/${PN}-0.92.4-poppler-0.83.0.patch"
 )
 
 S="${WORKDIR}/${MY_P}"

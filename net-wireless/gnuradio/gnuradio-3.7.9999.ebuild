@@ -5,7 +5,7 @@ EAPI=6
 PYTHON_COMPAT=( python2_7 )
 
 CMAKE_BUILD_TYPE="None"
-inherit cmake-utils eutils gnome2-utils python-single-r1 python-utils-r1 xdg-utils
+inherit cmake-utils eutils gnome2-utils python-single-r1 xdg-utils
 
 DESCRIPTION="Toolkit that provides signal processing blocks to implement software radios"
 HOMEPAGE="https://www.gnuradio.org/"
@@ -61,7 +61,10 @@ RDEPEND="${PYTHON_DEPS}
 		dev-python/cheetah[${PYTHON_USEDEP}]
 		dev-python/lxml[${PYTHON_USEDEP}]
 		>=dev-python/pygtk-2.10:2[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		|| (
+			dev-python/numpy-python2[${PYTHON_USEDEP}]
+			dev-python/numpy[${PYTHON_USEDEP}]
+		)
 	)
 	jack? (
 		media-sound/jack-audio-connection-kit
@@ -80,7 +83,10 @@ RDEPEND="${PYTHON_DEPS}
 	)
 	wxwidgets? (
 		dev-python/wxpython:3.0[${PYTHON_USEDEP}]
-		dev-python/numpy[${PYTHON_USEDEP}]
+		|| (
+			dev-python/numpy-python2[${PYTHON_USEDEP}]
+			dev-python/numpy[${PYTHON_USEDEP}]
+		)
 	)
 	zeromq? ( >=net-libs/zeromq-2.1.11 )
 	"
