@@ -1,6 +1,10 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Georgy Yakovlev <gyakovlev@gentoo.org> (2020-01-25)
+# requires fwupd, which is not yet keyworded
+kde-plasma/discover firmware
+
 # Michał Górny <mgorny@gentoo.org> (2020-01-11)
 # Unkeyworded test deps.
 dev-cpp/eigen test
@@ -96,8 +100,6 @@ media-libs/opencv contribdnn
 
 # Robin H. Johnson <robbat2@gentoo.org> (2017-11-10)
 # Masked for dependencies:
-# - bug #438780: sys-firmware/ipxe not buildable on PPC without cross-compiler
-app-emulation/qemu qemu_softmmu_targets_i386 qemu_softmmu_targets_x86_64
 # - media-libs/virglrenderer: pending keywording
 app-emulation/qemu virgl
 

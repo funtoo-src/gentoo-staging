@@ -32,6 +32,245 @@
 
 #--- END OF EXAMPLES ---
 
+# David Seifert <soap@gentoo.org> (2020-01-27)
+# Unmaintained, py2 only, depends on dead dev-python/pygtkglext, last release
+# over 8 years ago, no sign of py3 port. Removal in 30 days.
+sci-libs/pymmlib
+
+# David Seifert <soap@gentoo.org> (2020-01-27)
+# Unmaintained, py2 only, depends on dead dev-python/pygtkglext and
+# dev-python/librsvg-python, no revdeps.
+# Removal in 30 days.  Bug #640074.
+media-gfx/pycam
+
+# Robin H. Johnson <robbat2@gentoo.org> (2020-01-26)
+# EAPI conversion caused some regressions, need to redesign old ebuilds.
+=dev-lang/lua-5.1.5-r5
+
+# David Seifert <soap@gentoo.org> (2020-01-26)
+# Unmaintained, last release 14 years ago, tons of patches,
+# Autoconf script is broken, fails with gettext-0.20.
+# Removal in 30 days.  Bug #578234, #685928.
+app-i18n/zhcon
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-01-26)
+# No revdeps, blocks dev-python/pygtk cleanup, bug #706476
+# Masked for removal in 30 days.
+dev-python/pygtkhelpers
+
+# Michał Górny <mgorny@gentoo.org> (2020-01-26)
+# Unmaintained.  Not bumped since Mar 2018.  No py3.7 compat.  Forces
+# old version of dev-python/idna.
+# Removal in 30 days.  Bug #706502.
+net-misc/crossbar
+
+# Andrew Ammerlaan <andrewammerlaan@riseup.net> (2020-01-26)
+# Proxy Maintainers <proxy-maint@gentoo.org>
+# v3.6.3 uses huge amounts of memory: Bug #705682
+# v3.6.1 is the latest version without this issue
+=dev-libs/libsass-3.6.3
+
+# Michał Górny <mgorny@gentoo.org> (2020-01-26)
+# Unmaintained in Gentoo.  Last bumped in 2013.  Multiple problems
+# reported both in release and live ebuild.  Python 2 only.  Version
+# bump is non-trivial.
+# Removal in 30 days.  Bug #706498.
+app-vim/youcompleteme
+
+# Georgy Yakovlev <gyakovlev@gentoo.org> (2020-01-26)
+# Starting with Firefox 74 Mozilla removes xpi sideloading support
+# install from addons.mozilla.org
+# passff-host remains in the tree
+www-plugins/passff
+
+# Michał Górny <mgorny@gentoo.org> (2020-01-18)
+# The following packages depend on django, support Python 2 only
+# and have no reverse dependencies.
+# Removal in 30 days.  Bug #706360.
+dev-python/django-annoying
+dev-python/django-endless-pagination
+dev-python/django-international
+dev-python/django-ldapdb
+dev-python/django-ldap-groups
+dev-python/django-oauth-plus
+dev-python/django-openid-auth
+dev-python/django-piston
+dev-python/django-registration
+dev-python/django-xslt
+
+# David Seifert <soap@gentoo.org> (2020-01-25)
+# Upstream is mostly unresponsive and doesn't have the resources to
+# fix their code. Lots of bugs in the form of big endian issues, buffer
+# overflows, heap overflows, memory leaks and missing sanity checks.
+# Includes libbinio, which is only used by adplug and in a similarly poor
+# state. Multiple open CVEs, removal in 30 days. Bug #667170, #706346.
+media-libs/adplug
+dev-cpp/libbinio
+media-sound/adplay
+
+# Victor Payno <vpayno+gentoo@gmail.com> (2020-01-23)
+# Requires slotted lua.
+=dev-lang/lua-5.1.5-r103
+=dev-lang/lua-5.2.4-r2
+=dev-lang/lua-5.3.5-r2
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# Upstream disappeared, no other distro still carries this,
+# blocks removal of EOL gtkglext, no revdeps.
+# Removal in 30 days.
+games-strategy/gwp
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# All released versions depend on EOL gtkglext, no revdeps.
+# Bug #644334, #694834. Removal of releases in 30 days.
+# Lars Wendler <polynomial-c@gemtoo.org> (2020-01-22)
+# Do NOT treeclean the live ebuild!
+<sci-astronomy/celestia-9999
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# Last release over 2 years ago, depends on EOL gtkglext.
+# No revdeps, Removal in 30 days.
+sci-chemistry/gabedit
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# Last release over 13 years ago, depends on EOL gtkglext, no revdeps.
+# Bug #353119, #435676. Removal in 30 days.
+sci-chemistry/ghemical
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# Last release over 18 years ago, depends on EOL gtkglext.
+# No revdeps, Removal in 30 days.
+sci-physics/lightspeed
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# Last release over 7 years ago, depends on EOL gtkglext.
+# No revdeps, Removal in 30 days.
+sci-visualization/gfsview
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# No sign of py3 port, depends on EOL pygtk. No revdeps.
+# Bug #706030. Removal in 30 days.
+app-misc/gourmet
+dev-python/python-poppler
+
+# David Seifert <soap@gentoo.org> (2020-01-21)
+# EAPI 4, last release in 2005, doesn't build, no revdeps.
+# Bug #664498. Removal in 30 days.
+app-text/sary
+
+# Mike Gilbert <floppym@gentoo.org> (2020-01-20)
+# Newer versions are using Go modules, which makes this more difficult to
+# maintain. Take this over if wanted, otherwise I will remove it in 30 days.
+app-admin/cli53
+
+# Stephan Hartmann <stha09@googlemail.com> (2020-01-20)
+# Dev channel releases are only for people who
+# are developers or want more experimental features
+# and accept a more unstable release.
+>=www-client/chromium-81
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-01-19)
+# Ancient, last release in 2006, blocks x11-libs/gtkglext cleanup
+# Masked for removal in 30 days.
+media-sound/glmix
+
+# Zac Medico <zmedico@gentoo.org> (2020-01-19)
+# This package has been replaced by dev-python/python-podman and has
+# no reverse dependencies.
+# Removal in 30 days.  Bug #705826.
+dev-python/pypodman
+
+# David Seifert <soap@gentoo.org> (2020-01-18)
+# Leftover from silc* removal (#522916), unmaintained, no
+# upstream releases since 2014, no revdeps, EAPI-4.
+# Bug #705462. Removal in 14 days.
+net-im/silc-toolkit
+
+# Michał Górny <mgorny@gentoo.org> (2020-01-18)
+# The following Gentoo packages are Python 2-only and have no reverse
+# dependencies.
+# Removal in 30 days.  Bug #705762.
+dev-python/aldryn-boilerplates
+dev-python/aldryn-common
+dev-python/aquarium
+dev-python/celementtree
+dev-python/collectd-rabbitmq
+dev-python/cosmolopy
+dev-python/django-annoying
+dev-python/django-endless-pagination
+dev-python/django-international
+dev-python/django-ldapdb
+dev-python/django-ldap-groups
+dev-python/django-oauth-plus
+dev-python/django-openid-auth
+dev-python/django-piston
+dev-python/django-registration
+dev-python/django-xslt
+dev-python/egg-python
+dev-python/Flask-KVSession
+dev-python/flask-openid
+dev-python/flask-xml-rpc
+dev-python/gdata
+dev-python/libwnck-python
+dev-python/lxc-python2
+dev-python/mantissa
+dev-python/mkpythonproj
+dev-python/morbid
+dev-python/myghty
+dev-python/myghtyutils
+dev-python/openstack-nose-plugin
+dev-python/paisley
+dev-python/pkipplib
+dev-python/processing
+dev-python/pSQL
+dev-python/pudge
+dev-python/pyds
+dev-python/pygene
+dev-python/pygtkhelpers
+dev-python/pynotifier
+dev-python/pypgsql
+dev-python/pythong
+dev-python/python-musicbrainz
+dev-python/python-nss
+dev-python/python-recaptcha
+dev-python/python-scw
+dev-python/python-tvrage
+dev-python/python-yadis
+dev-python/qpid-python
+dev-python/robotframework-selenium2library
+dev-python/robotframework-sshlibrary
+dev-python/rtgraph
+dev-python/ruledispatch
+dev-python/runsnakerun
+dev-python/sqlite3dbm
+dev-python/sqlobject
+dev-python/steadymark
+dev-python/storm
+dev-python/timelib
+dev-python/turbocheetah
+dev-python/turbojson
+dev-python/turbokid
+dev-python/weakrefmethod
+dev-python/webut
+dev-python/wehjit
+dev-python/zfec
+
+# David Seifert <soap@gentoo.org> (2020-01-18)
+# EAPI 4, last release in 2004, ebuild has QA and licensing issues.
+# Bug #426028, #454116. Removal in 30 days.
+net-ftp/oftpd
+
+# David Seifert <soap@gentoo.org> (2020-01-18)
+# EAPI 4, doesn't build against OpenSSL 1.1 API, last release in 2014,
+# lots of QA issues (calls cc directly, -Werror)
+# Bug #634442, #664766. Removal in 30 days.
+net-dns/validns
+
+# David Seifert <soap@gentoo.org> (2020-01-18)
+# EAPI 4, doesn't build, last release in 2005.
+# Bug #384031, #638492, #663644. Removal in 30 days.
+net-analyzer/pchar
+
 # Michał Górny <mgorny@gentoo.org> (2020-01-16)
 # Python 2 only.  Last release in 2006.  No reverse dependencies.
 # Removal in 30 days.  Bug #705522.
@@ -115,16 +354,6 @@ media-sound/kaudiocreator
 # Unmaintained upstream and redundant. Use Night Color functionality built into
 # Plasma 5.17 instead, without needing x11-misc/redshift. Removal in 30 days.
 kde-misc/plasma-redshift-control
-
-# Andreas Sturmlechner <asturm@gentoo.org> (2020-01-12)
-# Merged into dev-util/kdevelop months ago, unusable standalone
-# Removal in 10 days.
-dev-util/kdevelop-clang-tidy
-
-# Anthony G. Basile <blueness@gentoo.org> (2020-01-11)
-# Awaiting a fix from upstream, bug #705038
-=net-libs/mbedtls-2.18.1
-=net-libs/mbedtls-2.19.1
 
 # Mart Raudsepp <leio@gentoo.org> (2020-01-11)
 # End of life vala:0.42 series, please depclean.
@@ -479,12 +708,6 @@ games-action/accelerator3d
 # Removal in 30 days.  Bug #693032.
 games-kids/tuxmathscrabble
 
-# Ulrich Müller <ulm@gentoo.org> (2019-12-25)
-# Broken SRC_URI. Most distfiles have no license,
-# so we cannot distribute them on mirrors.
-# Masked for removal in 30 days. Bug #635372.
-x11-themes/audacious-themes
-
 # David Seifert <soap@gentoo.org> (2019-12-24)
 # Unmaintained, uses dead POSIX streams interface, EAPI 4.
 # Bug #692228, Removal in 30 days.
@@ -504,32 +727,11 @@ sci-libs/naga
 sci-libs/spooles
 sci-libs/vecmath-objectclub
 
-# Alfredo Tupone <tupone@gentoo.org> (2019-12-20)
-# dev-tcltk/tkXwin functionality is >=dev-lang/tk-8.5
-# Removal in 30 days
-dev-tcltk/tkXwin
-
-# Brian Evans <grknight@gentoo.org> (2019-12-19)
-# PHP 7.1 is end of life and has security issues Bug 703326
-# Associated packages are not ready for new versions tracked in bug 702110
-# Removal in 30 days
-dev-lang/php:7.1
-dev-php/pecl-cassandra
-<dev-php/pecl-event-2.5
-virtual/httpd-php:7.1
-
 # Tomáš Mózes <hydrapolic@gentoo.org> (2019-12-19)
 # Needs more testing.
 =app-emulation/xen-4.13.0
 =app-emulation/xen-pvgrub-4.13.0
 =app-emulation/xen-tools-4.13.0
-
-# Ulrich Müller <ulm@gentoo.org> (2019-12-18)
-# Live ebuilds for Emacs from Git have been consolidated
-# into separate slots of the app-editors/emacs package.
-# Please update your package.accept_keywords file accordingly.
-# Masked for removal in 30 days. Bug #291296.
-app-editors/emacs-vcs
 
 # Anthony G. Basile <blueness@gentoo.org> (2019-12-17)
 # Project has been dead upstream for years.

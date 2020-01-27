@@ -6,6 +6,10 @@
 # This file is only for generic masks. For arch-specific masks (i.e.
 # mask everywhere, unmask on arch/*) use arch/base.
 
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-01-19)
+# media-libs/pulseaudio-qt is not keyworded
+kde-misc/kdeconnect pulseaudio
+
 # Michał Górny <mgorny@gentoo.org> (2020-01-12)
 # libcxxrt is unmaintained and it's going to be removed.
 sys-libs/libcxx libcxxrt
@@ -55,14 +59,9 @@ dev-python/statsmodels doc
 # Requires dev-python/astropy that's being removed.
 sci-visualization/veusz fits
 
-# Andreas Sturmlechner <asturm@gentoo.org> (2019-11-28)
-# sci-visualization/visit was last-rited, bug #657952
-sci-libs/libgeodecomp visit
-
 # Michał Górny <mgorny@gentoo.org> (2019-11-25)
 # Requires old version of dev-python/sphinx that's being removed.
 ~dev-python/fabric-2.3.1 doc
-<dev-python/hacking-1.1.0 doc
 
 # Michał Górny <mgorny@gentoo.org> (2019-11-09)
 # eMovix is being removed.
@@ -217,7 +216,6 @@ sys-libs/glibc cet
 # Michał Górny <mgorny@gentoo.org> (2018-06-13)
 # Requires app-arch/snappy[static-libs] that is no longer available.
 # Bugs #651604, #651606.
-app-emulation/qemu static
 <dev-libs/leveldb-1.20 static-libs
 sys-block/fio static
 sys-cluster/ceph static-libs

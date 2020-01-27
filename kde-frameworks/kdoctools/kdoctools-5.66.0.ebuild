@@ -10,7 +10,7 @@ inherit ecm kde.org
 DESCRIPTION="Tools to generate documentation in various formats from DocBook files"
 
 LICENSE="MIT"
-KEYWORDS="~amd64 ~arm ~arm64 ~x86"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
 IUSE="nls"
 
 BDEPEND="
@@ -28,7 +28,7 @@ DEPEND="
 "
 RDEPEND="${DEPEND}"
 
-PATCHES=( "${FILESDIR}/${PN}-5.66.0-docbundledir.patch" )
+PATCHES=( "${FILESDIR}/${PN}-5.54.0-gentoo-docbundledir.patch" )
 
 src_configure() {
 	local mycmakeargs=(
