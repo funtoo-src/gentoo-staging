@@ -32,6 +32,27 @@
 
 #--- END OF EXAMPLES ---
 
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-03)
+# No maintainer, py27-only, blocks pygtk-removal, last release in 2012.
+app-misc/pystopwatch
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-03)
+# No maintainer, py27-only, broken at runtime, last release in 2010.
+# Masked for removal in 30 days.
+x11-misc/googsystray
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-03)
+# Ancient, no maintainer, py27-only, bug 708104. Masked for removal in 30 days.
+dev-util/gquilt
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-03)
+# Ancient, no maintainer, py27-only. Masked for removal in 30 days.
+dev-util/xesam-tools
+
+# Mart Raudsepp <leio@gentoo.org> (2020-02-03)
+# Known breakages that need to be handled first, bug 698922
+>=x11-libs/pango-1.43
+
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-02-02)
 # Ancient, dead, py27-only, all revdeps masked for removal, bugs 651346, 696974
 # Masked for removal in 30 days.
