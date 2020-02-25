@@ -32,6 +32,29 @@
 
 #--- END OF EXAMPLES ---
 
+# Jason A. Donenfeld <zx2c4@gentoo.org> (2020-02-24)
+# Unsupported upstream version, likely has security bugs. Not removed
+# immediately because of backwards incompatible configuration changes
+# with the newer version in the tree.
+#
+# Removal in 14 days. Bug #710754.
+~mail-mta/opensmtpd-6.0.3_p1
+
+# Marek Szuba <marecki@gentoo.org> (2020-02-24)
+# Deprecated upstream in Q1'2018 in favour of dev-libs/intel-neo and
+# while it officially remains the recommended solution for "legacy HW
+# platforms" not supported by NEO (i.e. Sandy Bridge, Ivy Bridge and
+# Haswell GPUs), there has been no repository activity since August 2018.
+# Only really suitable for code development due to poor performance, some
+# OpenCL-aware software (e.g. media-gfx/darktable) explicitly
+# blacklists Beignet devices.
+# Upstream does not support LLVM versions newer than 7, third-party patches
+# exist for 8 and 9 but Beignet built against those versions fails some
+# unit tests.
+#
+# Removal in 30 days. Bug #710640.
+dev-libs/beignet
+
 # Michał Górny <mgorny@gentoo.org> (2020-02-24)
 # app-admin/packagekit-base is Python 2 only and behind upstream.
 # The Portage backend is unmaintained.  Other packages are its reverse
@@ -66,8 +89,7 @@ games-strategy/boswars
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-02-22)
 # Last release in 2009, py2-only, blocks dev-python/pygtk removal, bug #708100
-# media-gfx/mcomix meanwhile is a fork of comix that will be kept until its
-# fork mcomix3 was packaged. Masked for removal in 30 days.
+# Use media-gfx/mcomix instead. Masked for removal in 30 days.
 media-gfx/comix
 
 # Mart Raudsepp <leio@gentoo.org> (2020-02-21)
