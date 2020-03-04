@@ -32,6 +32,11 @@
 
 #--- END OF EXAMPLES ---
 
+# Craig Andrews <candrews@gentoo.org> (2020-03-03)
+# Deprecated upstream in favor of dev-libs/rocm-comgr
+# Masked for removal in 30 days. Bug #711398
+dev-libs/rocm-opencl-driver
+
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-02-29)
 # Breaks at least app-text/texlive-core and app-office/libreoffice right now,
 # bugs 711096, 711102.
@@ -50,22 +55,39 @@ www-servers/tomcat:9
 app-portage/euscan
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
-# Unmaintained revdeps on dev-python/pygtk blocking its removal, py2-only
-# All masked for removal in 30 days.
-# Last release in 2011, bug #708106
+# Unmaintained revdep on dev-python/pygtk blocking its removal, py2-only
+# Last release in 2011, bug #708106, masked for removal in 30 days.
 app-cdr/gtkcdlabel
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
+# Unmaintained revdep on dev-python/pygtk blocking its removal, py2-only
 # No plans upstream to port away from pygtk, suggested alternative dupeguru
-# not packaged in Gentoo, bug #708112
+# not packaged in Gentoo, bug #708112. Masked for removal in 30 days.
 app-misc/fslint
-# Last release in 2012, bug #708124
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
+# Unmaintained revdep on dev-python/pygtk blocking its removal, py2-only
+# Last release in 2012, bug #708124, masked for removal in 30 days.
 app-text/keepnote
-# Last release in 2012, bug #708142
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
+# Unmaintained revdep on dev-python/pygtk blocking its removal, py2-only
+# Last release in 2012, bug #708142, masked for removal in 30 days.
 x11-misc/revelation
-# Last release in 2011, bug #708150
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
+# Unmaintained revdep on dev-python/pygtk blocking its removal, py2-only
+# Last release in 2011, bug #708150, masked for removal in 30 days.
 x11-misc/tintwizard
-# Last activity in 2013, bug #710162
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
+# Unmaintained revdep on dev-python/pygtk blocking its removal, py2-only
+# Last activity in 2013, bug #710162, masked for removal in 30 days.
 sci-misc/pythoncad
-# Last release in 2013, bug #710164
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
+# Unmaintained revdep on dev-python/pygtk blocking its removal, py2-only
+# Last release in 2013, bug #710164, masked for removal in 30 days.
 sci-electronics/gresistor
 
 # Jason A. Donenfeld <zx2c4@gentoo.org> (2020-02-24)
@@ -570,8 +592,9 @@ www-plugins/passff
 =dev-python/nototools-20190320
 
 # Ulrich Müller <ulm@gentoo.org> (2020-01-06)
-# Snapshots from Git, masked for testing.
+# Snapshots from Git and pretest versions, masked for testing.
 =app-editors/emacs-27.0.50_pre*
+~app-editors/emacs-27.0.90
 
 # Jonas Stein <jstein@gentoo.org> (2019-12-30)
 # Package masked for removal. Broken SRC_URI,
