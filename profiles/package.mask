@@ -32,6 +32,15 @@
 
 #--- END OF EXAMPLES ---
 
+# Ulrich Müller <ulm@gentoo.org> (2020-03-11)
+# No license. HOMEPAGE is gone.
+# Masked for removal in 14 days. Bug #450454.
+games-misc/fortune-mod-humorixfortunes
+
+# Matt Turner <mattst88@gentoo.org> (2020-03-11)
+# Masked for testing due to removal of libnm-glib (bug #665338)
+>=net-misc/networkmanager-1.20
+
 # Michał Górny <mgorny@gentoo.org> (2020-03-11)
 # Unmaintained Trac plugins.  Last bumped in 2013.  Blockers
 # for Python 2 removal.
@@ -102,7 +111,6 @@ dev-python/beaker
 dev-python/biplist
 dev-python/blaze
 dev-python/cgroup-utils
-dev-python/chameleon
 dev-python/colander
 dev-python/colorful
 dev-python/columnize
@@ -194,7 +202,6 @@ dev-python/pyfiglet
 dev-python/pygcrypt
 dev-python/pygeocoder
 dev-python/pyhcl
-dev-python/pykka
 dev-python/pymtp
 dev-python/pynzb
 dev-python/pyopencl
