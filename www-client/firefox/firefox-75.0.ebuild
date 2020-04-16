@@ -27,7 +27,7 @@ if [[ ${MOZ_ESR} == 1 ]] ; then
 fi
 
 # Patch version
-PATCH="${PN}-75.0-patches-3"
+PATCH="${PN}-75.0-patches-5"
 
 MOZ_HTTP_URI="https://archive.mozilla.org/pub/${PN}/releases"
 MOZ_SRC_URI="${MOZ_HTTP_URI}/${MOZ_PV}/source/firefox-${MOZ_PV}.source.tar.xz"
@@ -131,7 +131,7 @@ DEPEND="${CDEPEND}
 	app-arch/zip
 	app-arch/unzip
 	>=dev-util/cbindgen-0.13.0
-	>=net-libs/nodejs-8.11.0
+	>=net-libs/nodejs-10.19.0
 	>=sys-devel/binutils-2.30
 	sys-apps/findutils
 	|| (
