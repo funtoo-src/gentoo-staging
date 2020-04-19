@@ -32,6 +32,42 @@
 
 #--- END OF EXAMPLES ---
 
+# Georgy Yakovlev <gyakovlev@gentoo.org> (2020-04-18)
+# Unmaintained, vulnerable oracle java ebuilds, even fetching distfiles
+# requires agreement to restrictive license
+# Revdeps that still depend on oracle variants require javafx
+# Please use icedtea or openjdk instead.
+# Removal in 30 days.
+# https://bugs.gentoo.org/681828
+dev-java/oracle-jdk-bin
+dev-java/oracle-jre-bin
+app-forensics/sleuthkit
+app-text/jabref-bin
+dev-java/netbeans-platform
+dev-java/netbeans-harness
+games-util/pogo-manager-bin
+net-p2p/bisq
+sci-mathematics/geogebra
+
+# Michał Górny <mgorny@gentoo.org> (2020-04-18)
+# Long dead, vulnerable.  All revdeps have either been ported away,
+# removed or had their optional deps removed.
+# Removal in 30 days.  Bug #703682.
+dev-python/pycrypto
+
+# Michał Górny <mgorny@gentoo.org> (2020-04-18)
+# Practically dead.  Last blocker for dev-python/pycrypto removal.
+# Upstream is struggling to port away from it for 3 years now.
+# Removal in 30 days.  Bug #611608.
+dev-python/potr
+
+# Ulrich Müller <ulm@gentoo.org> (2020-04-17)
+# Upstream has moved the manpages-de project to manpages-l10n.
+# We cannot move multiple packages to one, therefore removing the
+# old package. Use app-i18n/man-pages-l10n[l10n_de] as replacement.
+# Masked for removal in 30 days. Bug #717744.
+app-i18n/man-pages-de
+
 # Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com> (2020-04-17)
 # Very little activity for almost a year and the link to download the
 # "compiled" man-pages is dead.
@@ -474,64 +510,6 @@ media-sound/galan
 # No reverse deps. GNOME 2 era slot. Removal in 30 days
 gnome-base/gnome-desktop:2
 
-# Michał Górny <mgorny@gentoo.org> (2020-03-20)
-# Python 2 only.  Upstream is not working on a port.
-# Removal in 30 days.  Bug #713568.
-sci-physics/espresso++
-
-# Michał Górny <mgorny@gentoo.org> (2020-03-20)
-# Deprecated GNOME libraries, replaced by introspection.  Python 2 only.
-# No reverse dependencies.
-# Removal in 30 days.  Bug #713566.
-dev-python/gnome-python-desktop-base
-dev-python/gnome-python-extras-base
-dev-python/gnome-vfs-python
-dev-python/gtkspell-python
-dev-python/libbonobo-python
-dev-python/libgnome-python
-dev-python/libgnomecanvas-python
-dev-python/librsvg-python
-dev-python/pyorbit
-
-# Michał Górny <mgorny@gentoo.org> (2020-03-20)
-# Added in 2009, not bumped since.  Python 2 only, requires dead
-# dev-python/pygtk.  Gone from HOMEPAGE.
-# Removal in 30 days.  Bug #710166.
-sci-electronics/geda-xgsch2pcb
-
-# Michał Górny <mgorny@gentoo.org> (2020-03-19)
-# Unmaintained.  Added in 2014 and not touched since.  Python 2 only.
-# Removal in 30 days.  Bug #713506.
-net-ftp/pybootd
-
-# Hans de Graaff <graaff@gentoo.org> (2020-03-19)
-# Masked for security issues, bug #699840
-# No reverse dependencies. Use dev-ruby/haml:5 instead.
-# Removal in 30 days.
-dev-ruby/haml:4
-
-# Michał Górny <mgorny@gentoo.org> (2020-03-18)
-# Unmaintained.  Version bump pending.  No Python 3 support upstream.
-# Removal in 30 days.  Bug #708268.
-app-backup/buttersink
-
-# Michał Górny <mgorny@gentoo.org> (2020-03-17)
-# Abandoned.  Python 2 only.  Upstream recommends dev-python/suds
-# instead.
-# Removal in 30 days.  Bug #713056.
-dev-python/soappy
-
-# Marc Schiffbauer <mschiff@gentoo.org> (2020-03-17)
-# No py3 support, replaced by its successor automx2
-# Removal in 30 days. Bug #708410
-net-mail/automx
-
-# Michał Górny <mgorny@gentoo.org> (2020-03-17)
-# Unmaintained.  Current Gentoo version is from 2015, last upstream
-# release in 2017.  Python 2 only.
-# Removal in 30 days.  Bug #712950.
-mail-filter/spambayes
-
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-03-14)
 # Breaks at least dev-games/simgear right now, bug #709878.
 ~dev-games/openscenegraph-3.6.5
@@ -546,36 +524,10 @@ mail-filter/spambayes
 >=net-misc/networkmanager-1.20
 
 # Michał Górny <mgorny@gentoo.org> (2020-03-11)
-# Unmaintained Trac plugins.  Last bumped in 2013.  Blockers
-# for Python 2 removal.
-# Removal in 30 days.  Bug #712120.
-www-apps/trac-accountmanager
-www-apps/trac-mercurial
-www-apps/trac-tags
-
-# Michał Górny <mgorny@gentoo.org> (2020-03-11)
 # The following Mercurial-related tools do not declare support
 # for Python 3 and have no maintainers.
 # Removal in 30 days.  Bug #712114.
-dev-vcs/hgsubversion
-dev-vcs/hgsvn
-dev-vcs/hgview
-dev-vcs/mercurial-server
 dev-vcs/tortoisehg
-
-# Alexander Tsoy <alexander@tsoy.me> (2020-03-10)
-# media-sound/gtklick: last commit in 2014, python 2 only, blocks
-# dev-python/pygtk removal.
-# Alternatives: media-sound/kmetronome, media-sound/gtick,
-# media-sound/klick (cli)
-#
-# media-libs/pyliblo: last commit in 2015, the only revdep is
-# media-sound/gtklick, there is an actively maintained fork named
-# pyliblo3.
-#
-# Removal in 30 days.  Bug #708172.
-media-sound/gtklick
-media-libs/pyliblo
 
 # Eray Aslan <eras@gentoo.org> (2020-03-09)
 # Mask experimental software
@@ -585,29 +537,6 @@ media-libs/pyliblo
 # Depends on dev-java/eclipse-ecj:4.13 which
 # depends on >=virtual/{jdk,jre}-11 which is masked
 www-servers/tomcat:9
-
-# Michał Górny <mgorny@gentoo.org> (2020-02-26)
-# Effectively unmaintained.  Last upstream commit in 2016.  Multiple
-# unresolved bugs.  Python 2 only.  Repology (https://repology.org/)
-# provides quite a good replacement.
-# Removal in 30 days.  Bug #709458.
-app-portage/euscan
-
-# Michał Górny <mgorny@gentoo.org> (2020-02-24)
-# app-admin/packagekit-base is Python 2 only and behind upstream.
-# The Portage backend is unmaintained.  Other packages are its reverse
-# dependencies.
-#
-# It is unclear why app-backup/deja-dup needs it unconditionally.
-# However, it has not been bumped since 2016.
-#
-# Removal in 30 days.  Bug #708398.
-app-admin/packagekit
-app-admin/packagekit-base
-app-admin/packagekit-gtk
-app-admin/packagekit-qt
-app-backup/deja-dup
-gnome-extra/gnome-packagekit
 
 # Mart Raudsepp <leio@gentoo.org> (2020-02-16)
 # Fails to automatically launch pipewire for me. Help welcome figuring it out.

@@ -40,7 +40,6 @@ dev-python/pytest-runner
 # Deprecated GNOME 2 era packages
 # Bugs #640022, #713010
 dev-python/gconf-python
-dev-python/gnome-python-base
 dev-python/pygobject:2
 dev-python/pygtksourceview
 gnome-base/gnome-vfs
@@ -108,12 +107,6 @@ dev-java/oracle-jre-bin
 # Removal (without prior masking) after the release of Emacs 27.1,
 # but not later than 2020-06-18. Bug #291296.
 virtual/emacs
-
-# Michał Górny <mgorny@gentoo.org> (2019-12-09)
-# The pycrypto project is long dead, and has been forked into
-# dev-python/pycryptodome that's not entirely API compatible.  Many
-# upstreams prefer switching to dev-python/cryptography instead.
-dev-python/pycrypto
 
 # Michał Górny <mgorny@gentoo.org> (2019-12-09)
 # Test coverage reporting is not useful for Gentoo ebuilds.  The deps
