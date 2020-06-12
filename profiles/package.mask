@@ -32,6 +32,21 @@
 
 #--- END OF EXAMPLES ---
 
+# Aaron Bauman <bman@gentoo.org> (2020-06-11)
+# outstanding vulns. RCE. rdeps masked.
+# maintainer ignored w/irrelevant comment.
+# removal in 30 days. bug #719084
+net-analyzer/ntopng
+net-analyzer/pmacct
+net-libs/nDPI
+
+# Lars Wendler <polynomial-c@gentoo.org> (2020-06-10)
+# At least alsactl is broken:
+#   double free or corruption (fasttop)
+# https://bugs.gentoo.org/727838
+=media-libs/alsa-lib-1.2.3
+=media-sound/alsa-utils-1.2.3
+
 # Mikle Kolyada <zlogene@gentoo.org> (2020-06-08)
 # This version has critical changes.
 # Do NOT unmask it unless you are completly
