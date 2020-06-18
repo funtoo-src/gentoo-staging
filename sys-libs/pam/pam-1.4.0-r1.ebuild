@@ -40,6 +40,7 @@ S="${WORKDIR}/linux-${P}"
 src_prepare() {
 	default
 	touch ChangeLog || die
+	eapply "${FILESDIR}"/fix-test-calls.patch
 	eautoreconf
 }
 
@@ -67,10 +68,10 @@ multilib_src_configure() {
 		--disable-tally2
 		--disable-doc
 		--disable-regenerate-docu
+		--disable-Werror
 		$(use_enable audit)
 		$(use_enable berkdb db)
 		$(use_enable debug)
-		$(use_enable debug Werror)
 		$(use_enable nis)
 		$(use_enable pie)
 		$(use_enable selinux)
