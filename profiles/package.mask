@@ -32,6 +32,22 @@
 
 #--- END OF EXAMPLES ---
 
+# Kent Fredric <kentnl@gentoo.org> (2020-07-15)
+# No LICENSE declaration by upstream, and no response from upstream
+# since at least 2013 as to what license to use (bug #732710)
+# Removal in 30 days.
+dev-perl/Data-Diver
+
+# Andreas K. Hüttel <dilfridge@gentoo.org> (2020-07-15)
+# In preparation; do not use yet.
+=dev-lang/perl-5.32*
+
+# Christoph Junghans <junghans@gentoo.org> (2020-07-14)
+# Unmaintained upstream and does not support systemd or firewalld. 
+# Please use net-analyzer/fail2ban instead. (bug #732076)
+# Removal in 30 days.
+app-admin/denyhosts
+
 # Matt Turner <mattst88@gentoo.org> (2019-09-01)
 # Icons look funny. E.g., the X (close) icon is wrong. I suspect files are
 # installed incorrectly
@@ -53,6 +69,17 @@ sys-cluster/kubectl
 sys-cluster/kubelet
 sys-cluster/kube-proxy
 sys-cluster/kube-scheduler
+
+# Michał Górny <mgorny@gentoo.org> (2020-07-13)
+# Python 2 dev-python/pillow revdeps with extended removal time.
+# Removal in 90 days.  Bug #729672.
+<net-wireless/gnuradio-3.8
+<net-wireless/gr-iio-0.3_p20191219-r1
+<net-wireless/gr-paint-0.0_p20200517
+<net-analyzer/gr-fosphor-0.0_p20200131
+<net-wireless/gr-ieee802154-0.0_p20191006
+<net-wireless/gr-iqbal-0.38.1
+<net-wireless/gr-osmosdr-0.2.0
 
 # Michał Górny <mgorny@gentoo.org> (2020-07-13)
 # These packages are mid-profile Python 2-only dependencies
@@ -77,13 +104,6 @@ net-print/pkpgcounter
 <sci-chemistry/chemex-2018
 sci-libs/scipy-python2
 sci-visualization/pyxplot
-<net-wireless/gnuradio-3.8
-<net-wireless/gr-iio-0.3_p20191219-r1
-<net-wireless/gr-paint-0.0_p20200517
-<net-analyzer/gr-fosphor-0.0_p20200131
-<net-wireless/gr-ieee802154-0.0_p20191006
-<net-wireless/gr-iqbal-0.38.1
-<net-wireless/gr-osmosdr-0.2.0
 
 # Michał Górny <mgorny@gentoo.org> (2020-07-13)
 # Unmaintained.  Last release from 2018, still does not support py3.
