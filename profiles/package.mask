@@ -32,6 +32,17 @@
 
 #--- END OF EXAMPLES ---
 
+# Jimi Huotari <chiitoo@gentoo.org> (2020-08-04)
+# No consumers since 2015, and no known stand-alone use.
+# Removal in 30 days.
+dev-libs/liboobs
+
+# Mikle Kolyada <zlogene@gentoo.org> (2020-08-04)
+# Starting with this version pambase was
+# completly rewritten in python.
+# Initial testing needed.
+=sys-auth/pambase-20200804
+
 # Jack Todaro <solpeth@posteo.org> (2020-08-04)
 # Deprecated in favour of dev-haskell/dbus.
 # Unmaintained since 2012.
@@ -516,6 +527,13 @@ dev-perl/Data-Diver
 ~virtual/perl-ExtUtils-CBuilder-0.280.234
 ~virtual/perl-ExtUtils-MakeMaker-7.440.0
 ~virtual/perl-Filter-Simple-0.960.0
+~virtual/perl-Getopt-Long-2.510.0
+~virtual/perl-I18N-LangTags-0.440.0
+~virtual/perl-IO-1.430.0
+~virtual/perl-IO-Compress-2.93.0
+~virtual/perl-IPC-Cmd-1.40.0
+~virtual/perl-JSON-PP-4.40.0
+~virtual/perl-Math-BigInt-1.999.818
 
 # Christoph Junghans <junghans@gentoo.org> (2020-07-14)
 # Unmaintained upstream and does not support systemd or firewalld.
@@ -639,11 +657,6 @@ net-misc/termpkg
 # version of dev-python/pillow.  No revdeps.  Multiple bugs open.
 # Removal in 30 days.  Bug #715682.
 media-gfx/uniconvertor
-
-# Mikle Kolyada <zlogene@gentoo.org> (2020-07-03)
-# Merged into dev-texlive/texlive-langcjk.
-# Removal in 30 days.
-dev-tex/cjk-latex
 
 # Stephan Hartmann <stha09@googlemail.com> (2020-06-29)
 # Dev channel releases are only for people who
