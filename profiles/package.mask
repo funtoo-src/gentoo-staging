@@ -32,6 +32,12 @@
 
 #--- END OF EXAMPLES ---
 
+# Michał Górny <mgorny@gentoo.org> (2020-08-22)
+# Effectively unmaintained.  Optionally uses Python 2.  I could remove
+# that but it fails to build anyway.
+# Removal in 30 days.  Bug #646748.
+games-action/openclonk
+
 # Sergei Trofimovich <slyfox@gentoo.org> (2020-08-21)
 # Obsolete package without reverse dependencies.
 # Use dev-haskell/regex-tdfa.
@@ -704,13 +710,6 @@ dev-ruby/xpath:2
 net-analyzer/ntopng
 net-analyzer/pmacct
 net-libs/nDPI
-
-# Jaco Kroon <jaco@uls.co.za> (2020-07-20)
-# net-misc/asterisk was only consumer, dependency now removed (due to failures
-# in osptoolkit build). No known users of USE=osplookup in net-misc/asterisk,
-# and unknown usefulness. bugs #674346, #731250
-# Removal in 30 days.
-net-libs/osptoolkit
 
 # Jaco Kroon <jaco@uls.co.za> (2020-07-20)
 # Asterisk 11 is EOL. All users should migrate to asterisk 13.
