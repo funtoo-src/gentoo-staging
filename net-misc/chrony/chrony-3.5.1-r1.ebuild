@@ -13,7 +13,7 @@ if [[ ${PV} == "9999" ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://download.tuxfamily.org/${PN}/${P/_/-}.tar.gz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~sparc ~x86"
+	KEYWORDS="~alpha amd64 arm ~arm64 ~hppa ppc ppc64 sparc x86"
 fi
 
 LICENSE="GPL-2"
@@ -67,13 +67,14 @@ src_prepare() {
 		-e 's|pkg-config|${PKG_CONFIG}|g' \
 		configure || die
 
-	# Copy for potential user fixup
-	cp "${FILESDIR}"/chronyd.conf-r1 "${T}"/chronyd.conf
-	cp examples/chronyd.service "${T}"/chronyd.service
+	sed \
+		-e 's/-F 1/-F 0/' \
+		examples/chronyd.service > "${T}"/chronyd.service || die
+
+	cp "${FILESDIR}"/chronyd.conf-r1 "${T}"/chronyd.conf || die
 }
 
 src_configure() {
-	# Set config for privdrop
 	if ! use caps; then
 		sed -i \
 			-e 's/-u ntp//' \
@@ -82,7 +83,7 @@ src_configure() {
 
 	if ! use seccomp; then
 		sed -i \
-			-e 's/-F 1//' \
+			-e 's/-F 0//' \
 			"${T}"/chronyd.conf "${T}"/chronyd.service || die
 	fi
 
