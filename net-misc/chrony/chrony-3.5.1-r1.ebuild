@@ -19,8 +19,8 @@ fi
 LICENSE="GPL-2"
 SLOT="0"
 IUSE="
-	+adns +caps +cmdmon html ipv6 libedit +nettle +ntp +phc pps readline
-	+refclock +rtc +seccomp +sechash selinux
+	+caps +cmdmon html ipv6 libedit +nettle +ntp +phc pps readline +refclock
+	+rtc samba +seccomp +sechash selinux
 "
 REQUIRED_USE="
 	?? ( libedit readline )
@@ -64,6 +64,7 @@ src_prepare() {
 		doc/* examples/* || die
 
 	sed -i \
+		-e 's|RELOADDNS||g' \
 		-e 's|pkg-config|${PKG_CONFIG}|g' \
 		configure || die
 
@@ -106,7 +107,6 @@ src_configure() {
 	# not an autotools generated script
 	local myconf=(
 		$(use_enable seccomp scfilter)
-		$(usex adns '' --disable-asyncdns)
 		$(usex caps '' --disable-linuxcaps)
 		$(usex cmdmon '' --disable-cmdmon)
 		$(usex ipv6 '' --disable-ipv6)
@@ -116,6 +116,7 @@ src_configure() {
 		$(usex pps '' --disable-pps)
 		$(usex refclock '' --disable-refclock)
 		$(usex rtc '' --disable-rtc)
+		$(usex samba --enable-ntp-signd '')
 		$(usex sechash '' --disable-sechash)
 		${CHRONY_EDITLINE}
 		${EXTRA_ECONF}
@@ -124,6 +125,7 @@ src_configure() {
 		--mandir="${EPREFIX}/usr/share/man"
 		--prefix="${EPREFIX}/usr"
 		--sysconfdir="${EPREFIX}/etc/chrony"
+		--with-hwclockfile="${EPREFIX}/etc/adjtime"
 		--with-pidfile="${EPREFIX}/run/chrony/chronyd.pid"
 		--without-nss
 		--without-tomcrypt
