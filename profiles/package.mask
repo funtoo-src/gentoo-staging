@@ -32,6 +32,23 @@
 
 #--- END OF EXAMPLES ---
 
+# Thomas Beierlein <tomjbe@gentoo.org> (2020-09-09)
+# Depends on obsolete gnome-base/libgnomeui. 
+# Upstream promised to have a better version 
+# for nearly a year now, but no release in sight.
+# Masked for removal in 30 days.
+sci-electronics/linsmith
+
+# Louis Sautier <sbraz@gentoo.org> (2020-09-10)
+# Masked for removal in 30 days, no revdeps.
+# All former consumers now use os.sendfile available in Python >= 3.3.
+dev-python/pysendfile
+
+# Mikle Kolyada <zlogene@gentoo.org> (2020-09-10)
+# Merged into the app-text/texlive-core package.
+# Removal in 30 days
+dev-tex/dvi2tty
+
 # Michał Górny <mgorny@gentoo.org> (2020-09-09)
 # Last release in <2003.  Fails to build (bug #691690).
 # Removal in 30 days.  Bug #731008.
