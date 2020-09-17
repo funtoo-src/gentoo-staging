@@ -32,6 +32,58 @@
 
 #--- END OF EXAMPLES ---
 
+# Hans de Graaff <graaff@gentoo.org> (2020-09-17)
+# Mask old unmaintained or obsolete ruby packages for removal in 30
+# days.
+# No longer maintained upstream, ruby27 issues, no deps
+dev-ruby/bluecloth
+# No longer maintained upstream, no deps
+dev-ruby/calendar_date_select
+# Obsolete, no deps
+dev-ruby/capistrano-stats
+# No longer maintained, git snapshot from 2013, no deps
+dev-ruby/expression_parser
+# No longer needed, no deps
+dev-ruby/hoe-seattlerb
+# No longer maintained upstream, ruby27 issues, no deps
+dev-ruby/inifile
+# Obsolete (merged into rails 4)
+dev-ruby/journey
+# No longer maintained, ruby27 issues, no deps
+dev-ruby/rgen
+# No longer maintained, no deps
+dev-ruby/ruby_dep
+
+# Sam James <sam@gentoo.org> (2020-09-16)
+# Stuck on EAPI 4, only source is mirror://gentoo,
+# unmaintained, HOMEPAGE gone.
+app-admin/recursos
+
+# David Seifert <soap@gentoo.org> (2020-09-16)
+# EAPI 4, last release in 2001, the Fortran source code
+# is terrible and has buffer overflows.
+# Removal in 30 days.  Bug #664120, #742008.
+sci-chemistry/ortep3
+
+# Hans de Graaff <graaff@gentoo.org> (2020-09-16)
+# Mask old ruby slots for removal in 30 days. Please use a newer slot
+# instead.
+dev-ruby/bindata:2.4.1
+dev-ruby/coffee-rails:4.2
+dev-ruby/delayer:0
+dev-ruby/faker:0
+dev-ruby/roadie:0
+dev-ruby/roadie-rails:0
+dev-ruby/rbnacl:5
+dev-ruby/twitter:6
+
+# Hans de Graaff <graaff@gentoo.org> (2020-09-16)
+# Dependencies of the already removed metasploit that are relevant
+# only with metasploit. Masked for removal in 30 days.
+dev-ruby/meterpreter_bins
+dev-ruby/patch_finder
+dev-ruby/rb-readline-r7
+
 # Sam James <sam@gentoo.org> (2020-09-15)
 # No longer exists upstream, stuck on long-obsolete EAPI 4,
 # and fails to build with glibc-2.32.
@@ -65,12 +117,6 @@ dev-python/args
 # Dead upstream, EAPI 4, no maintainer
 # Removal in 30 days
 net-dialup/tkvoice
-
-# Sam James <sam@gentoo.org> (2020-09-13)
-# Dead upstream, EAPI 4, no maintainer
-# Removal in 30 days
-# bug #740954
-dev-lang/cll1h
 
 # Sam James <sam@gentoo.org> (2020-09-12)
 # Merged into app-text/texlive-core
