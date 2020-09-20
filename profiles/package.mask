@@ -32,6 +32,65 @@
 
 #--- END OF EXAMPLES ---
 
+# Michał Górny <mgorny@gentoo.org> (2020-09-20)
+# Unmaintained NIH libraries for app-backup/genbackupdata that is masked
+# for removal.
+# Removal in 30 days.  Bug #743721.
+dev-python/cliapp
+dev-python/coverage-test-runner
+dev-python/ttystatus
+
+# Michał Górny <mgorny@gentoo.org> (2020-09-20)
+# Obsolete library, replaced by app-crypt/libsecret.  All remaining
+# revdeps have been masked.  Requires Python 2.
+# Removal in 30 days.  Bug #713010.
+gnome-base/libgnome-keyring
+
+# Michał Górny <mgorny@gentoo.org> (2020-09-20)
+# Obsolete GNOME libraries.  All remaining revdeps have been lastrited.
+# Removal in 30 days.  Bug #726784.
+gnome-base/libbonoboui
+gnome-base/libgnome
+gnome-base/libgnomeui
+
+# Michał Górny <mgorny@gentoo.org> (2020-09-20)
+# Abandoned upstream, homepage gone.  Last release in 2009.  Uses
+# deprecated gnome-base/libgnomeui.  Arch apparently has patches to keep
+# it alive, if anyone wants to.
+# Removal in 30 days.  Bug #726796.
+net-misc/gwget
+
+# David Seifert <soap@gentoo.org> (2020-09-20)
+# EAPI 4, last release in 2012, sandbox violations and
+# full of bugs. Mainlined since 3.14, Removal in 30 days.
+# Bug #679502, #701406, #701408, #742116.
+sys-block/rts5229
+
+# David Seifert <soap@gentoo.org> (2020-09-19)
+# EAPI 4, last release in 2008, upstream pretty much dead,
+# tons of bugs, broken since at least 2016, lots of weird
+# dead/alive/redead forks all over the internet. Use
+# sci-mathematics/fricas as spiritual successor fork.
+# Removal in 30 days.  Bug #326575, #514762, #532498,
+# #574956, #581250, #586402, #587878, #740966.
+sci-mathematics/axiom
+
+# Michał Górny <mgorny@gentoo.org> (2020-09-19)
+# These packages (or package versions) still require Python 2.7.
+# They are either dead upstream, their Python 3 porting efforts are
+# not progressing or their maintainers are simply unresponsive.
+# Please do not remove any packages from this list unless you actually
+# port them to Python 3.
+# Removal in 30 days.  Please find relevant bugs on tracker bug #694800.
+app-admin/github-backup-utils
+app-backup/genbackupdata
+app-i18n/pology
+app-text/pdf2djvu
+app-text/sgmltools-lite
+dev-util/gyp
+app-i18n/mozc
+sci-libs/magma
+
 # Hans de Graaff <graaff@gentoo.org> (2020-09-19)
 # Mask insecure rack slot for removal in 30 days, bug 730786
 dev-ruby/rack:1.6
@@ -853,19 +912,6 @@ app-office/texmacs
 # Requires >=dev-lang/lua-5.2 which is masked
 >=app-admin/conky-1.11.4
 
-# Georgy Yakovlev <gyakovlev@gentoo.org> (2019-04-17)
-# The Oracle JDK License has changed for releases starting 2019-04-16
-# While it may be fine to use for some usecases it's not comepletely clear
-# what is considered "personal use" and if we can legally distribute it.
-# License states:
-# "You may not:
-# make the Programs available in any manner to any third party"
-# masking all future versions, removal will follow soon.
-# Alternatives: icedtea, icedtea-bin, openjdk, openjdk-bin, openjdk-jre-bin
-# Bug: https://bugs.gentoo.org/681828
->dev-java/oracle-jdk-bin-1.8.0.202:1.8
->dev-java/oracle-jre-bin-1.8.0.202:1.8
-
 # Robin H. Johnson <robbat2@gentoo.org> (2019-03-25)
 # Requires >=dev-lang/lua-5.3 which is masked
 sys-apps/likwid
@@ -932,9 +978,9 @@ dev-java/eclipse-ecj:4.10
 ~net-libs/rpcsvc-proto-0
 
 # James Le Cuirot <chewi@gentoo.org> (2017-12-17)
-# Java 9+ is not yet fully supported on Gentoo. Packages cannot depend
+# Java 11 is not yet fully supported on Gentoo. Packages cannot depend
 # on it so these virtuals are not yet required. If you wish to use
-# Java 9+ then install oracle-(jdk|jre)-bin or openjdk(-bin) directly.
+# Java 11 then install openjdk-(jdk|jre)-bin directly.
 virtual/jdk:11
 virtual/jre:11
 
