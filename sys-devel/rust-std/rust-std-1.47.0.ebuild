@@ -138,7 +138,7 @@ src_configure() {
 src_compile() {
 	env RUST_BACKTRACE=1 \
 		"${EPYTHON}" ./x.py build -vv --config="${S}"/config.toml -j$(makeopts_jobs) \
-		src/libstd --stage 0 || die
+		library/std --stage 0 || die
 }
 
 src_test() {
@@ -146,9 +146,9 @@ src_test() {
 }
 
 src_install() {
-	local rustlib="lib/rust/${PV}/rustlib"
+	local rustlib="lib/rust/${PV}/lib/rustlib"
 	dodir "/usr/${rustlib}"
-	pushd "build/${rhost}/stage0-sysroot/${rustlib}" > /dev/null || die
+	pushd "build/${rhost}/stage0-sysroot/lib/rustlib" > /dev/null || die
 	cp -pPRv "${rtarget}" "${ED}/usr/${rustlib}" || die
 	popd > /dev/null || die
 }
