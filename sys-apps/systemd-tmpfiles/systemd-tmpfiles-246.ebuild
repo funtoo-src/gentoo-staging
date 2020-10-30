@@ -8,11 +8,12 @@ inherit meson
 
 DESCRIPTION="Creates, deletes and cleans up volatile and temporary files and directories"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/systemd"
-SRC_URI="https://github.com/systemd/systemd/archive/v${PV}.tar.gz -> systemd-${PV}.tar.gz"
+SRC_URI="https://github.com/systemd/systemd/archive/v${PV}.tar.gz -> systemd-${PV}.tar.gz
+	elibc_musl? ( https://dev.gentoo.org/~gyakovlev/distfiles/${P}-musl.tar.xz )"
 
 LICENSE="BSD-2 GPL-2 LGPL-2.1 MIT public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~arm64 ~ppc64"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~sparc ~x86"
 
 DEPEND="
 	>=sys-kernel/linux-headers-${MINKV}
@@ -37,7 +38,18 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
+# test pass, but some unrelated efi parts that
+# are impossible to skip fail to build
+RESTRICT="elibc_musl? ( test )"
+
 S="${WORKDIR}/systemd-${PV}"
+
+src_prepare() {
+	# musl patchset from:
+	# http://cgit.openembedded.org/openembedded-core/tree/meta/recipes-core/systemd/systemd
+	use elibc_musl && eapply "${WORKDIR}/${P}-musl"
+	default
+}
 
 src_configure() {
 	# disable everything until configure says "enabled features: ACL, tmpfiles"
@@ -166,6 +178,14 @@ src_install() {
 	# same content, but install as different file
 	newconfd "${FILESDIR}"/stmpfiles.confd stmpfiles-dev
 	newconfd "${FILESDIR}"/stmpfiles.confd stmpfiles-setup
+}
+
+src_test() {
+	# selection of relevant tests
+	# unfortunately full suite will be built to run tests, but we still
+	# install just what we need and not a bit more.
+	local tests=( test-{acl-util,tmpfiles,chase-symlinks,path} )
+	meson_src_test "${tests[@]}"
 }
 
 # adapted from opentmpfiles ebuild
