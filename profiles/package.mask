@@ -32,6 +32,11 @@
 
 #--- END OF EXAMPLES ---
 
+# Alfredo Tupone <tupone@gentoo.org> (2020-11-05)
+# will be upgraded after new lua release
+www-apps/liquid_feedback_frontend
+www-apps/wepmcp
+
 # Sergei Trofimovich <slyfox@gentoo.org> (2020-11-03)
 # Hackage release does not build against gcc-8:
 # https://github.com/Helium4Haskell/helium/issues/4
@@ -233,7 +238,7 @@ dev-lua/luacrypto
 >=net-p2p/eiskaltdcpp-2.2.10-r100
 >=www-servers/lighttpd-1.4.55-r100
 >=app-admin/conky-1.11.4
->=media-sound/aqualung-1.1-r1
+>=media-sound/aqualung-1.1-r100
 
 # Andrew Savchenko <bircoph@gentoo.org> (2020-10-11)
 # Mask old openafs version and corresponding openafs-kernel with
