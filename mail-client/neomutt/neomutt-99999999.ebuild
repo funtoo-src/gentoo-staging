@@ -8,7 +8,6 @@ inherit eutils
 if [[ ${PV} =~ 99999999$ ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/neomutt/neomutt.git"
-	EGIT_CHECKOUT_DIR="${WORKDIR}/neomutt-${P}"
 else
 	SRC_URI="https://github.com/${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~amd64 ~ppc64 ~x86"
@@ -43,7 +42,7 @@ CDEPEND="
 	qdbm? ( dev-db/qdbm )
 	tokyocabinet? ( dev-db/tokyocabinet )
 	gnutls? ( >=net-libs/gnutls-1.0.17:= )
-	gpgme? ( >=app-crypt/gpgme-0.9.0:= )
+	gpgme? ( >=app-crypt/gpgme-1.13.1:= )
 	idn? ( net-dns/libidn:= )
 	kerberos? ( virtual/krb5 )
 	notmuch? ( net-mail/notmuch:= )

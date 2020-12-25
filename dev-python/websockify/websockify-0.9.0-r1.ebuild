@@ -9,13 +9,13 @@ DISTUTILS_USE_SETUPTOOLS=rdepend
 
 inherit distutils-r1
 
-SRC_URI="https://github.com/kanaka/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
+SRC_URI="https://github.com/novnc/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 DESCRIPTION="WebSockets support for any application/server"
-HOMEPAGE="https://github.com/kanaka/websockify"
+HOMEPAGE="https://github.com/novnc/websockify"
 
 LICENSE="LGPL-3"
 SLOT="0"
-KEYWORDS="amd64 ~arm64 ~x86"
+KEYWORDS="amd64 ~arm64 x86"
 
 RDEPEND="dev-python/numpy[${PYTHON_USEDEP}]"
 BDEPEND="test? ( dev-python/jwcrypto[${PYTHON_USEDEP}] )"

@@ -17,6 +17,13 @@
 
 #--- END OF EXAMPLES ---
 
+# Michał Górny <mgorny@gentoo.org> (2020-12-21)
+# Sanitizers supported on this architecture.
+sys-libs/compiler-rt-sanitizers -asan -dfsan -lsan -msan -hwasan -tsan
+sys-libs/compiler-rt-sanitizers -ubsan -safestack -cfi -scudo
+sys-libs/compiler-rt-sanitizers -gwp-asan
+sys-libs/compiler-rt-sanitizers -libfuzzer -profile -xray
+
 # Sam James <sam@gentoo.org> (2020-10-24)
 # asm redc is only available on amd64,
 # ppc64. bug #750974.
@@ -82,6 +89,8 @@ www-client/firefox -eme-free
 # dev-util/sysprof-capture is keyworded on amd64
 x11-wm/mutter -sysprof
 dev-libs/gjs -sysprof
+dev-libs/glib -sysprof
+x11-libs/gtk+ -sysprof
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
 # Vulkan is available on amd64.

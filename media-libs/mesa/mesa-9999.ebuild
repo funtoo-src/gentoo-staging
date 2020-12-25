@@ -19,7 +19,7 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 else
 	SRC_URI="https://archive.mesa3d.org/${MY_P}.tar.xz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~sparc-solaris ~x64-solaris ~x86-solaris"
 fi
 
 LICENSE="MIT"
@@ -43,6 +43,7 @@ REQUIRED_USE="
 	d3d9?   ( dri3 || ( video_cards_iris video_cards_r300 video_cards_r600 video_cards_radeonsi video_cards_nouveau video_cards_vmware ) )
 	gles1?  ( egl )
 	gles2?  ( egl )
+	osmesa? ( gallium )
 	vulkan? ( dri3
 			  video_cards_radeonsi? ( llvm ) )
 	vulkan-overlay? ( vulkan )
@@ -74,7 +75,6 @@ REQUIRED_USE="
 
 LIBDRM_DEPSTRING=">=x11-libs/libdrm-2.4.100"
 RDEPEND="
-	!app-eselect/eselect-mesa
 	>=dev-libs/expat-2.1.0-r3:=[${MULTILIB_USEDEP}]
 	>=media-libs/libglvnd-1.3.2[X?,${MULTILIB_USEDEP}]
 	>=sys-libs/zlib-1.2.8[${MULTILIB_USEDEP}]
@@ -117,7 +117,6 @@ RDEPEND="
 	X? (
 		>=x11-libs/libX11-1.6.2:=[${MULTILIB_USEDEP}]
 		>=x11-libs/libxshmfence-1.1:=[${MULTILIB_USEDEP}]
-		>=x11-libs/libXdamage-1.1.4-r1:=[${MULTILIB_USEDEP}]
 		>=x11-libs/libXext-1.3.2:=[${MULTILIB_USEDEP}]
 		>=x11-libs/libXxf86vm-1.1.3:=[${MULTILIB_USEDEP}]
 		>=x11-libs/libxcb-1.13:=[${MULTILIB_USEDEP}]
@@ -259,8 +258,9 @@ pkg_pretend() {
 	if use vulkan; then
 		if ! use video_cards_i965 &&
 		   ! use video_cards_iris &&
-		   ! use video_cards_radeonsi; then
-			ewarn "Ignoring USE=vulkan     since VIDEO_CARDS does not contain i965, iris, or radeonsi"
+		   ! use video_cards_radeonsi &&
+		   ! use video_cards_v3d; then
+			ewarn "Ignoring USE=vulkan     since VIDEO_CARDS does not contain i965, iris, radeonsi, or v3d"
 		fi
 	fi
 
@@ -317,6 +317,10 @@ pkg_pretend() {
 	if ! use llvm; then
 		use opencl     && ewarn "Ignoring USE=opencl     since USE does not contain llvm"
 	fi
+
+	if use osmesa && ! use llvm; then
+		ewarn "OSMesa will be slow without enabling USE=llvm"
+	fi
 }
 
 python_check_deps() {
@@ -347,6 +351,8 @@ multilib_src_configure() {
 	local emesonargs=()
 
 	if use classic; then
+		dri_driver_enable !gallium swrast
+
 		# Intel code
 		dri_driver_enable video_cards_i915 i915
 		dri_driver_enable video_cards_i965 i965
@@ -371,6 +377,12 @@ multilib_src_configure() {
 	use X && platforms+="x11"
 	use wayland && platforms+=",wayland"
 	[[ -n $platforms ]] && emesonargs+=(-Dplatforms=${platforms#,})
+
+	if use X || use egl; then
+		emesonargs+=(-Dglvnd=true)
+	else
+		emesonargs+=(-Dglvnd=false)
+	fi
 
 	if use gallium; then
 		emesonargs+=(
@@ -432,6 +444,7 @@ multilib_src_configure() {
 			gallium_enable -- kmsro
 		fi
 
+		gallium_enable -- swrast
 		gallium_enable video_cards_lima lima
 		gallium_enable video_cards_panfrost panfrost
 		gallium_enable video_cards_v3d v3d
@@ -473,14 +486,7 @@ multilib_src_configure() {
 		vulkan_enable video_cards_i965 intel
 		vulkan_enable video_cards_iris intel
 		vulkan_enable video_cards_radeonsi amd
-	fi
-
-	if use gallium; then
-		gallium_enable -- swrast
-		emesonargs+=( -Dosmesa=$(usex osmesa gallium none) )
-	else
-		dri_driver_enable -- swrast
-		emesonargs+=( -Dosmesa=$(usex osmesa classic none) )
+		vulkan_enable video_cards_v3d broadcom
 	fi
 
 	driver_list() {
@@ -491,13 +497,13 @@ multilib_src_configure() {
 	emesonargs+=(
 		$(meson_use test build-tests)
 		-Dglx=$(usex X dri disabled)
-		-Dglvnd=true
-		-Dshared-glapi=true
+		-Dshared-glapi=enabled
 		$(meson_feature dri3)
 		$(meson_feature egl)
 		$(meson_feature gbm)
 		$(meson_feature gles1)
 		$(meson_feature gles2)
+		$(meson_use osmesa)
 		$(meson_use selinux)
 		$(meson_feature zstd)
 		-Dvalgrind=$(usex valgrind auto false)
@@ -525,7 +531,7 @@ multilib_src_install_all() {
 }
 
 multilib_src_test() {
-	meson test -v -C "${BUILD_DIR}" -t 100 || die "tests failed"
+	meson_src_test -t 100
 }
 
 # $1 - VIDEO_CARDS flag (check skipped for "--")

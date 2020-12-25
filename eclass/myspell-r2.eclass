@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: myspell-r2.eclass
@@ -7,7 +7,6 @@
 # @AUTHOR:
 # Tomáš Chvátal <scarabeus@gentoo.org>
 # @BLURB: An eclass to ease the construction of ebuilds for myspell dicts
-# @DESCRIPTION:
 
 EXPORT_FUNCTIONS src_unpack src_install
 

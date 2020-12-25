@@ -13,10 +13,9 @@ SRC_URI="https://github.com/ponty/PyVirtualDisplay/archive/${PV}.tar.gz -> ${P}.
 
 LICENSE="BSD-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 
 BDEPEND="test? (
-	dev-python/backports[${PYTHON_USEDEP}]
 	dev-python/backports-tempfile[${PYTHON_USEDEP}]
 	dev-python/entrypoint2[${PYTHON_USEDEP}]
 	dev-python/path-py[${PYTHON_USEDEP}]

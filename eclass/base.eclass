@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # DEPRECATED
@@ -24,15 +24,26 @@
 # Original author: Dan Armak <danarmak@gentoo.org>
 # @SUPPORTED_EAPIS: 0 1 2 3 4 5
 # @BLURB: The base eclass defines some default functions and variables.
+# @DEPRECATED: none
 # @DESCRIPTION:
 # The base eclass defines some default functions and variables.
+
+# @VARIABLE: _BASE_ECLASS
+# @INTERNAL
+# @DESCRIPTION:
+# If null set to 1
 
 if [[ -z ${_BASE_ECLASS} ]]; then
 _BASE_ECLASS=1
 
 inherit eutils
 
+# @VARIABLE: BASE_EXPF
+# @DESCRIPTION:
+# Please document me
+
 BASE_EXPF="src_unpack src_compile src_install"
+
 case "${EAPI:-0}" in
 	0|1) ;;
 	2|3|4|5) BASE_EXPF+=" src_prepare src_configure" ;;

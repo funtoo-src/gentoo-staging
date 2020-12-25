@@ -13,7 +13,7 @@ SRC_URI="https://github.com/aabc/ipt-netflow/archive/v${PV}.tar.gz -> ${P}.tar.g
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 
 IUSE="debug natevents snmp"
 
@@ -28,6 +28,7 @@ DEPEND="${RDEPEND}
 PATCHES=(
 	"${FILESDIR}/${PN}-2.0-configure.patch" # bug #455984
 	"${FILESDIR}/${PN}-2.5-gentoo.patch"
+	"${FILESDIR}/${P}-vlan_dev_priv.patch"
 )
 
 pkg_setup() {
@@ -91,7 +92,7 @@ src_configure() {
 }
 
 src_compile() {
-	emake ARCH="$(tc-arch-kernel)" CC="$(tc-getCC)" all
+	emake ARCH="$(tc-arch-kernel)" CC="$(tc-getCC)" LD="$(tc-getLD)" OBJDUMP="$(tc-getOBJDUMP)" all
 }
 
 src_install() {

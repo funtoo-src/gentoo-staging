@@ -3,7 +3,7 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_7 )
+PYTHON_COMPAT=( python3_{7..9} )
 
 DISTUTILS_USE_SETUPTOOLS=rdepend
 
@@ -13,7 +13,7 @@ MY_PN="Pweave"
 MY_P="${MY_PN}-${PV}"
 
 DESCRIPTION="Scientific report generator and literate programming tool"
-HOMEPAGE="http://mpastell.com/pweave
+HOMEPAGE="http://mpastell.com/pweave/
 		https://github.com/mpastell/Pweave"
 SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz -> ${P}.tar.gz"
 

@@ -14,7 +14,7 @@ LICENSE="GPL-2"
 SLOT="0"
 # uneven minor versions are development versions
 if [[ $(( $(ver_cut 2) % 2 )) == 0 ]] ; then
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~ppc ~ppc64 ~x86"
 fi
 IUSE="dbus dedicated doc fribidi libressl nls server"
 
@@ -46,6 +46,10 @@ BDEPEND="
 	virtual/pkgconfig
 "
 
+PATCHES=(
+	"${FILESDIR}/wesnoth-1.14.14-ar.patch"
+)
+
 src_prepare() {
 	cmake_src_prepare
 
@@ -71,9 +75,6 @@ src_configure() {
 		filter-flags -fstack-protector
 		append-flags -fno-stack-protector
 	fi
-
-	# Work around eclass
-	append-flags -UNDEBUG
 
 	if use dedicated || use server ; then
 		mycmakeargs=(

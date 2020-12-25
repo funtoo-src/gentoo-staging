@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools elisp-common flag-o-matic readme.gentoo-r1
+inherit autotools elisp-common flag-o-matic readme.gentoo-r1 toolchain-funcs
 
 if [[ ${PV##*.} = 9999 ]]; then
 	inherit git-r3
@@ -57,7 +57,7 @@ RDEPEND="app-emacs/emacs-common-gentoo[games?,gui(-)?]
 	lcms? ( media-libs/lcms:2 )
 	libxml2? ( >=dev-libs/libxml2-2.2.0 )
 	mailutils? ( net-mail/mailutils[clients] )
-	!mailutils? ( net-libs/liblockfile )
+	!mailutils? ( acct-group/mail net-libs/liblockfile )
 	selinux? ( sys-libs/libselinux )
 	ssl? ( net-libs/gnutls:0= )
 	systemd? ( sys-apps/systemd )
@@ -260,6 +260,17 @@ src_configure() {
 		fi
 	fi
 
+	if tc-is-cross-compiler; then
+		# Configure a CBUILD directory when cross-compiling to make tools
+		mkdir "${S}-build" && pushd "${S}-build" >/dev/null || die
+		ECONF_SOURCE="${S}" econf_build --without-all --without-x-toolkit
+		popd >/dev/null || die
+		# Don't try to execute the binary for dumping during the build
+		myconf+=" --with-dumping=none"
+	else
+		myconf+=" --with-dumping=pdumper"
+	fi
+
 	econf \
 		--program-suffix="-${EMACS_SUFFIX}" \
 		--includedir="${EPREFIX}"/usr/include/${EMACS_SUFFIX} \
@@ -269,8 +280,8 @@ src_configure() {
 		--without-compress-install \
 		--without-hesiod \
 		--without-pop \
-		--with-dumping=pdumper \
 		--with-file-notification=$(usev inotify || usev gfile || echo no) \
+		--with-pdumper \
 		$(use_enable acl) \
 		$(use_with dbus) \
 		$(use_with dynamic-loading modules) \
@@ -291,13 +302,22 @@ src_configure() {
 		${myconf}
 }
 
-#src_compile() {
-#	# Disable sandbox when dumping. For the unbelievers, see bug #131505
-#	emake RUN_TEMACS="SANDBOX_ON=0 LD_PRELOAD= env ./temacs"
-#}
+src_compile() {
+	if tc-is-cross-compiler; then
+		# Build native tools for compiling lisp etc.
+		emake -C "${S}-build" src
+		emake lib	   # Cross-compile dependencies first for timestamps
+		# Save native build tools in the cross-directory
+		cp "${S}-build"/lib-src/make-{docfile,fingerprint} lib-src || die
+		# Specify the native Emacs to compile lisp
+		emake -C lisp all EMACS="${S}-build/src/emacs"
+	fi
+
+	emake
+}
 
 src_install() {
-	emake DESTDIR="${D}" NO_BIN_LINK=t install
+	emake DESTDIR="${D}" NO_BIN_LINK=t BLESSMAIL_TARGET= install
 
 	mv "${ED}"/usr/bin/{emacs-${FULL_VERSION}-,}${EMACS_SUFFIX} || die
 	mv "${ED}"/usr/share/man/man1/{emacs-,}${EMACS_SUFFIX}.1 || die
@@ -307,6 +327,12 @@ src_install() {
 	mv "${ED}"/usr/share/info/${EMACS_SUFFIX}/dir{,.orig} || die
 	touch "${ED}"/usr/share/info/${EMACS_SUFFIX}/.keepinfodir
 	docompress -x /usr/share/info/${EMACS_SUFFIX}/dir.orig
+
+	# movemail must be setgid mail
+	if ! use mailutils; then
+		fowners root:mail /usr/libexec/emacs/${FULL_VERSION}/${CHOST}/movemail
+		fperms 2751 /usr/libexec/emacs/${FULL_VERSION}/${CHOST}/movemail
+	fi
 
 	# avoid collision between slots, see bug #169033 e.g.
 	rm "${ED}"/usr/share/emacs/site-lisp/subdirs.el
@@ -369,7 +395,7 @@ src_install() {
 
 	dodoc README BUGS CONTRIBUTE
 
-	if use aqua; then
+	if use gui && use aqua; then
 		dodir /Applications/Gentoo
 		rm -rf "${ED}"/Applications/Gentoo/${EMACS_SUFFIX^}.app
 		mv nextstep/Emacs.app \
@@ -384,14 +410,21 @@ src_install() {
 		it is strongly recommended that you use app-admin/emacs-updater
 		to rebuild all byte-compiled elisp files of the installed Emacs
 		packages."
-	use gui && DOC_CONTENTS+="\\n\\nYou need to install some fonts for Emacs.
-		Installing media-fonts/font-adobe-{75,100}dpi on the X server's
-		machine would satisfy basic Emacs requirements under X11.
-		See also https://wiki.gentoo.org/wiki/Xft_support_for_GNU_Emacs
-		for how to enable anti-aliased fonts."
-	use aqua && DOC_CONTENTS+="\\n\\n${EMACS_SUFFIX^}.app is in
-		\"${EPREFIX}/Applications/Gentoo\". You may want to copy or symlink
-		it into /Applications by yourself."
+	if use gui; then
+		DOC_CONTENTS+="\\n\\nYou need to install some fonts for Emacs.
+			Installing media-fonts/font-adobe-{75,100}dpi on the X server's
+			machine would satisfy basic Emacs requirements under X11.
+			See also https://wiki.gentoo.org/wiki/Xft_support_for_GNU_Emacs
+			for how to enable anti-aliased fonts."
+		use aqua && DOC_CONTENTS+="\\n\\n${EMACS_SUFFIX^}.app is in
+			\"${EPREFIX}/Applications/Gentoo\". You may want to copy or
+			symlink it into /Applications by yourself."
+	fi
+	tc-is-cross-compiler && DOC_CONTENTS+="\\n\\nEmacs did not write
+		a portable dump file due to being cross-compiled.
+		To create this file at run time, execute the following command:
+		\\n${EMACS_SUFFIX} --batch --eval='(dump-emacs-portable
+		\"/usr/libexec/emacs/${FULL_VERSION}/${CHOST}/emacs.pdmp\")'"
 	readme.gentoo_create_doc
 }
 

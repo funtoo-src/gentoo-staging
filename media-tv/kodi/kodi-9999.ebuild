@@ -9,7 +9,7 @@ LIBDVDREAD_VERSION="6.0.0-Leia-Alpha-3"
 LIBDVDNAV_VERSION="6.0.0-Leia-Alpha-3"
 FFMPEG_VERSION="4.3.1"
 CODENAME="Matrix"
-FFMPEG_KODI_VERSION="Alpha1-2"
+FFMPEG_KODI_VERSION="Beta1"
 PYTHON_COMPAT=( python3_{6,7,8,9} )
 SRC_URI="https://github.com/xbmc/libdvdcss/archive/${LIBDVDCSS_VERSION}.tar.gz -> libdvdcss-${LIBDVDCSS_VERSION}.tar.gz
 	https://github.com/xbmc/libdvdread/archive/${LIBDVDREAD_VERSION}.tar.gz -> libdvdread-${LIBDVDREAD_VERSION}.tar.gz
@@ -220,6 +220,7 @@ src_configure() {
 	use gbm && platform+=( gbm )
 	use wayland && platform+=( wayland )
 	use X && platform+=( x11 )
+	local core_platform_name="${platform[@]}"
 	local mycmakeargs=(
 		-Ddocdir="${EPREFIX}/usr/share/doc/${PF}"
 		-DENABLE_LDGOLD=OFF # https://bugs.gentoo.org/show_bug.cgi?id=606124
@@ -263,7 +264,7 @@ src_configure() {
 		-DPYTHON_INCLUDE_DIR="$(python_get_includedir)"
 		-DPYTHON_LIBRARY="$(python_get_library_path)"
 		-DAPP_RENDER_SYSTEM="$(usex opengl gl gles)"
-		-DCORE_PLATFORM_NAME="${platform[@]}"
+		-DCORE_PLATFORM_NAME="${core_platform_name}"
 	)
 
 	use libusb && mycmakeargs+=( -DENABLE_LIBUSB=$(usex libusb) )

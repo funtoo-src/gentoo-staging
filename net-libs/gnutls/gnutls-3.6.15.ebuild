@@ -5,8 +5,8 @@ EAPI=7
 
 inherit libtool multilib-minimal
 
-DESCRIPTION="A TLS 1.2 and SSL 3.0 implementation for the GNU project"
-HOMEPAGE="http://www.gnutls.org/"
+DESCRIPTION="A secure communications library implementing the SSL, TLS and DTLS protocols"
+HOMEPAGE="https://www.gnutls.org/"
 SRC_URI="mirror://gnupg/gnutls/v$(ver_cut 1-2)/${P}.tar.xz"
 
 LICENSE="GPL-3 LGPL-2.1+"
@@ -54,7 +54,7 @@ DOCS=(
 
 HTML_DOCS=()
 
-#PATCHES=( "${FILESDIR}"/${PN}-3.6.15-skip-dtls-seccomp-tests.patch )
+PATCHES=( "${FILESDIR}"/${PN}-3.6.15-skip-dtls-seccomp-tests.patch )
 
 pkg_setup() {
 	# bug#520818
@@ -73,6 +73,11 @@ src_prepare() {
 	for file in $(grep -l AutoGen-ed src/*.c) ; do
 		rm src/$(basename ${file} .c).{c,h} || die
 	done
+
+	# don't try to use system certificate store on macOS, it is
+	# confusingly ignoring our ca-certificates and more importantly
+	# fails to compile in certain configurations
+	sed -i -e 's/__APPLE__/__NO_APPLE__/' lib/system/certs.c || die
 
 	# Use sane .so versioning on FreeBSD.
 	elibtoolize

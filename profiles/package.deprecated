@@ -17,16 +17,15 @@
 
 #--- END OF EXAMPLES ---
 
-# Jesus P Rey <gentoo@chuso.net> (2020-09-26)
-# Only one provider left; media-video/ffmpeg should be used instead
-# Bug #744787
-virtual/ffmpeg
+# Michał Górny <mgorny@gentoo.org> (2020-12-22)
+# This is a renamed dev-python/pycryptodome.  Since the latter has more
+# revdeps, please sed your package s:Cryptodome:Crypto:,
+# s:pycryptodomex:pycryptodome:.
+dev-python/pycryptodomex
 
-# Thomas Deutschmann <whissi@gentoo.org> (2020-09-08)
-# Dead implementations, please migrate to >=zeromq-4
-dev-perl/ZMQ-LibZMQ2
-dev-perl/ZMQ-LibZMQ3
-<net-libs/zeromq-4
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-11-20)
+# dev-qt/qtwebkit is in the process of being removed, tracker bug #684580
+dev-qt/qtwebkit
 
 # Mart Raudsepp <leio@gentoo.org> (2020-07-04)
 # Port to gtk+:3 using wxGTK:3.0-gtk3 SLOT
@@ -45,12 +44,8 @@ sys-power/pm-utils
 dev-perl/Net-SMTP-SSL
 
 # Matt Turner <mattst88@gentoo.org> (2020-03-17)
-# Deprecated GNOME 2 era packages
-# Bugs #640022, #713010, #726784, #728956
+# Deprecated GNOME 2 era packages, bug #751001
 gnome-base/gnome-vfs
-gnome-base/libbonobo
-gnome-base/libgnome-keyring
-gnome-base/orbit
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-03-08)
 # x11-libs/gtkglext is in the process of being removed, tracker bug #698950
@@ -65,7 +60,6 @@ virtual/libffi
 # Test coverage reporting is not useful for Gentoo ebuilds.  The deps
 # against coverage plugins are either entirely spurious, or the build
 # systems need to be fixed to work without them.
-dev-python/nose-cover3
 dev-python/nosexcover
 
 # Zac Medico <zmedico@gentoo.org> (2019-12-06)

@@ -1,6 +1,18 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Michał Górny <mgorny@gentoo.org> (2020-11-30)
+# Qt5 is not keyworded here.
+x11-misc/synergy gui
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-11-12)
+# media-sound/lash not keyworded, bug #736725
+media-sound/fluidsynth lash
+
+# Cédric Krier <cedk@gentoo.org> (2020-11-10)
+# virtual/rust has no alpha keyword
+dev-vcs/mercurial rust
+
 # Arfrever Frehtes Taifersar Arahesis <arfrever.fta@gmail.com> (2020-10-14)
 # app-i18n/fcitx:4 not keyworded.
 media-libs/libsdl2 fcitx4
@@ -31,10 +43,8 @@ app-office/planner eds
 gnome-base/nautilus previewer
 # needs libgdata[gnome-online-accounts], depends on net-libs/webkit-gtk
 gnome-base/gvfs google
-
-# Robin H. Johnson <robbat2@gentoo.org> (2020-07-02)
-# Mask io-uring & zbc pending keywording
-sys-block/fio -io-uring zbc
+# needs app-text/libgepub which depends on webkit-gtk
+xfce-extra/tumbler epub
 
 # Michał Górny <mgorny@gentoo.org> (2020-06-14)
 # Requires dev-python/networkx.

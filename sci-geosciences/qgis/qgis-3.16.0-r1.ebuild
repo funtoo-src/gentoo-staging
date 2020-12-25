@@ -12,7 +12,7 @@ if [[ ${PV} = *9999 ]]; then
 else
 	SRC_URI="https://qgis.org/downloads/${P}.tar.bz2
 		examples? ( https://qgis.org/downloads/data/qgis_sample_data.tar.gz -> qgis_sample_data-2.8.14.tar.gz )"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="amd64 x86"
 fi
 inherit cmake desktop python-single-r1 qmake-utils xdg
 
@@ -158,7 +158,8 @@ src_configure() {
 		)
 	fi
 
-	use python && mycmakeargs+=( -DBINDINGS_GLOBAL_INSTALL=ON )
+	use python && mycmakeargs+=( -DBINDINGS_GLOBAL_INSTALL=ON ) ||
+		mycmakeargs+=( -DWITH_QGIS_PROCESS=OFF ) # FIXME upstream issue #39973
 
 	# bugs 612956, 648726
 	addpredict /dev/dri/renderD128

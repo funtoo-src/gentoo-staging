@@ -17,7 +17,7 @@ if [[ ${PV} == *9999* ]]; then
 	SRC_URI=""
 else
 	SRC_URI="https://download.ceph.com/tarballs/${P}.tar.gz"
-	KEYWORDS="~amd64 ~ppc64"
+	KEYWORDS="amd64 ~ppc64"
 fi
 
 DESCRIPTION="Ceph distributed filesystem"
@@ -151,7 +151,7 @@ RDEPEND="${DEPEND}
 		diskprediction? (
 			$(python_gen_cond_dep '<dev-python/scipy-1.4.0[${PYTHON_USEDEP}]' python3_{6,7})
 		)
-		sci-libs/scikits_learn[${PYTHON_USEDEP}]
+		sci-libs/scikit-learn[${PYTHON_USEDEP}]
 		dev-python/six[${PYTHON_USEDEP}]
 	)
 "

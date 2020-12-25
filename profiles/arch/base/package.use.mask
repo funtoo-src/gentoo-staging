@@ -1,6 +1,13 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Michał Górny <mgorny@gentoo.org> (2020-12-21)
+# Mask all sanitizers by default, unmask on arches supporting them.
+sys-libs/compiler-rt-sanitizers asan dfsan lsan msan hwasan tsan
+sys-libs/compiler-rt-sanitizers ubsan safestack cfi scudo
+sys-libs/compiler-rt-sanitizers shadowcallstack gwp-asan
+sys-libs/compiler-rt-sanitizers libfuzzer profile xray
+
 # Sam James <sam@gentoo.org> (2020-10-24)
 # asm redc is only available on amd64,
 # ppc64. bug #750974.
@@ -61,6 +68,8 @@ sys-libs/glibc static-pie
 # dev-util/sysprof not keyworded on most arches yet
 x11-wm/mutter sysprof
 dev-libs/gjs sysprof
+dev-libs/glib sysprof
+x11-libs/gtk+ sysprof
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-02-26)
 # Vulkan support is only available on few selected arches atm.

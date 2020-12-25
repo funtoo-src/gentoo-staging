@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: autotools-utils.eclass
@@ -7,6 +7,7 @@
 # Michał Górny <mgorny@gentoo.org>
 # @SUPPORTED_EAPIS: 4 5
 # @BLURB: common ebuild functions for autotools-based packages
+# @DEPRECATED: out-of-source
 # @DESCRIPTION:
 # autotools-utils.eclass is autotools.eclass(5) and base.eclass(5) wrapper
 # providing all inherited features along with econf arguments as Bash array,
@@ -112,6 +113,11 @@ esac
 # Note that dependencies are added for autoconf, automake and libtool only.
 # If your package needs one of the external tools listed above, you need to add
 # appropriate packages to DEPEND yourself.
+
+# @VARIABLE: AUTOTOOLS_AUTO_DEPEND
+# @DESCRIPTION:
+# Please document me
+
 [[ ${AUTOTOOLS_AUTORECONF} ]] || : ${AUTOTOOLS_AUTO_DEPEND:=no}
 
 # eutils for eqawarn, path_exists
@@ -191,6 +197,12 @@ EXPORT_FUNCTIONS src_prepare src_configure src_compile src_install src_test
 # cases only.
 
 # Determine using IN or OUT source build
+
+# @FUNCTION: _check_build_dir
+# @INTERNAL
+# @DESCRIPTION:
+# Please document me
+
 _check_build_dir() {
 	: ${ECONF_SOURCE:=${S}}
 	# Respect both the old variable and the new one, depending

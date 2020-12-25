@@ -19,7 +19,7 @@ MY_PV="$(ver_cut 1-2)"
 
 SLOT="0"
 LICENSE="|| ( GPL-2 BL )"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 ~x86"
 IUSE="+bullet +dds +elbeem +openexr +system-python +system-numpy +tbb \
 	abi6-compat abi7-compat alembic collada color-management cuda cycles \
 	debug doc ffmpeg fftw headless jack jemalloc jpeg2k llvm \
@@ -88,7 +88,7 @@ RDEPEND="${PYTHON_DEPS}
 		~media-gfx/openvdb-7.0.0[abi6-compat(-)?,abi7-compat(-)?]
 		dev-libs/c-blosc:=
 	)
-	osl? ( media-libs/osl )
+	osl? ( media-libs/osl:= )
 	sdl? ( media-libs/libsdl2[sound,joystick] )
 	sndfile? ( media-libs/libsndfile )
 	tbb? ( dev-cpp/tbb )
@@ -113,6 +113,8 @@ BDEPEND="
 	)
 	nls? ( sys-devel/gettext )
 "
+
+CMAKE_BUILD_TYPE="Release"
 
 blender_check_requirements() {
 	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp

@@ -30,14 +30,14 @@ fi
 
 RELEASE_VER=${PV}
 
-GCC_BOOTSTRAP_VER=20180511
+GCC_BOOTSTRAP_VER=20201208
 
 LOCALE_GEN_VER=2.10
 
 SRC_URI+=" https://gitweb.gentoo.org/proj/locale-gen.git/snapshot/locale-gen-${LOCALE_GEN_VER}.tar.gz"
-SRC_URI+=" multilib? ( https://dev.gentoo.org/~dilfridge/distfiles/gcc-multilib-bootstrap-${GCC_BOOTSTRAP_VER}.tar.xz )"
+SRC_URI+=" multilib-bootstrap? ( https://dev.gentoo.org/~dilfridge/distfiles/gcc-multilib-bootstrap-${GCC_BOOTSTRAP_VER}.tar.xz )"
 
-IUSE="audit caps cet compile-locales +crypt custom-cflags doc gd headers-only +multiarch multilib nscd profile selinux +ssp +static-libs static-pie suid systemtap test vanilla"
+IUSE="audit caps cet compile-locales +crypt custom-cflags doc gd headers-only +multiarch multilib multilib-bootstrap nscd profile selinux +ssp +static-libs static-pie suid systemtap test vanilla"
 
 # Minimum kernel version that glibc requires
 MIN_KERN_VER="3.2.0"
@@ -743,7 +743,7 @@ src_unpack() {
 	# Consistency is not guaranteed between pkg_ and src_ ...
 	sanity_prechecks
 
-	use multilib && unpack gcc-multilib-bootstrap-${GCC_BOOTSTRAP_VER}.tar.xz
+	use multilib-bootstrap && unpack gcc-multilib-bootstrap-${GCC_BOOTSTRAP_VER}.tar.xz
 
 	setup_env
 
@@ -943,6 +943,11 @@ glibc_do_configure() {
 		$(use_enable static-pie)
 		$(use_enable systemtap)
 		$(use_enable nscd)
+
+		# locale data is arch-independent
+		# https://bugs.gentoo.org/753740
+		libc_cv_complocaledir='${exec_prefix}/lib/locale'
+
 		${EXTRA_ECONF}
 	)
 
@@ -985,7 +990,7 @@ glibc_do_configure() {
 	# is built with MULTILIB_ABIS="amd64 x86" but we want to
 	# add x32 to it, gcc/glibc don't yet support x32.
 	#
-	if [[ -n ${GCC_BOOTSTRAP_VER} ]] && use multilib ; then
+	if [[ -n ${GCC_BOOTSTRAP_VER} ]] && use multilib-bootstrap ; then
 		echo 'main(){}' > "${T}"/test.c
 		if ! $(tc-getCC ${CTARGET}) ${CFLAGS} ${LDFLAGS} "${T}"/test.c -Wl,-emain -lgcc 2>/dev/null ; then
 			sed -i -e '/^CC = /s:$: -B$(objdir)/../'"gcc-multilib-bootstrap-${GCC_BOOTSTRAP_VER}/${ABI}:" config.make || die
@@ -1328,26 +1333,7 @@ glibc_do_src_install() {
 	insinto /etc
 	doins locale.gen
 
-	# Make sure all the ABI's can find the locales and so we only
-	# have to generate one set
-	local a
-	keepdir /usr/$(get_libdir)/locale
-	for a in $(get_install_abis) ; do
-		if [[ ! -e ${ED}/usr/$(get_abi_LIBDIR ${a})/locale ]] ; then
-			dosym ../$(get_libdir)/locale /usr/$(get_abi_LIBDIR ${a})/locale
-		fi
-	done
-
-	# HACK: If we're building for riscv, we need to additionally make sure that
-	# we can find the locale archive afterwards
-	case ${CTARGET} in
-		riscv*)
-			if [[ ! -e ${ED}/usr/lib/locale ]] ; then
-				dosym ../$(get_libdir)/locale /usr/lib/locale
-			fi
-			;;
-		*) ;;
-	esac
+	keepdir /usr/lib/locale
 
 	cd "${S}"
 
@@ -1474,6 +1460,12 @@ pkg_preinst() {
 	[[ -n ${ROOT} ]] && return 0
 	[[ -d ${ED}/$(get_libdir) ]] || return 0
 	[[ -z ${BOOTSTRAP_RAP} ]] && glibc_sanity_check
+
+	if [[ -L ${EROOT}/usr/lib/locale ]]; then
+		# Help portage migrate this to a directory
+		# https://bugs.gentoo.org/753740
+		rm "${EROOT}"/usr/lib/locale || die
+	fi
 }
 
 pkg_postinst() {

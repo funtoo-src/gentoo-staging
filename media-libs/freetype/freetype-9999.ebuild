@@ -7,7 +7,7 @@ inherit flag-o-matic libtool multilib-build multilib-minimal toolchain-funcs
 
 DESCRIPTION="A high-quality and portable font engine"
 HOMEPAGE="https://www.freetype.org/"
-IUSE="X +adobe-cff bindist brotli bzip2 +cleartype_hinting debug fontforge harfbuzz infinality png static-libs utils"
+IUSE="X +adobe-cff bindist brotli bzip2 +cleartype_hinting debug fontforge harfbuzz infinality +png static-libs utils"
 
 if [[ "${PV}" != 9999 ]] ; then
 	SRC_URI="mirror://sourceforge/freetype/${P/_/}.tar.xz
@@ -80,6 +80,16 @@ src_fetch() {
 
 src_unpack() {
 	_egit_repo_handler ${EBUILD_PHASE}
+
+	if [[ "${PV}" == 9999 ]] ; then
+		# Need to copy stuff from dlg submodule (#758902)
+		local dlg_inc_dir="${S}/submodules/dlg/include/dlg"
+		local dlg_src_dir="${S}/submodules/dlg/src/dlg"
+		local dlg_dest_dir="${S}/src/dlg"
+		mkdir -p "${dlg_dest_dir}/dlg" || die
+		cp "${dlg_inc_dir}"/{dlg,output}.h "${dlg_dest_dir}/dlg" || die
+		cp "${dlg_src_dir}"/* "${dlg_dest_dir}" || die
+	fi
 }
 
 src_prepare() {

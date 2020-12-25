@@ -11,7 +11,7 @@ SRC_URI="https://marlam.de/msmtp/releases/${P}.tar.xz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~ia64 ppc ppc64 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x86-macos"
 IUSE="daemon doc gnome-keyring idn +mta nls sasl ssl vim-syntax"
 
 # fcaps.eclass unconditionally defines "filecaps" USE flag which we need for
@@ -22,10 +22,10 @@ REQUIRED_USE="daemon? ( filecaps )"
 # https://marlam.de/msmtp/news/openssl-discouraged/
 DEPEND="
 	gnome-keyring? ( app-crypt/libsecret )
+	idn? ( net-dns/libidn2:= )
 	nls? ( virtual/libintl )
 	sasl? ( virtual/gsasl )
 	ssl? ( net-libs/gnutls[idn?] )
-	!ssl? ( idn? ( net-dns/libidn2:= ) )
 "
 
 RDEPEND="${DEPEND}

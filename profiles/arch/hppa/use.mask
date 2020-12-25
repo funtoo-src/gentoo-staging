@@ -7,6 +7,10 @@
 # NOTE: When masking a USE flag due to missing keywords, please file a keyword
 # request bug for the hppa arch.
 
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-11-12)
+# media-sound/jack-audio-connection-kit re-keywording timeout, bug #736725
+jack
+
 # Matt Turner <mattst88@gentoo.org> (2020-07-01)
 # Unlikely.
 vulkan
@@ -77,6 +81,8 @@ clang
 
 # Jeroen Roovers <jer@gentoo.org> (2014-11-07)
 # dev-lang/luajit has not been ported to HPPA
+lua_single_target_luajit
+lua_targets_luajit
 luajit
 luajittex
 

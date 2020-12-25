@@ -1,8 +1,14 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# Maintainer: Toolchain Ninjas <toolchain@gentoo.org>
+# @ECLASS: toolchain.eclass
+# @MAINTAINER:
+# Toolchain Ninjas <toolchain@gentoo.org>
+# @AUTHOR:
+# Toolchain Ninjas <toolchain@gentoo.org>
 # @SUPPORTED_EAPIS: 5 6 7
+# @BLURB: Basic toolchain stuff
+
 
 DESCRIPTION="The GNU Compiler Collection"
 HOMEPAGE="https://gcc.gnu.org/"
@@ -181,6 +187,7 @@ if [[ ${PN} != "kgcc64" && ${PN} != gcc-* ]] ; then
 	tc_version_is_at_least 9.1 && IUSE+=" lto"
 	tc_version_is_at_least 10 && IUSE+=" zstd" TC_FEATURES+=(zstd)
 	tc_version_is_at_least 11 && IUSE+=" valgrind" TC_FEATURES+=(valgrind)
+	tc_version_is_at_least 11 && IUSE+=" custom-cflags"
 fi
 
 if tc_version_is_at_least 10; then
@@ -1391,12 +1398,18 @@ downgrade_arch_flags() {
 }
 
 gcc_do_filter_flags() {
-	# Be conservative here:
-	# - don't allow -O3 and like to over-optimize libgcc # 701786
-	# - don't allow -O0 to generate potentially invalid startup code
-	strip-flags
-	filter-flags '-O?'
-	append-flags -O2
+	# Allow users to explicitly avoid flag sanitization via
+	# USE=custom-cflags.
+	if ! _tc_use_if_iuse custom-cflags; then
+		# Over-zealous CFLAGS can often cause problems.  What may work for one
+		# person may not work for another.  To avoid a large influx of bugs
+		# relating to failed builds, we strip most CFLAGS out to ensure as few
+		# problems as possible.
+		strip-flags
+		# Lock gcc at -O2; we want to be conservative here.
+		filter-flags '-O?'
+		append-flags -O2
+	fi
 
 	# dont want to funk ourselves
 	filter-flags '-mabi*' -m31 -m32 -m64

@@ -9,25 +9,64 @@
 # @SUPPORTED_EAPIS: 6 7
 # @BLURB: common functions and variables for cargo builds
 
+# @VARIABLE: _CARGO_ECLASS
+# @INTERNAL
+# @DESCRIPTION:
+# If null set to 1
+
 if [[ -z ${_CARGO_ECLASS} ]]; then
 _CARGO_ECLASS=1
 
+# @VARIABLE: RUST_DEPEND
+# @DESCRIPTION:
 # we need this for 'cargo vendor' subcommand and net.offline config knob
+
 RUST_DEPEND=">=virtual/rust-1.37.0"
 
-case ${EAPI} in
-	7) BDEPEND="${RUST_DEPEND}";;
-	*) die "EAPI=${EAPI:-0} is not supported" ;;
+case "${EAPI:-0}" in
+	0|1|2|3|4|5|6)
+		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
+		;;
+	7)
+		;;
+	*)
+		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"
+		;;
 esac
 
 inherit multiprocessing toolchain-funcs
 
-EXPORT_FUNCTIONS src_unpack src_configure src_compile src_install src_test
+if [[ ! ${CARGO_OPTIONAL} ]]; then
+	BDEPEND="${RUST_DEPEND}"
+	EXPORT_FUNCTIONS src_unpack src_configure src_compile src_install src_test
+fi
 
 IUSE="${IUSE} debug"
 
+# @VARIABLE: ECARGO_HOME
+# @DESCRIPTION:
+# Adjust the working directory
+
 ECARGO_HOME="${WORKDIR}/cargo_home"
+
+# @VARIABLE: ECARGO_VENDOR
+# @DESCRIPTION:
+# Vendorize the working directory
+
 ECARGO_VENDOR="${ECARGO_HOME}/gentoo"
+
+# @ECLASS-VARIABLE: CARGO_OPTIONAL
+# @DEFAULT_UNSET
+# @PRE_INHERIT
+# @DESCRIPTION:
+# If set to a non-null value, before inherit cargo part of the ebuild will
+# be considered optional. No dependencies will be added and no phase
+# functions will be exported.
+#
+# If you enable CARGO_OPTIONAL, you have to set BDEPEND on virtual/rust
+# for your package and call at least cargo_gen_config manually before using
+# other src_ functions of this eclass.
+# note that cargo_gen_config is automatically called by cargo_src_unpack.
 
 # @VARIABLE: myfeatures
 # @DEFAULT_UNSET
@@ -325,7 +364,7 @@ cargo_src_compile() {
 	[[ ${_CARGO_GEN_CONFIG_HAS_RUN} ]] || \
 		die "FATAL: please call cargo_gen_config before using ${FUNCNAME}"
 
-	tc-export AR CC CXX
+	tc-export AR CC CXX PKG_CONFIG
 
 	set -- cargo build $(usex debug "" --release) ${ECARGO_ARGS[@]} "$@"
 	einfo "${@}"

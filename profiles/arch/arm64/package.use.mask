@@ -1,6 +1,38 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Michał Górny <mgorny@gentoo.org> (2020-12-21)
+# Sanitizers supported on this architecture.
+sys-libs/compiler-rt-sanitizers -asan -dfsan -lsan -msan -hwasan -tsan
+sys-libs/compiler-rt-sanitizers -ubsan -safestack -cfi -scudo
+sys-libs/compiler-rt-sanitizers -gwp-asan -shadowcallstack
+sys-libs/compiler-rt-sanitizers -libfuzzer -profile -xray
+
+# Sam James <sam@gentoo.org> (2020-12-13)
+# Requires unkeyworded, fetch-restricted deps
+net-proxy/haproxy device-atlas
+
+# Roy Bamford <neddyseagoon@gentoo.org< (2020-12-07)
+# media-libs/liblastfm fails to build with tests Bug #758896
+media-sound/clementine lastfm
+
+# Roy Bamford <neddyseagoon@gentoo.org< (2020-12-01)
+# hfs xfs fail build and/or tests on arm64 
+# See bug #747181 
+sys-block/gparted xfs
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-11-08)
+# dev-util/kdevelop-php is not keyworded, bug #751337
+>=kde-apps/umbrello-20.08.3 php
+
+# Marek Szuba <marecki@gentoo.org> (2020-11-06)
+# media-gfx/digikam has no arm64 keyword yet. Bug #753362.
+media-gfx/gmic digikam
+
+# Marek Szuba <marecki@gentoo.org> (2020-11-06)
+# media-gfx/gmic has no arm64 keyword yet. Bug #753356.
+media-gfx/darktable gmic
+
 # Sam James <sam@gentoo.org> (2020-10-03)
 # Builds & tests pass on arm64.
 # Available on: amd64, x86, arm{,64}.
@@ -14,10 +46,6 @@ net-mail/dovecot vpopmail
 # Guile only supports JIT on some arches
 # (See 9.3.8 in the Guile manual)
 dev-scheme/guile -jit
-
-# Joonas Niilola <juippis@gentoo.org> (2020-10-02)
-# luajit not available on this arch.
-dev-libs/efl luajit
 
 # Sam James <sam@gentoo.org> (2020-09-05)
 # nvidia-texture-tools not useful here
@@ -181,11 +209,6 @@ media-video/mpv -sdl
 media-video/transcode -sdl
 >=x11-libs/wxGTK-3 -sdl
 
-# Roy Bamford <neddyseagoon@gentoo.org> (2019-02-24)
-# kde-apps/cantor lua means luajit which needs luajit-2.1.0_beta3 for arm64
-# It builds OK but is not yet in ::gentoo. bug #678404
-kde-apps/cantor lua
-
 # Virgil Dupras <vdupras@gentoo.org> (2018-09-06)
 # sci-electronics/ngspice not yet keyworded, bug #665416
 # sci-libs/opencascade not yet keyworded
@@ -238,6 +261,8 @@ net-fs/samba dmapi
 sci-libs/gdal armadillo netcdf
 sys-fs/btrfs-progs reiserfs
 www-client/chromium widevine
+www-client/vivaldi widevine
+www-client/vivaldi-snapshot widevine
 
 # Matthew Thode <prometheanfire@gentoo.org> (2018-02-23)
 # net-proxy/haproxy isn't keyworded for arm64
@@ -248,7 +273,6 @@ sys-cluster/neutron haproxy
 dev-python/ipython notebook
 dev-python/networkx scipy
 dev-ruby/haml test
-media-libs/opencv contribdnn
 
 # Michał Górny <mgorny@gentoo.org> (2018-02-16)
 # USE=test-full requires USE=pkcs11 that is use.masked.

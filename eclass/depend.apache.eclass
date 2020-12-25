@@ -1,10 +1,10 @@
-# Copyright 1999-2012 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: depend.apache.eclass
 # @MAINTAINER:
 # apache-devs@gentoo.org
-# @SUPPORTED_EAPIS: 0 2 3 4 5 6
+# @SUPPORTED_EAPIS: 0 2 3 4 5 6 7
 # @BLURB: Functions to allow ebuilds to depend on apache
 # @DESCRIPTION:
 # This eclass handles depending on apache in a sane way and provides information
@@ -44,7 +44,7 @@ case ${EAPI:-0} in
 	0|2|3|4|5)
 		inherit multilib
 		;;
-	6)
+	6|7)
 		;;
 	*)
 		die "EAPI=${EAPI} is not supported by depend.apache.eclass"
@@ -127,6 +127,11 @@ APACHE2_4_DEPEND="=www-servers/apache-2.4*"
 # INTERNAL FUNCTIONS
 # ==============================================================================
 
+# @FUNCTION: _init_apache2
+# @INTERNAL
+# @DESCRIPTION:
+# Please document me
+
 _init_apache2() {
 	debug-print-function $FUNCNAME $*
 
@@ -148,10 +153,20 @@ _init_apache2() {
 	esac
 }
 
+# @FUNCTION: _init_apache2_late
+# @INTERNAL
+# @DESCRIPTION:
+# Please document me
+
 _init_apache2_late() {
 	APACHE_BASEDIR="/usr/$(get_libdir)/apache2"
 	APACHE_MODULESDIR="${APACHE_BASEDIR}/modules"
 }
+
+# @FUNCTION: _init_no_apache
+# @INTERNAL
+# @DESCRIPTION:
+# Please document me
 
 _init_no_apache() {
 	debug-print-function $FUNCNAME $*

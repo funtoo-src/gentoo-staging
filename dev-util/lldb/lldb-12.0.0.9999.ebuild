@@ -8,9 +8,6 @@ inherit cmake llvm llvm.org python-single-r1 toolchain-funcs
 
 DESCRIPTION="The LLVM debugger"
 HOMEPAGE="https://llvm.org/"
-LLVM_COMPONENTS=( lldb )
-LLVM_TEST_COMPONENTS=( llvm/lib/Testing/Support llvm/utils/unittest )
-llvm.org_set_globals
 
 LICENSE="Apache-2.0-with-LLVM-exceptions UoI-NCSA"
 SLOT="0"
@@ -25,7 +22,7 @@ RDEPEND="
 	ncurses? ( >=sys-libs/ncurses-5.9-r3:0= )
 	python? (
 		$(python_gen_cond_dep '
-			dev-python/six[${PYTHON_MULTI_USEDEP}]
+			dev-python/six[${PYTHON_USEDEP}]
 		')
 		${PYTHON_DEPS}
 	)
@@ -38,10 +35,16 @@ BDEPEND="
 	python? ( >=dev-lang/swig-3.0.11 )
 	test? (
 		$(python_gen_cond_dep "
-			~dev-python/lit-${PV}[\${PYTHON_MULTI_USEDEP}]
+			~dev-python/lit-${PV}[\${PYTHON_USEDEP}]
+			dev-python/psutil[\${PYTHON_USEDEP}]
 		")
-		sys-devel/lld )
+		sys-devel/lld
+	)
 	${PYTHON_DEPS}"
+
+LLVM_COMPONENTS=( lldb )
+LLVM_TEST_COMPONENTS=( llvm/lib/Testing/Support llvm/utils/unittest )
+llvm.org_set_globals
 
 pkg_setup() {
 	LLVM_MAX_SLOT=${PV%%.*} llvm_pkg_setup
@@ -74,9 +77,6 @@ src_configure() {
 	)
 	use test && mycmakeargs+=(
 		-DLLVM_BUILD_TESTS=$(usex test)
-		# compilers for lit tests
-		-DLLDB_TEST_COMPILER="$(type -P clang)"
-
 		-DLLVM_MAIN_SRC_DIR="${WORKDIR}/llvm"
 		-DLLVM_EXTERNAL_LIT="${EPREFIX}/usr/bin/lit"
 		-DLLVM_LIT_ARGS="$(get_lit_flags)"

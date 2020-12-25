@@ -1,4 +1,4 @@
-# Copyright 1999-2017 Gentoo Foundation
+# Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: aspell-dict-r1.eclass
@@ -41,6 +41,11 @@ case ${EAPI:-0} in
 esac
 
 EXPORT_FUNCTIONS src_configure src_install
+
+# @VARIABLE: _ASPELL_DICT_R1
+# @INTERNAL
+# @DESCRIPTION:
+# Please document me
 
 if [[ ! ${_ASPELL_DICT_R1} ]]; then
 

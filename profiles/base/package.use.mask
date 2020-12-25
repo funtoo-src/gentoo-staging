@@ -6,22 +6,82 @@
 # This file is only for generic masks. For arch-specific masks (i.e.
 # mask everywhere, unmask on arch/*) use arch/base.
 
-# Marek Szuba <marecki@gentoo.org> (2020-10-12)
-# Requires slotted Lua, which is still masked.
-media-gfx/darktable system-lua
+# Michał Górny <mgorny@gentoo.org> (2020-12-21)
+# LSAN is currently broken (due to new glibc?)
+<sys-libs/compiler-rt-sanitizers-12 lsan
+
+# Rick Farina <zerochaos@gentoo.org> (2020-12-21)
+# This use flag enables code which appears to be broken
+net-wireless/gr-osmosdr xtrx
+
+# Michał Górny <mgorny@gentoo.org> (2020-12-18)
+# app-text/ots is masked for removal.  Bug #648964.
+app-office/abiword ots
+
+# Arfrever Frehtes Taifersar Arahesis <arfrever.fta@gmail.com> (2020-12-07)
+# Waiting for unmasking of slotted Lua.
+>=app-i18n/fcitx-4.2.9.8:4 lua
+>=app-i18n/ibus-libpinyin-1.11.92 lua
+app-i18n/ibus-pinyin lua
+
+# Matt Turner <mattst88@gentoo.org> (2020-12-05)
+# Relies on gtkdoc-mktmpl which was removed from gtk-doc-1.26
+# Bug #740690
+x11-libs/colord-gtk doc
+
+# Michał Górny <mgorny@gentoo.org> (2020-12-04)
+# Mask the experimental targets in release ebuilds.
+<dev-ml/llvm-ocaml-11 llvm_targets_AVR
+<sys-devel/clang-11 llvm_targets_AVR
+<sys-devel/llvm-11 llvm_targets_AVR
+<dev-ml/llvm-ocaml-12 llvm_targets_ARC llvm_targets_CSKY llvm_targets_VE
+<sys-devel/clang-12 llvm_targets_ARC llvm_targets_CSKY llvm_targets_VE
+<sys-devel/llvm-12 llvm_targets_ARC llvm_targets_CSKY llvm_targets_VE
+
+# Joonas Niilola <juippis@gentoo.org> (2020-12-03)
+# Doc building seem to be very random without any predictability, 
+# bug #734104
+media-gfx/blender doc
+
+# Marek Szuba <marecki@gentoo.org> (2020-11-30)
+# Vendored therecipe/qt violates network sandbox + uses external binary
+# Qt libraries; see https://github.com/ProtonMail/proton-bridge/issues/16
+# The qt module itself apparently can be made to build against system Qt5
+# but making it do so while vendored is a non-trivial task.
+mail-mta/protonmail-bridge gui
+
+# Michał Górny <mgorny@gentoo.org> (2020-11-29)
+# libclangformat-ide is masked for removal.
+dev-qt/qt-creator clang
+
+# Joonas Niilola <juippis@gentoo.org> (2020-11-26)
+# Still too experimental. efl's upstream can't keep up with libavif's.
+# Bug: 756733
+dev-libs/efl avif
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2020-11-25)
+# Depends on masked net-libs/libkvkontakte
+kde-apps/kipi-plugins vkontakte
+
+# Alfredo Tupone <tupone@gentoo.org> (2020-11-06)
+# waiting for lua to be slotted
+media-gfx/exact-image lua
+
+# Haelwenn (lanodan) Monnier <contact@hacktivis.me> (2020-11-03)
+# Requires >=dev-lang/lua-5.2, which is still masked.
+app-editors/vis lua
 
 # Georgy Yakovlev <gyakovlev@gentoo.org> (2020-10-08)
-# Broken
+# USE=doc broken on 1.47.0
 # error: unresolved link to `crate::os::unix::ffi::OsStrExt`
->=dev-lang/rust-1.47.0 doc
+#
+# USE=miri seems to be not working on 1.48.0
+~dev-lang/rust-1.47.0 doc
+~dev-lang/rust-1.48.0 doc miri
 
 # Michał Górny <mgorny@gentoo.org> (2020-09-27)
 # The respective dependencies are masked for removal.
 net-im/telepathy-connection-managers gadu icq meanwhile steam yahoo
-
-# Michał Górny <mgorny@gentoo.org> (2020-09-26)
-# Removed in 1.1.34-r1, mask in older to unblock libxml2 cleanup.
-<dev-libs/libxslt-1.1.34-r1 python
 
 # Michał Górny <mgorny@gentoo.org> (2020-09-26)
 # The respective dependencies are masked for removal.
@@ -75,7 +135,6 @@ www-apps/nikola websocket
 # distutils_enable_sphinx to build docs.
 <=dev-python/lockfile-0.12.2-r2 doc
 <dev-python/pep8-1.7.1-r1 doc
-<dev-python/psycopg-2.8.4 doc
 
 # Michał Górny <mgorny@gentoo.org> (2020-07-27)
 # Requires Python 2 support in xapian-bindings which in turn require
@@ -91,11 +150,6 @@ dev-python/autobahn xbr
 # media-video/pipewire:0/0.3 is only available for certain architectures
 www-client/firefox screencast
 
-# Mart Raudsepp <leio@gentoo.org> (2020-06-28)
-# media-video/pipewire:0/0.3 is ongoing work, 0.2 on mutter-3.34
-# is not worth trying to get to work.
-<x11-wm/mutter-3.36 screencast
-
 # Stephan Hartmann <stha09@googlemail.com> (2020-06-28)
 # Mostly intended for development and not for general use.
 >=www-client/chromium-84 headless
@@ -110,10 +164,6 @@ media-gfx/inkscape jemalloc
 # broken.
 www-client/chromium component-build
 
-# Georgy Yakovlev <gyakovlev@gentoo.org> (2020-05-04)
-# Broken error[E0478]: lifetime bound not satisfied
-=dev-lang/rust-1.44.1 miri
-
 # Ben Kohler <bkohler@gentoo.org> (2020-04-29)
 # Dependency pam_wrapper missing for tests, and RESTRICT=test is already set
 net-fs/samba test
@@ -125,6 +175,14 @@ dev-util/meson test
 # Michał Górny <mgorny@gentoo.org> (2020-04-19)
 # Requires dev-vcs/ghp-import that is masked for removal.
 www-apps/nikola ghpages
+
+# Ulrich Müller <ulm@gentoo.org> (2020-04-08, 2020-11-21)
+# Old versions of libjpeg-turbo have known security issues.
+# The version included with >=zoom-5.3 has an empty DT_RPATH,
+# which is insecure because the loader will search the working
+# directory when it finds an empty path.
+# Use the bundled lib on your own risk. Bug #715106.
+net-im/zoom bundled-libjpeg-turbo
 
 # Alfredo Tupone <tupone@gentoo.org> (2020-04-04)
 # Ada support is not yet ready for sys-deve/gcc
@@ -163,10 +221,6 @@ dev-python/pyzmq doc
 # Unsatisfiable dep due to missing impls.
 dev-python/zeep tornado
 
-# Michał Górny <mgorny@gentoo.org> (2020-01-29)
-# Require Python 2 support in numpydoc.
-<=dev-python/pywavelets-0.5.2-r1 doc
-
 # Michał Górny <mgorny@gentoo.org> (2020-01-27)
 # Requires old split dev-python/twisted-*.
 net-irc/telepathy-idle test
@@ -185,7 +239,6 @@ dev-libs/ossp-uuid php
 dev-games/openscenegraph fox
 dev-libs/hidapi fox
 sci-mathematics/gsl-shell fox
-sys-libs/gwenhywfar fox
 
 # James Le Cuirot <chewi@gentoo.org> (2019-12-10)
 # The JIT feature only works on amd64 and x86.
@@ -342,9 +395,9 @@ net-fs/samba dmapi ceph
 app-emulation/fuse backend-svga
 
 # Patrick McLean <chutzpah@gentoo.org> (2018-03-06)
-# Requires dev-libs/boost-1.66 that is unkeyworded/masked
->=sys-cluster/ceph-12.2.4 system-boost
->=sys-cluster/ceph-14.2.8 -system-boost
+# Andreas K. Hüttel <dilfridge@gentoo.org> (2020-12-25)
+# Requires dev-libs/boost-1.72 that is gone
+sys-cluster/ceph system-boost
 
 # Brian Evans <grknight@gentoo.org> (2018-03-05)
 # Mask embedded USE on virtual/mysql and friends to transition it to be obsolete
@@ -411,11 +464,6 @@ sci-libs/linux-gpib php
 # Matthias Maier <tamiko@gentoo.org> (2017-05-11)
 # Globally mask pie use flag. Selectively unmask on specific profiles.
 sys-devel/gcc pie
-
-# Pawel Hajdan jr <phajdan.jr@gentoo.org> (2017-03-02)
-# Known build issue with system libvpx:
-# https://bugs.gentoo.org/show_bug.cgi?id=611394
->=www-client/chromium-58.0.3026.3 system-libvpx
 
 # Mike Gilbert <floppym@gentoo.org> (2017-02-16)
 # Multiple test failures.

@@ -11,10 +11,11 @@ SRC_URI="https://github.com/${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-3+"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="udev"
 
 RDEPEND="
+	app-cdr/cdrtools
 	app-shells/bash
 	net-dialup/mingetty
 	net-fs/nfs-utils
@@ -25,7 +26,6 @@ RDEPEND="
 	sys-apps/util-linux
 	sys-block/parted
 	sys-boot/syslinux
-	virtual/cdrtools
 	udev? ( virtual/udev )
 "
 

@@ -12,12 +12,12 @@ SRC_URI="https://github.com/Olivine-Labs/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm ~arm64 ppc ppc64 x86"
+KEYWORDS="amd64 arm arm64 ppc ppc64 x86"
 IUSE="luajit test"
 RESTRICT="!test? ( test )"
 
 RDEPEND="
-	!luajit? ( >=dev-lang/lua-5.1:= )
+	!luajit? ( >=dev-lang/lua-5.1:0= )
 	luajit? ( dev-lang/luajit:2 )"
 DEPEND="${RDEPEND}
 	virtual/pkgconfig

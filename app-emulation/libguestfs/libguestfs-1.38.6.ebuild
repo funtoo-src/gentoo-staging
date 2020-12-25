@@ -34,7 +34,7 @@ COMMON_DEPEND="
 	dev-libs/libpcre:3
 	app-arch/cpio
 	dev-lang/perl:=
-	virtual/cdrtools
+	app-cdr/cdrtools
 	>=app-emulation/qemu-2.0[qemu_softmmu_targets_x86_64,systemtap?,selinux?,filecaps]
 	sys-apps/fakeroot
 	sys-apps/file
@@ -78,7 +78,7 @@ COMMON_DEPEND="
 	)
 	virtual/acl
 	sys-libs/libcap
-	lua? ( dev-lang/lua:* )
+	lua? ( dev-lang/lua:0= )
 	>=dev-libs/yajl-2.0.4
 	gtk? (
 		sys-apps/dbus

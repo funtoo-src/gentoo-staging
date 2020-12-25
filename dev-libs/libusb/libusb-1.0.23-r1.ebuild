@@ -10,7 +10,7 @@ SRC_URI="https://github.com/${PN}/${PN}/releases/download/v${PV}/${P}.tar.bz2"
 
 LICENSE="LGPL-2.1"
 SLOT="1"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos"
 IUSE="debug doc examples static-libs test udev"
 RESTRICT="!test? ( test )"
 
@@ -60,9 +60,9 @@ multilib_src_install_all() {
 	dodoc AUTHORS ChangeLog NEWS PORTING README TODO
 
 	if use examples; then
-		insinto /usr/share/doc/${PF}/examples
-		doins examples/*.{c,h}
-		insinto /usr/share/doc/${PF}/examples/getopt
-		doins examples/getopt/*.{c,h}
+		docinto examples
+		dodoc examples/*.{c,h}
+		docinto examples/getopt
+		dodoc examples/getopt/*.{c,h}
 	fi
 }
