@@ -1,6 +1,10 @@
 # Copyright 1999-2020 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
+# Matt Turner <mattst88@gentoo.org> (2020-12-31)
+# dev-python/pyudev is not keyworded
+dev-libs/libwacom test
+
 # Cédric Krier <cedk@gentoo.org> (2020-11-10)
 # virtual/rust has no ia64 keyword
 dev-vcs/mercurial rust
@@ -305,12 +309,6 @@ media-video/ffmpeg gme ssh
 # Pacho Ramos <pacho@gentoo.org> (2014-01-10)
 # Missing keywords
 net-misc/networkmanager teamd
-
-# Mark Wright <gienah@gentoo.org> (2014-12-14/2014-12-23)
-# test dependencies need keywording
-dev-haskell/binary test
-dev-haskell/text test
-dev-haskell/vector test
 
 # Christoph Junghans <junghans@gentoo.org> (2014-07-21)
 # Missing keywords on sci-libs/libcerf (bug 517726)
