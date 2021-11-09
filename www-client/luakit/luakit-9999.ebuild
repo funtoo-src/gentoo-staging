@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -18,7 +18,7 @@ else
 	KEYWORDS="~amd64"
 fi
 
-LICENSE="GPL-3"
+LICENSE="GPL-3+"
 SLOT="0"
 IUSE="doc test"
 
@@ -48,7 +48,7 @@ BDEPEND="
 	)
 "
 PATCHES=(
-	"${FILESDIR}"/${PN}-2.2.1-make.patch
+	"${FILESDIR}"/${PN}-9999-make.patch
 )
 
 src_configure() {
@@ -82,6 +82,7 @@ src_install() {
 		DESTDIR="${ED}" \
 		DOCDIR="${EPREFIX}/usr/share/doc/${PF}" \
 		PREFIX="${EPREFIX}/usr" \
+		USE_LUAJIT=$(usex lua_single_target_luajit 1 0) \
 		XDGPREFIX="${EPREFIX}/etc/xdg" \
 		install
 

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -18,34 +18,36 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="mpd network popups pulseaudio tray +udev"
+IUSE="mpd network +popups pulseaudio sndio tray +udev wifi"
 
 BDEPEND="
 	>=app-text/scdoc-1.9.2
 	virtual/pkgconfig
-	"
+"
 DEPEND="
 	dev-cpp/gtkmm:3.0
 	dev-libs/jsoncpp:=
 	dev-libs/libinput:=
 	dev-libs/libsigc++:2
 	>=dev-libs/libfmt-5.3.0:=
-	>=dev-libs/spdlog-1.3.1:=
+	>=dev-libs/spdlog-1.8.0:=
 	dev-libs/date:=
 	dev-libs/wayland
 	dev-libs/wayland-protocols
-	gui-libs/wlroots
+	gui-libs/wlroots:=
 	x11-libs/gtk+:3[wayland]
 	mpd? ( media-libs/libmpdclient )
 	network? ( dev-libs/libnl:3 )
 	popups? ( gui-libs/gtk-layer-shell )
 	pulseaudio? ( media-sound/pulseaudio )
+	sndio? ( media-sound/sndio:= )
 	tray? (
 		dev-libs/libdbusmenu[gtk3]
 		dev-libs/libappindicator
 	)
 	udev? ( virtual/libudev:= )
-	"
+	wifi? ( || ( sys-apps/util-linux net-wireless/rfkill ) )
+"
 RDEPEND="${DEPEND}"
 
 src_configure() {
@@ -54,8 +56,10 @@ src_configure() {
 		$(meson_feature network libnl)
 		$(meson_feature popups gtk-layer-shell)
 		$(meson_feature pulseaudio)
+		$(meson_feature sndio)
 		$(meson_feature tray dbusmenu-gtk)
 		$(meson_feature udev libudev)
+		$(meson_feature wifi rfkill)
 	)
 	meson_src_configure
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,7 +6,7 @@ EAPI=7
 CMAKE_BUILD_TYPE="Release"
 #CMAKE_MAKEFILE_GENERATOR=emake
 
-POSTGRES_COMPAT=( 9.{5..6} {10..13} )
+POSTGRES_COMPAT=( 9.6 {10..13} )
 POSTGRES_USEDEP="server"
 
 inherit cmake postgres-multi
@@ -16,7 +16,7 @@ HOMEPAGE="https://pgrouting.org/"
 LICENSE="GPL-2 MIT Boost-1.0"
 
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 SRC_URI="https://github.com/pgRouting/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 IUSE=""
 

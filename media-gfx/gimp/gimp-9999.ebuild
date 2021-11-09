@@ -1,15 +1,15 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 LUA_COMPAT=( luajit )
-PYTHON_COMPAT=( python3_{6,7,8,9} )
+PYTHON_COMPAT=( python3_{8..10} )
 GNOME2_EAUTORECONF=yes
-VALA_MIN_API_VERSION="0.40"
+VALA_MIN_API_VERSION="0.44"
 VALA_USE_DEPEND=vapigen
 
-inherit autotools git-r3 gnome2 lua-single python-single-r1 toolchain-funcs vala virtualx
+inherit git-r3 gnome2 lua-single python-single-r1 toolchain-funcs vala virtualx
 
 DESCRIPTION="GNU Image Manipulation Program"
 HOMEPAGE="https://www.gimp.org/"
@@ -17,11 +17,12 @@ EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gimp.git"
 SRC_URI=""
 LICENSE="GPL-3 LGPL-3"
 SLOT="0/3"
-KEYWORDS=""
 
-IUSE="aalib alsa aqua debug doc gnome heif javascript jpeg2k lua mng openexr postscript python udev unwind vala vector-icons webp wmf xpm cpu_flags_ppc_altivec cpu_flags_x86_mmx cpu_flags_x86_sse"
-REQUIRED_USE="lua? ( ${LUA_REQUIRED_USE} )
-	python? ( ${PYTHON_REQUIRED_USE} )"
+IUSE="aalib alsa aqua doc gnome heif javascript jpeg2k lua mng openexr postscript python udev unwind vala vector-icons webp wmf xpm cpu_flags_ppc_altivec cpu_flags_x86_mmx cpu_flags_x86_sse"
+REQUIRED_USE="
+	lua? ( ${LUA_REQUIRED_USE} )
+	python? ( ${PYTHON_REQUIRED_USE} )
+"
 
 RESTRICT="!test? ( test )"
 
@@ -31,18 +32,18 @@ COMMON_DEPEND="
 	>=app-text/poppler-0.90.1[cairo]
 	>=app-text/poppler-data-0.4.9
 	>=dev-libs/atk-2.34.1
-	>=dev-libs/glib-2.62.6:2
+	>=dev-libs/glib-2.68.0:2
 	>=dev-libs/json-glib-1.4.4
 	dev-libs/libxml2:2
 	dev-libs/libxslt
 	>=gnome-base/librsvg-2.40.21:2
 	>=media-gfx/mypaint-brushes-2.0.2:=
-	>=media-libs/babl-0.1.84[introspection,lcms,vala?]
+	>=media-libs/babl-0.1.86[introspection,lcms,vala?]
 	>=media-libs/fontconfig-2.12.6
 	>=media-libs/freetype-2.10.2
-	>=media-libs/gegl-0.4.28:0.4[cairo,introspection,lcms,vala?]
+	>=media-libs/gegl-0.4.32:0.4[cairo,introspection,lcms,vala?]
 	>=media-libs/gexiv2-0.10.10
-	>=media-libs/harfbuzz-2.6.5
+	>=media-libs/harfbuzz-2.6.5:=
 	>=media-libs/lcms-2.9:2
 	>=media-libs/libmypaint-1.6.1:=
 	>=media-libs/libpng-1.6.37:0=
@@ -58,7 +59,7 @@ COMMON_DEPEND="
 	aalib? ( media-libs/aalib )
 	alsa? ( >=media-libs/alsa-lib-1.0.0 )
 	aqua? ( >=x11-libs/gtk-mac-integration-2.0.0 )
-	heif? ( >=media-libs/libheif-1.7.0:= )
+	heif? ( >=media-libs/libheif-1.9.1:= )
 	javascript? ( dev-libs/gjs )
 	jpeg2k? ( >=media-libs/openjpeg-2.3.1:2= )
 	lua? (
@@ -73,7 +74,7 @@ COMMON_DEPEND="
 	python? (
 		${PYTHON_DEPS}
 		$(python_gen_cond_dep '
-			>=dev-python/pygobject-3.0:3[${PYTHON_MULTI_USEDEP}]
+			>=dev-python/pygobject-3.0:3[${PYTHON_USEDEP}]
 		')
 	)
 	udev? ( >=dev-libs/libgudev-167:= )

@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit flag-o-matic qmake-utils xdg
+inherit qmake-utils toolchain-funcs xdg
 
 DESCRIPTION="E-Book Reader. Supports many e-book formats"
 HOMEPAGE="https://www.fbreader.org/"
@@ -39,8 +39,6 @@ PATCHES=( "${DISTDIR}"/${P}-combined.patch )
 src_prepare() {
 	default
 
-	append-cflags -std=c++11
-
 	# Let portage decide about the compiler
 	sed -e "/^CC = /d" \
 		-i makefiles/arch/desktop.mk || die "removing CC line failed"
@@ -73,6 +71,9 @@ src_prepare() {
 	else
 		echo "TARGET_STATUS = release" >> makefiles/target.mk || die
 	fi
+
+	# bug #437262
+	tc-ld-disable-gold
 }
 
 src_compile() {

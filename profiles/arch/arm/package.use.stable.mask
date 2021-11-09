@@ -1,5 +1,25 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Sam James <sam@gentoo.org> (2021-10-25)
+# Various dependencies not yet stable on arm
+# bug #816981
+dev-python/ipython notebook smp
+
+# Marek Szuba <marecki@gentoo.org> (2021-09-25)
+# No stable dev-ruby/{thor,tty-editor} on this arch yet
+# and there are many dependencies to go through before there are
+app-text/htmltidy test
+
+# Sam James <sam@gentoo.org> (2021-03-04)
+# Dependencies not yet stable, drags in
+# large amount of fabric. bug #763954
+sys-block/open-iscsi infiniband
+
+# Sam James <sam@gentoo.org> (2021-02-09)
+# dev-libs/libgdata is not (yet?) stable on arm
+# bug #769767, bug #769764
+mail-client/claws-mail gdata
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2020-10-05)
 # media-libs/libffado is not stable yet, which itself has unstable and
@@ -21,10 +41,6 @@ app-arch/rpm test
 net-misc/openssh security-key
 dev-util/geany-plugins markdown
 net-misc/unison gtk
-
-# Andreas Sturmlechner <asturm@gentoo.org> (2019-11-02)
-# media-video/pipewire is not stable yet
-<dev-libs/weston-9 pipewire
 
 # Michał Górny <mgorny@gentoo.org> (2019-09-08)
 # virtual/jdk is not stable here.
@@ -60,11 +76,6 @@ dev-db/qdbm java
 # Pacho Ramos <pacho@gentoo.org> (2018-05-28)
 # Don't rely on stable inkscape
 app-text/dblatex inkscape
-
-# Andreas Sturmlechner <asturm@gentoo.org> (2018-05-07)
-# Requires not stabilised dev-python/restkit
-dev-python/wsgiproxy2 test
-dev-python/pyquery test
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2018-05-07)
 # Requires not stabilised dev-python/matplotlib
@@ -113,17 +124,13 @@ dev-db/mariadb galera
 # Not going to be stable for now
 dev-util/geany-plugins gtkspell
 
-# Pacho Ramos <pacho@gentoo.org> (2016-12-31)
-# No stable for arm
-sys-fs/dmraid dietlibc klibc
-
-# Christoph Junghans <junghans@gentoo.org> (2016-11-27)
-# no stable mpi on arm yet, but maybe in the future
-<=sci-libs/fftw-3.3.4 mpi
-
 # Markus Meier <maekke@gentoo.org> (2016-09-27)
 # Missing stable
 dev-db/mariadb jdbc
+
+# Ian Whyman <thev00d00@gentoo.org> (2016-05-22)
+# RPI support on arm
+dev-libs/libcec -raspberry-pi
 
 # Ilya Tumaykin <itumaykin+gentoo@gmail.com> (2016-04-13)
 # Requires special hardware to test and stabilize properly.
@@ -155,7 +162,3 @@ net-misc/connman l2tp pptp
 gnome-base/gvfs google
 net-libs/libproxy webkit
 >=x11-libs/gtk+-3.12.2 cloudprint
-
-# Ian Whyman <thev00d00@gentoo.org> (2016-05-22)
-# RPI support on arm
-dev-libs/libcec -raspberry-pi

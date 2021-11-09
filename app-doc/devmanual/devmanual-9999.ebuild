@@ -1,9 +1,10 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit readme.gentoo-r1
+PYTHON_COMPAT=( python3_{8..10} )
+inherit python-any-r1 readme.gentoo-r1
 
 DESCRIPTION="The Gentoo Development Guide"
 HOMEPAGE="https://devmanual.gentoo.org/"
@@ -12,6 +13,7 @@ if [[ ${PV} == *9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://anongit.gentoo.org/git/proj/devmanual.git"
 else
+	# "make dist" in devmanual repo
 	SRC_URI="https://dev.gentoo.org/~ulm/distfiles/${P}.tar.xz"
 	S="${WORKDIR}/${PN}"
 	KEYWORDS="~alpha ~amd64 ~arm ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sparc ~x86 ~x64-macos"
@@ -19,12 +21,15 @@ fi
 
 LICENSE="CC-BY-SA-4.0"
 SLOT="0"
-IUSE="+offline"
+IUSE="+offline test"
+RESTRICT="!test? ( test )"
 
 BDEPEND="dev-libs/libxml2
 	dev-libs/libxslt
 	gnome-base/librsvg
-	media-fonts/open-sans"
+	media-fonts/open-sans
+	${PYTHON_DEPS}
+	test? ( >=app-text/htmltidy-5.8.0 )"
 
 PATCHES=( "${FILESDIR}"/${PN}-eclasses.patch )
 

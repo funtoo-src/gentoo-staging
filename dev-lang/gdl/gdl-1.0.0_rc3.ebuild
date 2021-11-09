@@ -1,10 +1,10 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 WX_GTK_VER="3.0-gtk3"
-PYTHON_COMPAT=( python3_{6..9} )
+PYTHON_COMPAT=( python3_{7..9} )
 
 # gdl's build system is a travesty, and actually calls
 # itself in the testsuite, which is something that ninja
@@ -61,6 +61,7 @@ RDEPEND="
 DEPEND="${RDEPEND}
 	eigen? ( dev-cpp/eigen:3 )"
 BDEPEND="
+	dev-util/intltool
 	virtual/pkgconfig
 	python? ( app-admin/chrpath )"
 

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,7 +9,7 @@ SRC_URI="https://github.com/${PN}/${PN}/releases/download/${PV}/${P}.tar.gz"
 
 LICENSE="LGPL-2.1+"
 SLOT="0/7"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="static-libs qd"
 
 BDEPEND="qd? ( virtual/pkgconfig )"
@@ -17,6 +17,8 @@ DEPEND="dev-libs/gmp:0
 	dev-libs/mpfr:0
 	qd? ( sci-libs/qd )"
 RDEPEND="${DEPEND}"
+
+PATCHES=( "${FILESDIR}/${PN}-5.4.0-gcc11.patch" )
 
 src_configure() {
 	econf \

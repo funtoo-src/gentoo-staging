@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=5
 
-inherit autotools eutils multilib
+inherit autotools multilib
 
 MY_P="${P/_/}"
 DESCRIPTION="A library to get the ink level of your printer"
@@ -20,6 +20,10 @@ DEPEND=">=sys-libs/libieee1284-0.2.11
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/${MY_P}"
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-0.9.2-autoconf-2.70.patch
+)
 
 src_prepare() {
 	sed -i -e "/^dist_doc_DATA/d" Makefile.am \

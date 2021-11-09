@@ -1,10 +1,10 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{6..8} )
 DISTUTILS_USE_SETUPTOOLS=rdepend
+PYTHON_COMPAT=( python3_{7..9} )
 
 inherit distutils-r1
 
@@ -15,17 +15,16 @@ SRC_URI="mirror://pypi/A/${PN}/${P}.tar.gz"
 LICENSE="MIT"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="test"
-RESTRICT="!test? ( test )"
 
 RDEPEND="dev-python/pytz[${PYTHON_USEDEP}]
 	>=dev-python/six-1.4.0[${PYTHON_USEDEP}]
 	>=dev-python/tzlocal-1.2[${PYTHON_USEDEP}]"
-DEPEND="${RDEPEND}
+BDEPEND="
 	test? (
-		dev-python/pytest[${PYTHON_USEDEP}]
 		www-servers/tornado[${PYTHON_USEDEP}]
 	)"
+
+distutils_enable_tests pytest
 
 # Tests that are known to fail (some may be triggered by network-sandbox).
 test_failures=(
@@ -62,9 +61,8 @@ python_prepare_all() {
 		sed -Ee "s:$(echo "${test_failures[@]}"| sed 's: :|:g'):_\\0:" -i "${REPLY}" || die
 	done < <(grep -rElZ "$(echo "${test_failures[@]}"| sed 's: :|:g')" "${S}")
 
-	distutils-r1_python_prepare_all
-}
+	# suppress setuptools warning #797751
+	sed -e 's|^upload-dir|upload_dir|' -i setup.cfg || die
 
-python_test() {
-	py.test || die "Testing failed with ${EPYTHON}"
+	distutils-r1_python_prepare_all
 }

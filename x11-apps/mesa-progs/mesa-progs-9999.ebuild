@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -18,7 +18,7 @@ if [[ ${PV} = 9999* ]]; then
 else
 	SRC_URI="https://mesa.freedesktop.org/archive/demos/${MY_P}.tar.bz2
 		https://mesa.freedesktop.org/archive/demos/${PV}/${MY_P}.tar.bz2"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux"
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~sparc ~x86 ~amd64-linux ~x86-linux"
 	S="${WORKDIR}/${MY_P}"
 fi
 LICENSE="LGPL-2"
@@ -26,7 +26,7 @@ SLOT="0"
 IUSE="egl gles2"
 
 RDEPEND="
-	media-libs/mesa[egl?,gles2?]
+	media-libs/mesa[egl(+)?,gles2?]
 	virtual/opengl
 	x11-libs/libX11"
 DEPEND="${RDEPEND}
@@ -35,7 +35,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	default
-	[[ $PV = 9999* ]] && eautoreconf
+	[[ ${PV} = 9999* ]] && eautoreconf
 }
 
 src_compile() {

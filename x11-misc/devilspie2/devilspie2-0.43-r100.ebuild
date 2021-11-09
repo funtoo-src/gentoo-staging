@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2021 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,7 +6,7 @@ EAPI=7
 LUA_COMPAT=( lua5-{1..3} luajit )
 PLOCALES="fi fr it ja nl pt_BR ru sv"
 
-inherit lua-single toolchain-funcs l10n
+inherit lua-single plocale toolchain-funcs
 
 DESCRIPTION="Devilspie like window matching utility, using LUA for scripting"
 HOMEPAGE="https://www.nongnu.org/devilspie2/"
@@ -14,7 +14,7 @@ SRC_URI="https://download.savannah.gnu.org/releases/devilspie2/devilspie2_${PV}-
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 REQUIRED_USE="${LUA_REQUIRED_USE}"
 
 RDEPEND="
@@ -38,11 +38,12 @@ PATCHES=(
 )
 
 src_compile() {
-	emake CC="$(tc-getCC)" PREFIX="/usr" LANGUAGES="$(l10n_get_locales)"
+	tc-export PKG_CONFIG
+	emake CC="$(tc-getCC)" PREFIX="/usr" LANGUAGES="$(plocale_get_locales)"
 }
 
 src_install() {
-	emake PREFIX="/usr" DESTDIR="${ED}" LANGUAGES="$(l10n_get_locales)" install
+	emake PREFIX="/usr" DESTDIR="${ED}" LANGUAGES="$(plocale_get_locales)" install
 	einstalldocs
 	doman devilspie2.1
 }
