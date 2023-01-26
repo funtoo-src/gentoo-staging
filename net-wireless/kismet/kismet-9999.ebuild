@@ -1,11 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8,9} )
+PYTHON_COMPAT=( python3_{9,10,11} )
 
-inherit autotools multilib python-single-r1 udev systemd
+inherit autotools python-single-r1 udev systemd
 
 if [[ ${PV} == "9999" ]] ; then
 	EGIT_REPO_URI="https://www.kismetwireless.net/git/${PN}.git"
@@ -46,7 +46,7 @@ CDEPEND="
 	sys-libs/zlib:=
 	dev-db/sqlite:=
 	net-libs/libmicrohttpd:=
-	net-libs/libwebsockets:=[client]
+	net-libs/libwebsockets:=[client,lejp]
 	kernel_linux? ( sys-libs/libcap
 			dev-libs/libnl:3
 			net-libs/libpcap
@@ -64,26 +64,23 @@ CDEPEND="
 	suid? ( sys-libs/libcap )
 	ubertooth? ( net-wireless/ubertooth:= )
 	"
-
-DEPEND="${CDEPEND}
-	dev-libs/boost
-	dev-libs/libfmt
-	virtual/pkgconfig
-"
-
 RDEPEND="${CDEPEND}
 	$(python_gen_cond_dep '
 		dev-python/pyserial[${PYTHON_USEDEP}]
 	')
-	selinux? ( sec-policy/selinux-kismet )
-"
-PDEPEND="
 	rtlsdr? (
 		$(python_gen_cond_dep '
 			dev-python/numpy[${PYTHON_USEDEP}]
 		')
 		net-wireless/rtl-sdr
-	)"
+	)
+	selinux? ( sec-policy/selinux-kismet )
+"
+DEPEND="${CDEPEND}
+	dev-libs/boost
+	<dev-libs/libfmt-9
+"
+BDEPEND="virtual/pkgconfig"
 
 src_prepare() {
 	sed -i -e "s:^\(logtemplate\)=\(.*\):\1=/tmp/\2:" \
@@ -112,18 +109,19 @@ src_prepare() {
 
 	eapply_user
 
-	#just use set to fix setup.py
-	find . -name "Makefile.in" -exec sed -i 's#setup.py install#setup.py install --root=$(DESTDIR)#' {} + || die
-	find . -name "Makefile" -exec sed -i 's#setup.py install#setup.py install --root=$(DESTDIR)#' {} + || die
-
 	if [ "${PV}" = "9999" ]; then
 		eautoreconf
 	fi
+	# VERSION was incorrectly removed in 4e490cf0b49a287e964df9c5e5c4067f6918909e upstream
+	# https://github.com/kismetwireless/kismet/issues/427
+	# https://bugs.gentoo.org/864298
+	echo "${PV}" > VERSION
 }
 
 src_configure() {
 	econf \
 		$(use_enable libusb libusb) \
+		$(use_enable libusb wifi-coconut) \
 		$(use_enable pcre) \
 		$(use_enable lm-sensors lmsensors) \
 		$(use_enable networkmanager libnm) \
@@ -145,7 +143,7 @@ src_install() {
 		dobin "${FILESDIR}"/kismet-gdb
 	fi
 
-	dodoc CHANGELOG README*
+	dodoc README*
 	newinitd "${FILESDIR}"/${PN}.initd-r3 kismet
 	newconfd "${FILESDIR}"/${PN}.confd-r2 kismet
 	systemd_dounit packaging/systemd/kismet.service
@@ -175,7 +173,7 @@ pkg_preinst() {
 migrate_config() {
 	einfo "Kismet Configuration files are now read from /etc/kismet/"
 	ewarn "Please keep user specific settings in /etc/kismet/kismet_site.conf"
-	if [ -n "$(ls ${EROOT}/etc/kismet_*.conf 2> /dev/null)" ]; then
+	if [ -n "$(ls "${EROOT}"/etc/kismet_*.conf 2> /dev/null)" ]; then
 		ewarn "Files at /etc/kismet_*.conf will not be read and should be removed"
 	fi
 	if [ -f "${EROOT}/etc/kismet_site.conf" ] && [ ! -f "${EROOT}/etc/kismet/kismet_site.conf" ]; then
@@ -200,4 +198,8 @@ pkg_postinst() {
 			fi
 		done
 	fi
+	udev_reload
+}
+pkg_postrm() {
+	udev_reload
 }

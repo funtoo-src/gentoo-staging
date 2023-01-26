@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -49,7 +49,7 @@ src_install() {
 	einstalldocs
 	doman ../man/*.[18]
 
-dodir /etc/runit
+	dodir /etc/runit
 	exeinto /etc/runit
 	doexe "${FILESDIR}"/ctrlaltdel
 	newexe "${FILESDIR}"/1-${PV} 1
@@ -67,12 +67,10 @@ dodir /etc/runit
 	done
 
 	# make sv command work
-	cat <<-EOF > "${T}"/env.d
+	newenvd - 20runit <<- EOF
 		#/etc/env.d/20runit
 		SVDIR="/etc/service/"
 	EOF
-	insinto /etc/env.d
-	newins "${T}"/env.d 20runit
 }
 
 pkg_preinst() {

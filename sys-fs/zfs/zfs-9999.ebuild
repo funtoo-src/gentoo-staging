@@ -1,11 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 DISTUTILS_OPTIONAL=1
-DISTUTILS_USE_SETUPTOOLS=manual
-PYTHON_COMPAT=( python3_{8,9,10} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit autotools bash-completion-r1 dist-kernel-utils distutils-r1 flag-o-matic linux-info pam systemd udev usr-ldscript
 
@@ -25,7 +24,7 @@ else
 	S="${WORKDIR}/${P%_rc?}"
 
 	if [[ ${PV} != *_rc* ]]; then
-		KEYWORDS="~amd64 ~arm64 ~ppc64 ~riscv"
+		KEYWORDS="~amd64 ~arm64 ~ppc64 ~riscv ~sparc"
 	fi
 fi
 
@@ -34,10 +33,10 @@ LICENSE="BSD-2 CDDL MIT"
 # possible candidates: libuutil, libzpool, libnvpair. Those do not provide stable abi, but are considered.
 # see libsoversion_check() below as well
 SLOT="0/5"
-IUSE="custom-cflags debug dist-kernel kernel-builtin minimal nls pam python +rootfs test-suite"
+IUSE="custom-cflags debug dist-kernel kernel-builtin minimal nls pam python +rootfs selinux test-suite"
 
 DEPEND="
-	net-libs/libtirpc
+	net-libs/libtirpc:=
 	sys-apps/util-linux
 	sys-libs/zlib
 	virtual/libudev:=
@@ -49,7 +48,7 @@ DEPEND="
 	)
 "
 
-BDEPEND="virtual/awk
+BDEPEND="app-alternatives/awk
 	virtual/pkgconfig
 	nls? ( sys-devel/gettext )
 	python? (
@@ -62,7 +61,7 @@ BDEPEND="virtual/awk
 "
 
 if [[ ${PV} != "9999" ]] ; then
-	BDEPEND+=" verify-sig? ( app-crypt/openpgp-keys-openzfs )"
+	BDEPEND+=" verify-sig? ( sec-keys/openpgp-keys-openzfs )"
 fi
 
 # awk is used for some scripts, completions, and the Dracut module
@@ -70,14 +69,15 @@ RDEPEND="${DEPEND}
 	!kernel-builtin? ( ~sys-fs/zfs-kmod-${PV}:= )
 	!prefix? ( virtual/udev )
 	sys-fs/udev-init-scripts
-	virtual/awk
+	app-alternatives/awk
 	dist-kernel? ( virtual/dist-kernel:= )
 	rootfs? (
 		app-arch/cpio
 		app-misc/pax-utils
-		!<sys-kernel/genkernel-3.5.1.1
 	)
+	selinux? ( sec-policy/selinux-zfs )
 	test-suite? (
+		app-shells/ksh
 		sys-apps/kmod[tools]
 		sys-apps/util-linux
 		sys-devel/bc
@@ -99,6 +99,10 @@ REQUIRED_USE="
 "
 
 RESTRICT="test"
+
+PATCHES=(
+	"${FILESDIR}"/2.1.5-dracut-zfs-missing.patch
+)
 
 pkg_pretend() {
 	use rootfs || return 0
@@ -183,6 +187,13 @@ src_configure() {
 	use custom-cflags || strip-flags
 	use minimal || python_setup
 
+	# All the same issue:
+	# Segfaults w/ GCC 12 and 'zfs send'
+	# bug #856373
+	# https://github.com/openzfs/zfs/issues/13620
+	# https://github.com/openzfs/zfs/issues/13605
+	append-flags -fno-tree-vectorize
+
 	local myconf=(
 		--bindir="${EPREFIX}/bin"
 		--enable-shared
@@ -197,7 +208,7 @@ src_configure() {
 		--with-pamconfigsdir="${EPREFIX}/unwanted_files"
 		--with-pammoduledir="$(getpam_mod_dir)"
 		--with-systemdunitdir="$(systemd_get_systemunitdir)"
-		--with-systemdpresetdir="${EPREFIX}/lib/systemd/system-preset"
+		--with-systemdpresetdir="$(systemd_get_systempresetdir)"
 		--with-vendor=gentoo
 		# Building zfs-mount-generator.c on musl breaks as strndupa
 		# isn't available. But systemd doesn't support musl anyway, so
@@ -251,6 +262,8 @@ src_install() {
 }
 
 pkg_postinst() {
+	udev_reload
+
 	# we always need userspace utils in sync with zfs-kmod
 	# so force initrd update for userspace as well, to avoid
 	# situation when zfs-kmod trigger initrd rebuild before
@@ -264,7 +277,7 @@ pkg_postinst() {
 		if ! has_version sys-kernel/genkernel && ! has_version sys-kernel/dracut; then
 			elog "Root on zfs requires an initramfs to boot"
 			elog "The following packages provide one and are tested on a regular basis:"
-			elog "  sys-kernel/dracut"
+			elog "  sys-kernel/dracut ( preferred, module maintained by zfs developers )"
 			elog "  sys-kernel/genkernel"
 		fi
 	fi
@@ -276,11 +289,13 @@ pkg_postinst() {
 	fi
 
 	if systemd_is_booted || has_version sys-apps/systemd; then
-		einfo "Please refer to ${EROOT}/lib/systemd/system-preset/50-zfs.preset"
+		einfo "Please refer to ${EROOT}/$(systemd_get_systempresetdir)/50-zfs.preset"
 		einfo "for default zfs systemd service configuration"
 	else
 		[[ -e "${EROOT}/etc/runlevels/boot/zfs-import" ]] || \
 			einfo "You should add zfs-import to the boot runlevel."
+		[[ -e "${EROOT}/etc/runlevels/boot/zfs-load-key" ]] || \
+			einfo "You should add zfs-load-key to the boot runlevel."
 		[[ -e "${EROOT}/etc/runlevels/boot/zfs-mount" ]]|| \
 			einfo "You should add zfs-mount to the boot runlevel."
 		[[ -e "${EROOT}/etc/runlevels/default/zfs-share" ]] || \
@@ -291,6 +306,8 @@ pkg_postinst() {
 }
 
 pkg_postrm() {
+	udev_reload
+
 	if ! use kernel-builtin && [[ ${PV} == "9999" ]]; then
 		remove_moduledb
 	fi

@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -14,7 +14,7 @@ SRC_URI="https://github.com/pavouk/lgi/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="amd64 arm ppc ppc64 ~riscv x86"
+KEYWORDS="amd64 arm ~loong ppc ppc64 ~riscv x86"
 IUSE="examples test"
 RESTRICT="!test? ( test )"
 REQUIRED_USE="${LUA_REQUIRED_USE}"
@@ -97,9 +97,14 @@ src_compile() {
 
 lua_src_test() {
 	pushd "${BUILD_DIR}" || die
-	virtx \
-		lgi_emake_wrapper \
-		check
+
+	if [[ ${ELUA} == luajit ]]; then
+		einfo "Tests are currently not supported on LuaJIT"
+	else
+		virtx \
+			lgi_emake_wrapper \
+			check
+	fi
 	popd
 }
 

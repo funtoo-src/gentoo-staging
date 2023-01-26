@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 ARCH="hppa"
@@ -9,8 +9,6 @@ CFLAGS="-O2 -pipe"
 CXXFLAGS="${CFLAGS}"
 
 FEATURES="sandbox sfperms strict"
-
-USE="cups foomaticdb fortran gdbm gpm imlib libwww spell firefox"
 
 # Michał Górny <mgorny@gentoo.org> (2014-07-01)
 # Set ABI & DEFAULT_ABI consistently with ${ARCH}, to make ebuild
@@ -25,6 +23,6 @@ CHOST_hppa="${CHOST}"
 # Defaults for video drivers
 VIDEO_CARDS="fbdev"
 
-# Hans de Graaff <graaff@gentoo.org> (2021-10-10)
-# Temporary override base default to support the ruby27 stable bug 801289
-RUBY_TARGETS="ruby26"
+# Hans de Graaff <graaff@gentoo.org> (2023-01-15)
+# Temporary mask for https://bugs.gentoo.org/890915
+RUBY_TARGETS="ruby27"

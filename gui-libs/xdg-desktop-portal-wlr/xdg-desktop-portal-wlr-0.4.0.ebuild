@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -35,14 +35,6 @@ RDEPEND="
 BDEPEND="
 	>=media-video/pipewire-0.3.2:=
 	>=dev-libs/wayland-protocols-1.14
-	>=dev-util/meson-0.50.0
 	dev-libs/inih:0
 	virtual/pkgconfig
 "
-
-src_configure() {
-	local emesonargs=(
-		"-Dwerror=false"
-	)
-	meson_src_configure
-}

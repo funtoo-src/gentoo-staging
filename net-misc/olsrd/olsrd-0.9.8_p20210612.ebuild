@@ -16,7 +16,7 @@ S="${WORKDIR}/${PN}-${MY_COMMIT}"
 
 LICENSE="BSD LGPL-2.1"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="gtk pud"
 
 DEPEND="
@@ -80,12 +80,14 @@ src_compile() {
 }
 
 src_install() {
+	# See bug #715392 re LDCONFIG
 	emake \
 		DESTDIR="${D}" \
 		DOCDIR_OLSRD="${D}/usr/share/doc/${PF}" \
 		LIBDIR="${D}/usr/$(get_libdir)/${PN}" \
 		OS=linux \
 		STRIP=true \
+		LDCONFIG=true \
 		install_all
 
 	if use gtk; then

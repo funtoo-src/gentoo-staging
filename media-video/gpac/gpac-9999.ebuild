@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,15 +11,15 @@ else
 	KEYWORDS="~alpha ~amd64 ~ppc ~ppc64 ~sparc ~x86"
 fi
 
-inherit flag-o-matic toolchain-funcs ${SCM} xdg
+inherit toolchain-funcs ${SCM} xdg
 
 DESCRIPTION="Implementation of the MPEG-4 Systems standard developed from scratch in ANSI C"
 HOMEPAGE="https://gpac.wp.imt.fr/"
 
 LICENSE="GPL-2"
 # subslot == libgpac major
-SLOT="0/10"
-IUSE="a52 aac alsa cpu_flags_x86_sse2 debug dvb ffmpeg ipv6 jack jpeg jpeg2k mad opengl oss png
+SLOT="0/11"
+IUSE="a52 aac alsa cpu_flags_x86_sse2 debug dvb ffmpeg jack jpeg jpeg2k mad opengl oss png
 	pulseaudio sdl ssl static-libs theora truetype vorbis xml xvid X"
 
 BDEPEND="virtual/pkgconfig"
@@ -31,7 +31,7 @@ RDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	ffmpeg? ( media-video/ffmpeg:0= )
 	jack? ( virtual/jack )
-	jpeg? ( virtual/jpeg:0 )
+	jpeg? ( media-libs/libjpeg-turbo:0= )
 	jpeg2k? ( media-libs/openjpeg:2 )
 	mad? ( media-libs/libmad )
 	opengl? (
@@ -63,7 +63,7 @@ DEPEND="
 "
 
 PATCHES=(
-	"${FILESDIR}/${PN}-1.0.1-configure.patch"
+	"${FILESDIR}/${PN}-2.0.0-configure.patch"
 	"${FILESDIR}/${PN}-1.0.0-zlib-compile.patch"
 )
 
@@ -100,6 +100,7 @@ src_configure() {
 		--cc="$(tc-getCC)"
 		--libdir="$(get_libdir)"
 		--verbose
+		--enable-ipv6
 		--enable-pic
 		--enable-svg
 		--disable-amr
@@ -108,7 +109,6 @@ src_configure() {
 		$(use_enable alsa)
 		$(use_enable debug)
 		$(use_enable dvb dvb4linux)
-		$(use_enable ipv6)
 		$(use_enable jack jack yes)
 		$(use_enable opengl 3d)
 		$(use_enable oss oss-audio)

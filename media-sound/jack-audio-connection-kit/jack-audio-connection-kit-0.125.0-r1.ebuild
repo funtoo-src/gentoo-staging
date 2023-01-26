@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit flag-o-matic multilib-minimal
+inherit multilib-minimal
 
 DESCRIPTION="A low-latency audio server"
 HOMEPAGE="http://www.jackaudio.org"
@@ -11,8 +11,8 @@ SRC_URI="https://github.com/jackaudio/jack1/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="GPL-2 LGPL-2.1"
 SLOT="0"
-KEYWORDS="amd64 arm arm64 ~ia64 ppc ppc64 ~riscv ~s390 sparc x86"
-IUSE="cpu_flags_x86_3dnow altivec alsa coreaudio doc debug examples oss cpu_flags_x86_sse pam"
+KEYWORDS="amd64 arm arm64 ~ia64 ppc ppc64 ~riscv sparc x86"
+IUSE="cpu_flags_ppc_altivec cpu_flags_x86_3dnow alsa coreaudio doc debug examples oss cpu_flags_x86_sse pam"
 
 # readline: only used for jack_transport -> useless for non native ABIs
 # libsndfile: ditto for jackrec
@@ -64,7 +64,7 @@ multilib_src_configure() {
 	use doc || export ac_cv_prog_HAVE_DOXYGEN=false
 
 	econf \
-		$(use_enable altivec) \
+		$(use_enable cpu_flags_ppc_altivec altivec) \
 		$(use_enable alsa) \
 		$(use_enable coreaudio) \
 		$(use_enable debug) \

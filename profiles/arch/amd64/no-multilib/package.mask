@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # James Le Cuirot <chewi@gentoo.org> (2021-09-04)
@@ -31,6 +31,7 @@ app-emulation/crossover-bin
 app-emulation/protontricks
 app-emulation/q4wine
 app-emulation/winetricks
+<=app-shells/scsh-0.6.9
 dev-embedded/libftd2xx
 dev-embedded/openocd
 dev-util/android-ndk
@@ -38,7 +39,8 @@ dev-util/android-sdk-update-manager
 dev-util/biew
 games-action/badland
 games-action/beathazardultra
-games-action/brutal-legend
+games-action/brutal-legend-gog
+games-action/brutal-legend-hb
 games-action/crimsonland
 games-action/descent3
 games-action/descent3-demo
@@ -60,7 +62,7 @@ games-arcade/gish-demo
 games-arcade/jardinains
 games-arcade/thinktanks-demo
 games-emulation/gens
-<games-emulation/pcsx2-9999
+<games-emulation/pcsx2-1.7
 games-emulation/vgba
 games-emulation/zinc
 games-emulation/zsnes
@@ -77,6 +79,8 @@ games-fps/ut2003-demo
 games-fps/ut2004-demo
 games-misc/little-inferno
 games-misc/papers-please
+games-puzzle/braid-hb
+games-puzzle/braid-gog
 games-puzzle/triptych
 games-roguelike/adom
 games-rpg/baldurs-gate-ee
@@ -87,7 +91,6 @@ games-rpg/dungeon-defenders
 games-rpg/eschalon-book-1-demo
 games-rpg/wasteland2
 games-server/etqw-ded
-games-simulation/bcs-demo
 games-strategy/darwinia
 games-strategy/darwinia-demo
 games-strategy/defcon-demo

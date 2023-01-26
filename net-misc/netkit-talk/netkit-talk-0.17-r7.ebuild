@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,8 +9,8 @@ MY_P=netkit-ntalk-${PV}
 S="${WORKDIR}"/netkit-ntalk-${PV}
 
 DESCRIPTION="Netkit - talkd"
-HOMEPAGE="ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/"
-SRC_URI="ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/${MY_P}.tar.gz"
+HOMEPAGE="https://wiki.linuxfoundation.org/networking/netkit"
+SRC_URI="http://ftp.linux.org.uk/pub/linux/Networking/netkit/${MY_P}.tar.gz"
 
 LICENSE="BSD"
 SLOT="0"
@@ -34,7 +34,7 @@ src_prepare() {
 
 src_configure() {
 	# not autotools based?
-	./configure --with-c-compiler=$(tc-getCC) || die
+	./configure --with-c-compiler="$(tc-getCC)" || die
 }
 
 src_compile() {

@@ -6,8 +6,11 @@
 		<name>Arfrever Frehtes Taifersar Arahesis</name>
 	</maintainer>
 	<maintainer type="project">
+		<email>cjk@gentoo.org</email>
+		<name>Cjk</name>
+	</maintainer>
+	<maintainer type="project">
 		<email>java@gentoo.org</email>
-		<name>Java</name>
 	</maintainer>
 	<slots>
 		<subslots>Soname version number of Protobuf</subslots>

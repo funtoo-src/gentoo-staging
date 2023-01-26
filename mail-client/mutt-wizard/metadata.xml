@@ -8,11 +8,14 @@
 		functionality for managing emails.
 	</longdescription>
 	<maintainer type="person" proxied="yes">
-		<email>gentoo@aisha.cc</email>
-		<name>Aisha Tammy</name>
+		<email>efe.izbudak@metu.edu.tr</email>
+		<name>Efe İzbudak</name>
 	</maintainer>
 	<maintainer type="project" proxied="proxy">
 		<email>proxy-maint@gentoo.org</email>
 		<name>Proxy Maintainers</name>
 	</maintainer>
+	<upstream>
+		<remote-id type="github">LukeSmithxyz/mutt-wizard</remote-id>
+	</upstream>
 </pkgmetadata>

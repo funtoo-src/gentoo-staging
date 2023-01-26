@@ -1,11 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-CMAKE_ECLASS=cmake
-PYTHON_COMPAT=( python3_{7..10} )
-inherit cmake-multilib python-single-r1
+PYTHON_COMPAT=( python3_{9..10} )
+inherit cmake-multilib multilib python-single-r1
 
 DESCRIPTION="Tool for tracing, analyzing, and debugging graphics APIs"
 HOMEPAGE="https://github.com/apitrace/apitrace"
@@ -40,6 +39,7 @@ PATCHES=(
 	# TODO: upstream
 	"${FILESDIR}"/${P}-disable-multiarch.patch
 	"${FILESDIR}"/${P}-brotli-unbundle.patch
+	"${FILESDIR}"/${P}-libc-dlopen-glibc-2.34.patch
 )
 
 src_prepare() {
@@ -61,7 +61,7 @@ src_configure() {
 			-DENABLE_GUI=$(multilib_native_usex qt5)
 			-DENABLE_STATIC_SNAPPY=OFF
 			-DENABLE_WAFFLE=ON
-			-DPYTHON_EXECUTABLE="${PYTHON}"
+			-DPython3_EXECUTABLE="${PYTHON}"
 		)
 		cmake_src_configure
 	}

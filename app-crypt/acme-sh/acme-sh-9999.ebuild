@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit git-r3 optfeature
 
@@ -13,10 +13,13 @@ LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
 
+IUSE="selinux"
+
 RDEPEND="
 	dev-libs/openssl:0
 	net-misc/curl
 	net-misc/socat
+	selinux? ( sec-policy/selinux-certbot )
 "
 
 src_install() {

@@ -1,9 +1,8 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-CMAKE_ECLASS=cmake
 inherit cmake-multilib desktop
 
 DESCRIPTION="cross-platform multimedia library"
@@ -12,7 +11,7 @@ SRC_URI="https://github.com/liballeg/allegro5/releases/download/${PV}/${P}.tar.g
 
 LICENSE="Allegro MIT GPL-2+ ZLIB"
 SLOT="0"
-KEYWORDS="amd64 ~arm64 ~mips ppc ppc64 ~riscv x86"
+KEYWORDS="amd64 ~arm64 ~loong ~mips ppc ppc64 ~riscv x86"
 IUSE="alsa doc fbcon jack jpeg opengl oss png svga vga vorbis X"
 
 RDEPEND="

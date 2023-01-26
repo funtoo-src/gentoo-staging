@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -14,7 +14,7 @@ if [[ ${PV} == "9999" ]]; then
 
 	inherit git-r3
 else
-	SRC_URI="https://build.openvpn.net/downloads/releases/${P}.tar.gz"
+	SRC_URI="https://build.openvpn.net/downloads/releases/${P}.tar.xz"
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux"
 fi
 
@@ -22,7 +22,7 @@ LICENSE="GPL-2"
 SLOT="0"
 
 IUSE="down-root examples inotify iproute2 +lz4 +lzo mbedtls +openssl"
-IUSE+=" pam pkcs11 +plugins selinux systemd test userland_BSD"
+IUSE+=" pam pkcs11 +plugins selinux systemd test"
 
 RESTRICT="!test? ( test )"
 REQUIRED_USE="

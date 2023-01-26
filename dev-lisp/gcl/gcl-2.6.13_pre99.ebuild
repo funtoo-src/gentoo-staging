@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,13 +8,11 @@ DESCRIPTION="GNU Common Lisp"
 HOMEPAGE="https://www.gnu.org/software/gcl/gcl.html"
 SRC_URI="https://dev.gentoo.org/~grozin/${P}.tar.xz"
 
-LICENSE="LGPL-2 GPL-2"
+LICENSE="LGPL-2+ GPL-2+"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~ppc ~ppc64 ~x86"
+KEYWORDS="amd64 ~arm ~ppc ppc64 x86"
 IUSE="+ansi athena emacs +readline tk X"
-
-# See bug #205803
-RESTRICT="strip"
+RESTRICT="strip"  #205803
 
 RDEPEND="dev-libs/gmp
 	virtual/latex-base
@@ -27,6 +25,11 @@ DEPEND="${RDEPEND}
 	virtual/texi2dvi
 	app-text/texi2html
 	>=sys-devel/autoconf-2.52"
+
+PATCHES=(
+	# bug 778770
+	"${FILESDIR}"/${P}-assertion.patch
+)
 
 src_configure() {
 	strip-flags

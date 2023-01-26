@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7..9} )
+PYTHON_COMPAT=( python3_9 )
 PYTHON_REQ_USE="sqlite?"
 
 inherit bash-completion-r1 distutils-r1 optfeature
@@ -49,6 +49,5 @@ python_install_all() {
 pkg_postinst() {
 	optfeature "bash-completion support" dev-python/argcomplete[${PYTHON_USEDEP}]
 	optfeature "Virus scanning" app-antivirus/clamav
-	optfeature "Geo IP support" dev-python/geoip-python[${PYTHON_USEDEP}]
 	optfeature "GNOME proxy settings support" dev-python/pygobject[${PYTHON_USEDEP}]
 }

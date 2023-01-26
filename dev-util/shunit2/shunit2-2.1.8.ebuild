@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -9,21 +9,10 @@ SRC_URI="https://github.com/kward/shunit2/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="Apache-2.0"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86"
-IUSE="test"
-RESTRICT="!test? ( test )"
-
-BDEPEND="
-	test? (
-		app-shells/dash
-		app-shells/ksh
-		app-shells/zsh
-	)
-"
+KEYWORDS="amd64 ~ppc ~ppc64 ~riscv x86"
 
 src_test() {
-	rm shunit2_macros_test.sh || die
-	./test_runner || die
+	SHELL="/bin/bash" ./test_runner -s /bin/bash || die "bash tests failed"
 }
 
 src_install() {

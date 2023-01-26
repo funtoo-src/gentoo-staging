@@ -1,19 +1,19 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: pam.eclass
 # @MAINTAINER:
-# Mikle Kolyada <zlogene@gentoo.org>
+# base-system@gentoo.org
 # @AUTHOR:
 # Diego Pettenò <flameeyes@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7
+# @SUPPORTED_EAPIS: 6 7 8
 # @BLURB: Handles pam related tasks
 # @DESCRIPTION:
 # This eclass contains functions to install pamd configuration files and
 # pam modules.
 
 case ${EAPI:-0} in
-	[567]) ;;
+	[678]) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
@@ -100,12 +100,7 @@ newpamsecurity() {
 # @DESCRIPTION:
 # Returns the pam modules' directory for current implementation
 getpam_mod_dir() {
-	if has_version sys-libs/pam; then
-		PAM_MOD_DIR=/$(get_libdir)/security
-	else
-		# Unable to find PAM implementation... defaulting
-		PAM_MOD_DIR=/$(get_libdir)/security
-	fi
+	PAM_MOD_DIR=/$(get_libdir)/security
 
 	echo ${PAM_MOD_DIR}
 }
@@ -209,7 +204,7 @@ pamd_mimic() {
 cleanpamd() {
 	while [[ -n $1 ]]; do
 		if ! has_version sys-libs/pam; then
-			sed -i -e '/pam_shells\|pam_console/s:^:#:' "${D}/etc/pam.d/$1"
+			sed -i -e '/pam_shells\|pam_console/s:^:#:' "${D}/etc/pam.d/$1" || die
 		fi
 
 		shift

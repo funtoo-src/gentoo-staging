@@ -1,34 +1,41 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
-inherit optfeature python-single-r1 toolchain-funcs xdg
+PYTHON_COMPAT=( python3_{9..11} )
+inherit edo optfeature multiprocessing python-single-r1 toolchain-funcs xdg
 
-if [[ ${PV} == 9999 ]] ; then
+if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/kovidgoyal/kitty.git"
 else
-	SRC_URI="https://github.com/kovidgoyal/kitty/releases/download/v${PV}/${P}.tar.xz"
-	KEYWORDS="~amd64 ~x86"
+	inherit verify-sig
+	SRC_URI="
+		https://github.com/kovidgoyal/kitty/releases/download/v${PV}/${P}.tar.xz
+		verify-sig? ( https://github.com/kovidgoyal/kitty/releases/download/v${PV}/${P}.tar.xz.sig )"
+	VERIFY_SIG_OPENPGP_KEY_PATH="${BROOT}/usr/share/openpgp-keys/kovidgoyal.gpg"
+	KEYWORDS="~amd64 ~ppc64 ~riscv ~x86"
 fi
 
 DESCRIPTION="Fast, feature-rich, GPU-based terminal"
 HOMEPAGE="https://sw.kovidgoyal.net/kitty/"
 
-LICENSE="GPL-3"
+LICENSE="GPL-3 ZLIB"
+LICENSE+=" Apache-2.0 BSD MIT" # go
 SLOT="0"
-IUSE="+X debug test wayland"
+IUSE="+X test wayland"
 REQUIRED_USE="
+	${PYTHON_REQUIRED_USE}
 	|| ( X wayland )
-	${PYTHON_REQUIRED_USE}"
+	test? ( X wayland )"
 RESTRICT="!test? ( test )"
 
+# dlopen: fontconfig,libglvnd
 RDEPEND="
 	${PYTHON_DEPS}
+	dev-libs/openssl:=
 	media-libs/fontconfig
-	media-libs/freetype:2
 	media-libs/harfbuzz:=
 	media-libs/lcms:2
 	media-libs/libglvnd[X?]
@@ -38,6 +45,7 @@ RDEPEND="
 	sys-libs/zlib:=
 	x11-libs/libxkbcommon[X?]
 	x11-misc/xkeyboard-config
+	~x11-terms/kitty-shell-integration-${PV}
 	~x11-terms/kitty-terminfo-${PV}
 	X? ( x11-libs/libX11 )
 	wayland? ( dev-libs/wayland )"
@@ -53,66 +61,90 @@ DEPEND="
 	wayland? ( dev-libs/wayland-protocols )"
 BDEPEND="
 	${PYTHON_DEPS}
+	>=dev-lang/go-1.19
 	sys-libs/ncurses
 	virtual/pkgconfig
 	test? ( $(python_gen_cond_dep 'dev-python/pillow[${PYTHON_USEDEP}]') )
 	wayland? ( dev-util/wayland-scanner )"
+[[ ${PV} == 9999 ]] || BDEPEND+=" verify-sig? ( sec-keys/openpgp-keys-kovidgoyal )"
 
-PATCHES=(
-	"${FILESDIR}"/${PN}-0.23.1-flags.patch
-)
+QA_FLAGS_IGNORED="usr/bin/kitten" # written in Go
+
+src_unpack() {
+	if [[ ${PV} == 9999 ]]; then
+		git-r3_src_unpack
+		cd "${S}" || die
+		edo go mod vendor
+	else
+		verify-sig_src_unpack
+	fi
+}
 
 src_prepare() {
 	default
 
-	sed "s/'x11 wayland'/'$(usev X x11) $(usev wayland)'/" -i setup.py || die
-	sed "s/else linux_backends/else [$(usev X "'x11',")$(usev wayland "'wayland'")]/" \
-		-i kitty_tests/check_build.py || die
-	use X || sed "/glfw_path('x11')/s/x11/wayland/" -i kitty_tests/glfw.py || die
+	# sed unfortunately feels easier on maintainenance than patches here
+	local sedargs=(
+		-e "/num_workers =/s/=.*/= $(makeopts_jobs)/"
+		-e "s/cflags.append.*-O3.*/pass/" -e 's/-O3//'
+		-e "s/ld_flags.append('-[sw]')/pass/"
+	)
 
-	# skip docs for live version
-	[[ ${PV} != 9999 ]] || sed -i '/exists.*_build/,/docs(ddir)/d' setup.py || die
+	# kitty is often popular on wayland-only setups, try to allow this
+	use !X && sedargs+=( -e '/gl_libs =/s/=.*/= []/' ) #857918
+	use !X || use !wayland &&
+		sedargs+=( -e "s/'x11 wayland'/'$(usex X x11 wayland)'/" )
+
+	# skip docs for live version, missing dependencies
+	[[ ${PV} == 9999 ]] && sedargs+=( -e '/exists.*_build/,/docs(ddir)/d' )
+
+	sed -i setup.py "${sedargs[@]}" || die
+
+	# test relies on 'who' command which doesn't detect users with pid-sandbox
+	rm kitty_tests/utmp.py || die
+
+	# test may fail/hang depending on environment and shell initialization scripts
+	rm kitty_tests/{shell_integration,ssh}.py || die
 }
 
 src_compile() {
 	tc-export CC
-	export PKGCONFIG_EXE=$(tc-getPKG_CONFIG)
+	local -x GOFLAGS="-buildmode=pie -v -x"
+	local -x PKGCONFIG_EXE=$(tc-getPKG_CONFIG)
 
-	local setup=(
-		${EPYTHON} setup.py
+	local conf=(
 		--disable-link-time-optimization
 		--ignore-compiler-warnings
 		--libdir-name=$(get_libdir)
+		--shell-integration="enabled no-rc"
 		--update-check-interval=0
 		--verbose
-		$(usev debug --debug)
-		linux-package
 	)
 
-	echo "${setup[*]}"
-	"${setup[@]}" || die "setup.py failed to compile ${PN}"
+	edo "${EPYTHON}" setup.py linux-package "${conf[@]}"
+	use test && edo "${EPYTHON}" setup.py build-launcher "${conf[@]}"
 
 	[[ ${PV} == 9999 ]] || mv linux-package/share/doc/{${PN},${PF}} || die
 	rm -r linux-package/share/terminfo || die
 }
 
 src_test() {
-	PATH=linux-package/bin:${PATH} KITTY_CONFIG_DIRECTORY=${T} \
-		${EPYTHON} test.py || die
+	KITTY_CONFIG_DIRECTORY=${T} ./test.py || die # shebang is kitty
 }
 
 src_install() {
 	insinto /usr
 	doins -r linux-package/.
 
-	fperms +x /usr/bin/kitty
+	local execbit
+	mapfile -t execbit < <(find linux-package -type f -perm /+x -printf '/usr/%P\n' || die)
+	fperms +x "${execbit[@]}"
 }
 
 pkg_postinst() {
-	xdg_icon_cache_update
+	xdg_pkg_postinst
 
-	optfeature "displaying images in the terminal" \
-		media-gfx/imagemagick media-gfx/graphicsmagick[imagemagick]
-
+	optfeature "in-terminal image display with kitty icat" media-gfx/imagemagick
 	optfeature "audio-based terminal bell support" media-libs/libcanberra
+	optfeature "opening links from the terminal" x11-misc/xdg-utils
 }

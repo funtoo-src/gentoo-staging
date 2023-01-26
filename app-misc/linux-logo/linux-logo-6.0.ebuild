@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ SRC_URI="http://www.deater.net/weave/vmwprod/linux_logo/${MY_P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~sparc ~x86 ~amd64-linux ~x86-linux"
+KEYWORDS="amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ppc ~riscv sparc x86 ~amd64-linux ~x86-linux"
 IUSE="nls"
 
 RDEPEND="nls? ( virtual/libintl )"
@@ -42,8 +42,7 @@ src_prepare() {
 }
 
 src_configure() {
-	ARCH="" CC="$(tc-getCC)" AR="$(tc-getAR)" LDFLAGS="${LDFLAGS}" DESTDIR="${D}" \
-		./configure --prefix=/usr || die
+	ARCH="" CC="$(tc-getCC)" AR="$(tc-getAR)" econf
 }
 
 src_install() {

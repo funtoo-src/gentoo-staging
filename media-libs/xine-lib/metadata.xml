@@ -8,6 +8,9 @@
 		<flag name="bluray">
 			Enable playback of Blu-ray filesystems using <pkg>media-libs/libbluray</pkg>
 		</flag>
+		<flag name="dav1d">
+			Enable support for <pkg>media-libs/dav1d</pkg> AV1 decoder
+		</flag>
 		<flag name="dxr3">
 			Enable support for DXR3 mpeg acceleration cards.
 		</flag>
@@ -59,7 +62,7 @@
 			Adds support for SIMD optimizations for UltraSPARC processors.
 		</flag>
 		<flag name="vpx">
-			Enable VP8 codec support via media-libs/libvpx.
+			Enable VP8 codec support via <pkg>media-libs/libvpx</pkg>.
 		</flag>
 		<flag name="xvmc">
 			Enable support for XVideo Motion Compensation (accelerated mpeg playback).

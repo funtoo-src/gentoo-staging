@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,11 +10,11 @@ inherit java-pkg-2 java-ant-2
 DESCRIPTION="Bytecode manipulation framework for Java"
 HOMEPAGE="https://asm.ow2.io"
 MY_P="ASM_${PV//./_}"
-SRC_URI="https://gitlab.ow2.org/asm/asm/-/archive/${MY_P}/asm-${MY_P}.tar.gz https://gitlab.ow2.org/asm/asm/-/archive/ASM_4_0/asm-ASM_4_0.tar.gz"
+SRC_URI="https://gitlab.ow2.org/asm/asm/-/archive/${MY_P}/asm-${MY_P}.tar.bz2 https://gitlab.ow2.org/asm/asm/-/archive/ASM_4_0/asm-ASM_4_0.tar.bz2"
 
 LICENSE="BSD"
 SLOT="4"
-KEYWORDS="amd64 ~arm ~arm64 ppc64 x86 ~x64-macos"
+KEYWORDS="amd64 ~arm arm64 ppc64 x86 ~x64-macos"
 
 CDEPEND=""
 DEPEND=">=virtual/jdk-1.8:*"
@@ -39,6 +39,7 @@ src_prepare() {
 }
 
 src_install() {
+	local x
 	for x in output/dist/lib/*.jar ; do
 		java-pkg_newjar "${x}" $(basename "${x%-*}.jar")
 	done

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="person" proxied="yes">
-		<email>gentoo@chymera.eu</email>
-		<name>Horea Christian</name>
-	</maintainer>
-	<maintainer type="project" proxied="proxy">
-		<email>proxy-maint@gentoo.org</email>
-		<name>Proxy Maintainers</name>
-	</maintainer>
 	<maintainer type="project">
 		<email>python@gentoo.org</email>
 		<name>Python</name>
@@ -30,7 +22,7 @@
 		* High-level abstractions for structuring grids of plots that let you easily build complex visualizations
 	</longdescription>
 	<upstream>
-		<remote-id type="pypi">seaborne</remote-id>
+		<remote-id type="pypi">seaborn</remote-id>
 		<remote-id type="github">mwaskom/seaborn</remote-id>
 	</upstream>
 </pkgmetadata>

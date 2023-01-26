@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit cmake qmake-utils xdg
+inherit cmake xdg
 
 if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://git.code.sf.net/p/qsampler/code"
@@ -36,7 +36,7 @@ RDEPEND="${DEPEND}
 "
 BDEPEND="dev-qt/linguist-tools:5"
 
-DOCS=( AUTHORS ChangeLog README TODO TRANSLATORS )
+DOCS=( ChangeLog README TRANSLATORS )
 
 src_prepare() {
 	cmake_src_prepare

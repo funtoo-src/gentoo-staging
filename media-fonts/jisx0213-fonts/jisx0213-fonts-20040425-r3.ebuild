@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -23,7 +23,7 @@ SRC_URI="mirror://gentoo/jiskan16-2004-1.bdf.gz
 
 LICENSE="public-domain"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~sparc ~x86"
+KEYWORDS="~alpha amd64 arm ~ia64 ~loong ppc ~riscv ~s390 sparc x86"
 IUSE=""
 RESTRICT="binchecks strip"
 
@@ -36,9 +36,9 @@ FONTDIR="/usr/share/fonts/${FONT_PN}"
 src_compile() {
 	einfo "Making bold and italic faces..."
 	for bdf in *.bdf; do
-		mkbold       -r -L ${bdf} >${bdf%.bdf}b.bdf
-		mkitalic           ${bdf} >${bdf%.bdf}i.bdf
-		mkbolditalic -r -L ${bdf} >${bdf%.bdf}bi.bdf
+		mkbold       -r -L ${bdf} >${bdf%.bdf}b.bdf || die
+		mkitalic           ${bdf} >${bdf%.bdf}i.bdf || die
+		mkbolditalic -r -L ${bdf} >${bdf%.bdf}bi.bdf || die
 	done
 	font-ebdftopcf_src_compile
 }

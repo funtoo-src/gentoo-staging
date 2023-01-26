@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -8,7 +8,7 @@ COMMIT=cd037b49
 BRANCH=release-1.18
 VERSION=v${MY_PV}
 
-DESCRIPTION="The plugin-driven server agent for collecting & reporting metrics."
+DESCRIPTION="The plugin-driven server agent for collecting & reporting metrics"
 HOMEPAGE="https://github.com/influxdata/telegraf"
 
 EGO_SUM=(
@@ -1229,7 +1229,7 @@ SRC_URI="https://github.com/influxdata/telegraf/archive/v${MY_PV}.tar.gz -> ${P}
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="~amd64 ~arm64"
 
 RESTRICT+=" test"
 

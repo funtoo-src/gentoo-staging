@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit toolchain-funcs multilib-minimal
+inherit flag-o-matic toolchain-funcs multilib-minimal
 
 DESCRIPTION="Console utility and library for computing and verifying file hash sums"
 HOMEPAGE="http://rhash.sourceforge.net/"
@@ -11,7 +11,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}-src.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~x64-cygwin ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 arm arm64 hppa ~ia64 ~loong ~m68k ~mips ppc ppc64 ~riscv ~s390 sparc x86 ~x64-cygwin ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="debug nls ssl static-libs"
 
 RDEPEND="
@@ -46,6 +46,13 @@ src_prepare() {
 }
 
 multilib_src_configure() {
+	# ideally we want !tc-ld-is-bfd for best future-proofing, but it needs
+	# https://github.com/gentoo/gentoo/pull/28355
+	# mold needs this too but right now tc-ld-is-mold is also not available
+	if tc-ld-is-lld; then
+		append-ldflags -Wl,--undefined-version
+	fi
+
 	set -- \
 		./configure \
 		--target="${CHOST}" \
@@ -70,6 +77,8 @@ multilib_src_configure() {
 
 # We would add compile-gmo to the build targets but install-gmo always
 # recompiles unconditionally. :(
+# (note from sam: this might be fixed in >1.4.2?
+#  https://github.com/rhash/RHash/commit/9e4eeb1268149b24b7fbe0fc0fe91e3a266e6261)
 
 multilib_src_install() {
 	# -j1 needed due to race condition.

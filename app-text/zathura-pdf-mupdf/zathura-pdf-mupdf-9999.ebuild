@@ -1,7 +1,7 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit meson xdg
 
@@ -11,30 +11,36 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_BRANCH="develop"
 else
 	KEYWORDS="~amd64 ~arm ~x86"
-	SRC_URI="https://github.com/pwmt/zathura-pdf-mupdf/archive/${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://git.pwmt.org/pwmt/${PN}/-/archive/${PV}/${P}.tar.gz"
 fi
 
 DESCRIPTION="PDF plug-in for zathura"
-HOMEPAGE="https://pwmt.org/projects/zathura-pdf-mupdf/"
+HOMEPAGE="https://git.pwmt.org/pwmt/zathura-pdf-mupdf"
 
 LICENSE="ZLIB"
 SLOT="0"
+IUSE="+javascript"
 
-DEPEND=">=app-text/mupdf-1.17:=
-	>=app-text/zathura-0.3.9
+DEPEND="
+	>=app-text/mupdf-1.20.0:=[javascript?]
+	>=app-text/zathura-0.5.2:=
 	dev-libs/girara
 	dev-libs/glib:2
-	media-libs/jbig2dec:=
-	media-libs/openjpeg:2=
-	virtual/jpeg:0
-	x11-libs/cairo"
+	x11-libs/cairo
+"
 
 RDEPEND="${DEPEND}"
 
 BDEPEND="virtual/pkgconfig"
 
-src_prepare() {
-	sed -i -e '/mupdfthird/d' meson.build || die "sed failed"
+PATCHES=(
+	"${FILESDIR}/${PN}-0.4.0-meson-mupdfthird.patch"
+)
 
+src_prepare() (
 	default
-}
+
+	if ! use javascript ; then
+		sed -i -e '/mujs/d' meson.build || die
+	fi
+)

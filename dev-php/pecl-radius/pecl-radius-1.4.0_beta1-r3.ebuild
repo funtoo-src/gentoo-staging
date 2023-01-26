@@ -1,15 +1,16 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
+EAPI="8"
 
 PHP_EXT_NAME="radius"
 PHP_EXT_INI="yes"
 PHP_EXT_ZENDEXT="no"
 
-USE_PHP="php7-2 php7-3 php7-4"
+USE_PHP="php7-4 php8-0 php8-1 php8-2"
 PHP_EXT_PECL_FILENAME="${PN/pecl-/}-${PV/_beta/b}.tgz"
 PHP_EXT_S="${WORKDIR}/${PHP_EXT_PECL_FILENAME%.tgz}"
+PHP_EXT_NEEDED_USE="pcntl(-),sockets(-)"
 
 inherit php-ext-pecl-r3
 
@@ -18,14 +19,14 @@ KEYWORDS="~amd64 ~x86"
 DESCRIPTION="Provides support for RADIUS authentication (RFC 2865) and accounting (RFC 2866)"
 LICENSE="BSD"
 SLOT="0"
-IUSE="examples test"
-RESTRICT="!test? ( test )"
+IUSE="examples"
 
 S="${PHP_EXT_S}"
 
-RDEPEND="
-	php_targets_php7-2? ( dev-lang/php:7.2[pcntl(-),sockets(-)] )
-	php_targets_php7-3? ( dev-lang/php:7.3[pcntl(-),sockets(-)] )
-	php_targets_php7-4? ( dev-lang/php:7.4[pcntl(-),sockets(-)] )
-"
-DEPEND="test? ( ${RDEPEND} )"
+PATCHES=( "${FILESDIR}/1.4.0-php8.patch" )
+
+src_unpack() {
+	default
+	#Non-portable test
+	rm "${S}/tests/radius_close.phpt" || die
+}

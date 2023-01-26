@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8,9} )
+PYTHON_COMPAT=( python3_{9..10} )
 PYTHON_REQ_USE=xml
 DISTUTILS_SINGLE_IMPL=1
 
@@ -18,20 +18,20 @@ S="${WORKDIR}/${MY_PN}-${PV}"
 
 LICENSE="GPL-3+"
 SLOT="1"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="doc"
 
 RDEPEND="$(python_gen_cond_dep '
-		dev-python/httplib2[${PYTHON_MULTI_USEDEP}]
-		dev-python/PyQt5[${PYTHON_MULTI_USEDEP},gui,svg,widgets]
-		dev-python/PyQtWebEngine[${PYTHON_MULTI_USEDEP}]
-		dev-python/pyzmq[${PYTHON_MULTI_USEDEP}]
-		dev-python/requests[${PYTHON_MULTI_USEDEP}]
+		dev-python/httplib2[${PYTHON_USEDEP}]
+		dev-python/PyQt5[${PYTHON_USEDEP},gui,svg,widgets]
+		dev-python/PyQtWebEngine[${PYTHON_USEDEP}]
+		dev-python/pyzmq[${PYTHON_USEDEP}]
+		dev-python/requests[${PYTHON_USEDEP}]
 	')
-	>=media-libs/libopenshot-0.2.6:0=[python,${PYTHON_SINGLE_USEDEP}]"
+	>=media-libs/libopenshot-0.2.7:0=[python,${PYTHON_SINGLE_USEDEP}]"
 DEPEND=""
 BDEPEND="$(python_gen_cond_dep '
-		doc? ( dev-python/sphinx[${PYTHON_MULTI_USEDEP}] )
+		doc? ( dev-python/sphinx[${PYTHON_USEDEP}] )
 	')"
 
 src_prepare() {

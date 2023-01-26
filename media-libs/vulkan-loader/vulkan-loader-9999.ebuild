@@ -1,10 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 MY_PN=Vulkan-Loader
-CMAKE_ECLASS="cmake"
 inherit flag-o-matic cmake-multilib toolchain-funcs
 
 if [[ ${PV} == *9999* ]]; then
@@ -12,9 +11,9 @@ if [[ ${PV} == *9999* ]]; then
 	EGIT_SUBMODULES=()
 	inherit git-r3
 else
-	SRC_URI="https://github.com/KhronosGroup/${MY_PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~x86"
-	S="${WORKDIR}"/${MY_PN}-${PV}
+	SRC_URI="https://github.com/KhronosGroup/${MY_PN}/archive/sdk-${PV}.0.tar.gz -> ${P}.tar.gz"
+	KEYWORDS="~amd64 ~arm ~arm64 ~loong ~ppc ~ppc64 ~riscv ~x86"
+	S="${WORKDIR}"/${MY_PN}-sdk-${PV}.0
 fi
 
 DESCRIPTION="Vulkan Installable Client Driver (ICD) Loader"
@@ -51,6 +50,7 @@ multilib_src_configure() {
 		-DBUILD_WSI_XCB_SUPPORT=$(usex X)
 		-DBUILD_WSI_XLIB_SUPPORT=$(usex X)
 		-DVULKAN_HEADERS_INSTALL_DIR="${ESYSROOT}/usr"
+		-DENABLE_WERROR=OFF
 	)
 	cmake_src_configure
 }

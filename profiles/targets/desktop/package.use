@@ -1,5 +1,18 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Alexey Sokolov <alexey+gentoo@asokolov.org> (2022-12-27)
+# On desktops it's common to use browser to browse internet, which these
+# days is full of emojis, which wouldn't render properly without the fonts.
+media-fonts/fonts-meta emoji
+
+# Andreas K. Hüttel <dilfridge@gentoo.org> (2022-04-18)
+# Avoid a circular dependency, bug 764623
+dev-lang/python -bluetooth
+
+# Andreas Sturmlechner <asturm@gentoo.org> (2021-12-18)
+# Required by media-gfx/digikam
+media-gfx/exiv2 xmp
 
 # Marek Szuba <marecki@gentoo.org> (2020-12-24)
 # Required by qt5
@@ -29,9 +42,6 @@ app-arch/unzip natspec
 # Andreas Sturmlechner <asturm@gentoo.org> (2017-11-30)
 # Required by kde-frameworks/kwayland
 dev-qt/qtgui:5 egl libinput
-
-# Required by dev-qt/qtwebengine
-media-libs/libvpx svc
 
 # Andreas Sturmlechner <asturm@gentoo.org> (2017-11-30)
 # Avoid circular dependency when installing from scratch
@@ -68,10 +78,6 @@ dev-python/PyQt5 gui multimedia network printsupport widgets
 # Enable x11-libs/libxcb[xkb] as it is needed by x11-libs/libxkbcommon[X]
 # and the X flag is enabled by default in the desktop profile
 x11-libs/libxcb xkb
-
-# Samuli Suominen <ssuominen@gentoo.org> (2011-09-27)
-# Required by mozilla browsers wrt #372419
-media-libs/libpng apng
 
 # Samuli Suominen <ssuominen@gentoo.org> (2010-12-19)
 # gudev, required by freedesktop.org udev helpers like udisks and upower

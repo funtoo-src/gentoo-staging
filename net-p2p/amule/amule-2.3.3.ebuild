@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 WX_GTK_VER="3.0-gtk3"
 
 inherit wxwidgets xdg-utils
@@ -13,7 +13,7 @@ else
 	MY_P="${PN/m/M}-${PV}"
 	SRC_URI="https://download.sourceforge.net/${PN}/${MY_P}.tar.xz"
 	S="${WORKDIR}/${MY_P}"
-	KEYWORDS="~alpha amd64 ~arm ppc ppc64 ~sparc x86"
+	KEYWORDS="~alpha amd64 ~arm ppc ppc64 ~riscv ~sparc x86"
 fi
 
 DESCRIPTION="aMule, the all-platform eMule p2p client"
@@ -50,6 +50,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}/${PN}-2.3.2-disable-version-check.patch"
+	"${FILESDIR}/${PN}-2.3.3-fix-exception.patch"
 )
 
 pkg_setup() {

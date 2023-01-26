@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -6,12 +6,15 @@ EAPI=7
 inherit xdg-utils
 
 DESCRIPTION="Screen saver and locker (port of MATE screensaver)"
-HOMEPAGE="https://git.xfce.org/apps/xfce4-screensaver/about/"
+HOMEPAGE="
+	https://docs.xfce.org/apps/screensaver/start
+	https://gitlab.xfce.org/apps/xfce4-screensaver/
+"
 SRC_URI="https://archive.xfce.org/src/apps/${PN}/${PV%.*}/${P}.tar.bz2"
 
 LICENSE="GPL-2+ LGPL-2+"
 SLOT="0"
-KEYWORDS="~alpha amd64 arm ~arm64 ppc ~ppc64 ~riscv x86"
+KEYWORDS="~alpha amd64 arm ~arm64 ~loong ppc ~ppc64 ~riscv x86"
 IUSE="elogind +locking opengl pam systemd"
 
 # Xrandr: optional but automagic

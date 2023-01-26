@@ -1,11 +1,13 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
+
 MY_PN=${PN/-bin/}
 
 DESCRIPTION="High-performance programming language for technical computing"
 HOMEPAGE="https://julialang.org/"
+S="${WORKDIR}/"
 
 PROPERTIES="live"
 MY_P=${MY_PN}-latest
@@ -13,18 +15,12 @@ SRC_URI=""
 
 LICENSE="MIT"
 SLOT="9999"
-IUSE="elibc_glibc elibc_FreeBSD"
-
-RDEPEND="!dev-lang/julia
-	app-arch/p7zip
-"
-DEPEND="${RDEPEND}"
-
 RESTRICT="strip"
 
-QA_PREBUILT="*"
+RDEPEND="app-arch/p7zip"
+DEPEND="${RDEPEND}"
 
-S="${WORKDIR}/"
+QA_PREBUILT="*"
 
 src_unpack() {
 	NIGHTLIES_S3="https://julialangnightlies-s3.julialang.org/bin"

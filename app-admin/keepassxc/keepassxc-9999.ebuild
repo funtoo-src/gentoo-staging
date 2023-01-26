@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -6,32 +6,34 @@ EAPI=8
 inherit cmake flag-o-matic xdg
 
 DESCRIPTION="KeePassXC - KeePass Cross-platform Community Edition"
-HOMEPAGE="https://keepassxc.org"
+HOMEPAGE="https://keepassxc.org/
+	https://github.com/keepassxreboot/keepassxc/"
 
-if [[ "${PV}" != 9999 ]] ; then
+if [[ "${PV}" != *9999 ]] ; then
 	if [[ "${PV}" == *_beta* ]] ; then
 		SRC_URI="https://github.com/keepassxreboot/keepassxc/archive/${PV/_/-}.tar.gz -> ${P}.tar.gz"
 		S="${WORKDIR}/${P/_/-}"
 	else
 		#SRC_URI="https://github.com/keepassxreboot/keepassxc/archive/${PV}.tar.gz -> ${P}.tar.gz"
 		SRC_URI="https://github.com/keepassxreboot/keepassxc/releases/download/${PV}/${P}-src.tar.xz"
-		KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
+		KEYWORDS="~amd64 ~arm64 ~ppc64 ~riscv ~x86"
 	fi
 else
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/keepassxreboot/${PN}"
+	[[ "${PV}" != 9999 ]] && EGIT_BRANCH="master"
 fi
 
 LICENSE="LGPL-2.1 GPL-2 GPL-3"
 SLOT="0"
-IUSE="autotype browser ccache doc keeshare +network test yubikey"
+IUSE="X autotype browser doc keeshare +network test yubikey"
 
 RESTRICT="!test? ( test )"
+REQUIRED_USE="autotype? ( X )"
 
 RDEPEND="
 	app-crypt/argon2:=
-	dev-libs/libgcrypt:=
-	>=dev-libs/libsodium-1.0.12:=
+	dev-libs/botan:2=
 	dev-qt/qtconcurrent:5
 	dev-qt/qtcore:5
 	dev-qt/qtdbus:5
@@ -42,35 +44,31 @@ RDEPEND="
 	media-gfx/qrencode:=
 	sys-libs/readline:0=
 	sys-libs/zlib:=
+	X? ( dev-qt/qtx11extras:5 )
 	autotype? (
-		dev-qt/qtx11extras:5
 		x11-libs/libX11
-		x11-libs/libXi
 		x11-libs/libXtst
 	)
-	keeshare? ( dev-libs/quazip:0= )
-	yubikey? ( sys-auth/ykpers )
+	keeshare? ( sys-libs/zlib:=[minizip] )
+	yubikey? (
+		dev-libs/libusb:1
+		sys-apps/pcsc-lite
+	)
 "
-
-DEPEND="
-	${RDEPEND}
-	dev-qt/linguist-tools:5
+DEPEND="${RDEPEND}
 	dev-qt/qttest:5
 "
 BDEPEND="
-	ccache? ( dev-util/ccache )
+	dev-qt/linguist-tools:5
 	doc? ( dev-ruby/asciidoctor )
 "
 
 src_prepare() {
-	 use test || \
-		sed -e "/^find_package(Qt5Test/d" -i CMakeLists.txt || die
-
-	if [[ "${PV}" != *_beta* ]] && [[ "${PV}" != 9999 ]] && [[ ! -f .version ]] ; then
+	if [[ "${PV}" != *_beta* ]] && [[ "${PV}" != *9999 ]] && [[ ! -f .version ]] ; then
 		printf '%s' "${PV}" > .version || die
 	fi
 
-	 cmake_src_prepare
+	cmake_src_prepare
 }
 
 src_configure() {
@@ -78,7 +76,9 @@ src_configure() {
 	filter-flags -flto*
 
 	local mycmakeargs=(
-		-DWITH_CCACHE="$(usex ccache)"
+		# Gentoo users enable ccache via e.g. FEATURES=ccache or
+		# other means. We don't want the build system to enable it for us.
+		-DWITH_CCACHE=OFF
 		-DWITH_GUI_TESTS=OFF
 		-DWITH_TESTS="$(usex test)"
 		-DWITH_XC_AUTOTYPE="$(usex autotype)"
@@ -86,11 +86,11 @@ src_configure() {
 		-DWITH_XC_BROWSER="$(usex browser)"
 		-DWITH_XC_FDOSECRETS=ON
 		-DWITH_XC_KEESHARE="$(usex keeshare)"
-		-DWITH_XC_KEESHARE_SECURE="$(usex keeshare)"
 		-DWITH_XC_NETWORKING="$(usex network)"
 		-DWITH_XC_SSHAGENT=ON
 		-DWITH_XC_UPDATECHECK=OFF
 		-DWITH_XC_YUBIKEY="$(usex yubikey)"
+		-DWITH_XC_X11="$(usex X)"
 	)
 	if [[ "${PV}" == *_beta* ]] ; then
 		mycmakeargs+=( -DOVERRIDE_VERSION="${PV/_/-}" )

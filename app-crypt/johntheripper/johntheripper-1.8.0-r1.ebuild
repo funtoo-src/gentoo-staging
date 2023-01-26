@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -61,25 +61,17 @@ get_target() {
 		echo "macosx-x86-64"
 	elif use x86-solaris; then
 		echo "solaris-x86-any"
-	elif use x86-fbsd; then
-		if use cpu_flags_x86_sse2; then
-			echo "freebsd-x86-sse2"
-		elif use cpu_flags_x86_mmx; then
-			echo "freebsd-x86-mmx"
-		else
-			echo "freebsd-x86-any"
-		fi
-	elif use amd64-fbsd; then
-		echo "freebsd-x86-64"
 	else
 		echo "generic"
 	fi
 }
 
+pkg_pretend() {
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
+}
+
 pkg_setup() {
-	if use openmp && [[ ${MERGE_TYPE} != binary ]]; then
-		tc-has-openmp || die "Please switch to an openmp compatible compiler"
-	fi
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 }
 
 src_prepare() {
@@ -112,7 +104,7 @@ EOF
 }
 
 src_test() {
-	make -C src/ check
+	emake -C src/ check
 }
 
 src_install() {

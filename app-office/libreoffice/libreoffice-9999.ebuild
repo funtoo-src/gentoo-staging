@@ -1,10 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
-PYTHON_REQ_USE="threads(+),xml"
+PYTHON_COMPAT=( python3_{9..11} )
+PYTHON_REQ_USE="threads(+),xml(+)"
 
 MY_PV="${PV/_alpha/.alpha}"
 MY_PV="${MY_PV/_beta/.beta}"
@@ -21,7 +21,7 @@ BRANDING="${PN}-branding-gentoo-0.8.tar.xz"
 # PATCHSET="${P}-patchset-01.tar.xz"
 
 [[ ${MY_PV} == *9999* ]] && inherit git-r3
-inherit autotools bash-completion-r1 check-reqs eapi8-dosym flag-o-matic java-pkg-opt-2 multiprocessing python-single-r1 qmake-utils toolchain-funcs xdg-utils
+inherit autotools bash-completion-r1 check-reqs flag-o-matic java-pkg-opt-2 multiprocessing python-single-r1 qmake-utils toolchain-funcs xdg-utils
 
 DESCRIPTION="A full office productivity suite"
 HOMEPAGE="https://www.libreoffice.org"
@@ -44,15 +44,12 @@ unset DEV_URI
 # These are bundles that can't be removed for now due to huge patchsets.
 # If you want them gone, patches are welcome.
 ADDONS_SRC=(
-	# not packaged in Gentoo, https://github.com/efficient/libcuckoo/
-	"${ADDONS_URI}/libcuckoo-93217f8d391718380c508a722ab9acd5e9081233.tar.gz"
-	# broken against latest upstream release, too many patches on top:
-	# https://github.com/tdf/libcmis/pull/43
-	"${ADDONS_URI}/libcmis-0.5.2.tar.xz"
+	# not packaged in Gentoo
+	"${ADDONS_URI}/dragonbox-1.1.3.tar.gz"
 	# not packaged in Gentoo, https://www.netlib.org/fp/dtoa.c
 	"${ADDONS_URI}/dtoa-20180411.tgz"
 	# not packaged in Gentoo, https://skia.org/
-	"${ADDONS_URI}/skia-m94-975fcdd755dfc5d57cddbb25857e0c4ac29abe98.tar.xz"
+	"${ADDONS_URI}/skia-m103-b301ff025004c9cd82816c86c547588e6c24b466.tar.xz"
 	"base? (
 		${ADDONS_URI}/commons-logging-1.2-src.tar.gz
 		${ADDONS_URI}/ba2930200c9f019c2d93a8c88c651a0f-flow-engine-0.9.4.zip
@@ -104,37 +101,13 @@ RESTRICT="!test? ( test )"
 LICENSE="|| ( LGPL-3 MPL-1.1 )"
 SLOT="0"
 
-[[ ${MY_PV} == *9999* ]] || \
-KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86 ~amd64-linux"
+#[[ ${MY_PV} == *9999* ]] || \
+#KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86 ~amd64-linux"
 
-BDEPEND="
-	dev-util/intltool
-	sys-devel/bison
-	sys-devel/flex
-	sys-devel/gettext
-	virtual/pkgconfig
-	clang? (
-		|| (
-			(	sys-devel/clang:13
-				sys-devel/llvm:13
-				=sys-devel/lld-13*	)
-			(	sys-devel/clang:12
-				sys-devel/llvm:12
-				=sys-devel/lld-12*	)
-			(	sys-devel/clang:11
-				sys-devel/llvm:11
-				=sys-devel/lld-11*	)
-			(	sys-devel/clang:10
-				sys-devel/llvm:10
-				=sys-devel/lld-10*	)
-		)
-	)
-	odk? ( >=app-doc/doxygen-1.8.4 )
-"
 COMMON_DEPEND="${PYTHON_DEPS}
 	app-arch/unzip
 	app-arch/zip
-	app-crypt/gpgme[cxx]
+	app-crypt/gpgme:=[cxx]
 	app-text/hunspell:=
 	>=app-text/libabw-0.1.0
 	>=app-text/libebook-0.1
@@ -143,7 +116,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	app-text/libexttextcat
 	app-text/liblangtag
 	>=app-text/libmspub-0.1.0
-	>=app-text/libmwaw-0.3.1
+	>=app-text/libmwaw-0.3.21
 	>=app-text/libnumbertext-1.0.6
 	>=app-text/libodfgen-0.1.0
 	app-text/libqxp
@@ -152,17 +125,18 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	app-text/libwpg:0.3
 	>=app-text/libwps-0.4
 	app-text/mythes
+	dev-cpp/abseil-cpp:=
 	>=dev-cpp/clucene-2.3.3.4-r2
-	>=dev-cpp/libcmis-0.5.2
+	>=dev-cpp/libcmis-0.5.2-r2
 	dev-db/unixODBC
 	dev-lang/perl
-	>=dev-libs/boost-1.72.0:=[nls]
+	dev-libs/boost:=[nls]
 	dev-libs/expat
 	dev-libs/hyphen
 	dev-libs/icu:=
 	dev-libs/libassuan
 	dev-libs/libgpg-error
-	dev-libs/liborcus:0/0.16
+	>=dev-libs/liborcus-0.17.2:0/0.17
 	dev-libs/librevenge
 	dev-libs/libxml2
 	dev-libs/libxslt
@@ -180,16 +154,19 @@ COMMON_DEPEND="${PYTHON_DEPS}
 	>=media-libs/libcdr-0.1.0
 	>=media-libs/libepoxy-1.3.1[X]
 	>=media-libs/libfreehand-0.1.0
+	media-libs/libjpeg-turbo:=
 	media-libs/libpagemaker
 	>=media-libs/libpng-1.4:0=
 	>=media-libs/libvisio-0.1.0
+	media-libs/libwebp:=
 	media-libs/libzmf
-	media-libs/zxing-cpp
+	media-libs/openjpeg:=
+	media-libs/tiff:=
+	media-libs/zxing-cpp:=
 	>=net-libs/neon-0.31.1:=
 	net-misc/curl
 	sci-mathematics/lpsolve
 	sys-libs/zlib
-	virtual/jpeg:0
 	virtual/opengl
 	x11-libs/cairo[X]
 	x11-libs/libXinerama
@@ -216,6 +193,7 @@ COMMON_DEPEND="${PYTHON_DEPS}
 		media-libs/gst-plugins-base:1.0
 	)
 	gtk? (
+		app-accessibility/at-spi2-core:2
 		dev-libs/glib:2
 		dev-libs/gobject-introspection
 		gnome-base/dconf
@@ -234,12 +212,12 @@ COMMON_DEPEND="${PYTHON_DEPS}
 		kde-frameworks/kio:5
 		kde-frameworks/kwindowsystem:5
 	)
-	ldap? ( net-nds/openldap )
+	ldap? ( net-nds/openldap:= )
 	libreoffice_extensions_scripting-beanshell? ( dev-java/bsh )
-	libreoffice_extensions_scripting-javascript? ( dev-java/rhino:1.6 )
-	mariadb? ( dev-db/mariadb-connector-c )
-	!mariadb? ( dev-db/mysql-connector-c )
-	pdfimport? ( app-text/poppler:=[cxx] )
+	libreoffice_extensions_scripting-javascript? ( >=dev-java/rhino-1.7.14:1.6 )
+	mariadb? ( dev-db/mariadb-connector-c:= )
+	!mariadb? ( dev-db/mysql-connector-c:= )
+	pdfimport? ( >=app-text/poppler-22.06:=[cxx] )
 	postgres? ( >=dev-db/postgresql-9.0:*[kerberos] )
 "
 # FIXME: cppunit should be moved to test conditional
@@ -251,7 +229,7 @@ DEPEND="${COMMON_DEPEND}
 	dev-perl/Archive-Zip
 	>=dev-util/cppunit-1.14.0
 	>=dev-util/gperf-3.1
-	dev-util/mdds:1/1.5
+	dev-util/mdds:1/2.0
 	media-libs/glm
 	sys-devel/ucpp
 	x11-base/xorg-proto
@@ -259,10 +237,7 @@ DEPEND="${COMMON_DEPEND}
 	x11-libs/libXtst
 	java? (
 		dev-java/ant-core
-		|| (
-			dev-java/openjdk:11
-			dev-java/openjdk-bin:11
-		)
+		>=virtual/jdk-11
 	)
 	test? (
 		app-crypt/gnupg
@@ -272,23 +247,43 @@ DEPEND="${COMMON_DEPEND}
 	)
 "
 RDEPEND="${COMMON_DEPEND}
+	acct-group/libreoffice
+	acct-user/libreoffice
 	!app-office/libreoffice-bin
 	!app-office/libreoffice-bin-debug
 	media-fonts/liberation-fonts
 	|| ( x11-misc/xdg-utils kde-plasma/kde-cli-tools )
-	java? ( || (
-		dev-java/openjdk:11
-		dev-java/openjdk-jre-bin:11
-		>=virtual/jre-1.8
-	) )
+	java? ( >=virtual/jre-11 )
 	kde? ( kde-frameworks/breeze-icons:* )
+"
+BDEPEND="
+	dev-util/intltool
+	sys-apps/which
+	sys-devel/bison
+	sys-devel/flex
+	sys-devel/gettext
+	virtual/pkgconfig
+	clang? (
+		|| (
+			(	sys-devel/clang:15
+				sys-devel/llvm:15
+				=sys-devel/lld-15*	)
+			(	sys-devel/clang:14
+				sys-devel/llvm:14
+				=sys-devel/lld-14*	)
+			(	sys-devel/clang:13
+				sys-devel/llvm:13
+				=sys-devel/lld-13*	)
+		)
+	)
+	odk? ( >=app-doc/doxygen-1.8.4 )
 "
 if [[ ${MY_PV} != *9999* ]] && [[ ${PV} != *_* ]]; then
 	PDEPEND="=app-office/libreoffice-l10n-$(ver_cut 1-2)*"
 else
 	# Translations are not reliable on live ebuilds
 	# rather force people to use english only.
-	PDEPEND="!app-office/libreoffice-l10n"
+	RDEPEND+=" !app-office/libreoffice-l10n"
 fi
 
 PATCHES=(
@@ -313,16 +308,10 @@ _check_reqs() {
 }
 
 pkg_pretend() {
-	if use x86; then
-		elog "Unfortunately for packaging reasons on x86, various Java-based wizards,"
-		elog "most notably Report Builder in LibreOffice Base, will not be available."
-		elog "See also: https://bugs.gentoo.org/785640"
-	else
-		use base ||
-			ewarn "If you plan to use Base application you must enable USE base."
-		use java ||
-			ewarn "Without USE java, several wizards are not going to be available."
-	fi
+	use base ||
+		ewarn "If you plan to use Base application you must enable USE base."
+	use java ||
+		ewarn "Without USE java, several wizards are not going to be available."
 
 	[[ ${MERGE_TYPE} != binary ]] && _check_reqs pkg_pretend
 }
@@ -421,6 +410,10 @@ src_configure() {
 		CXX=${CHOST}-g++
 		NM=gcc-nm
 		RANLIB=gcc-ranlib
+
+		# Apparently the Clang flags get used even for GCC builds sometimes.
+		# bug #838115
+		sed -i -e "s/-flto=thin/-flto/" solenv/gbuild/platform/com_GCC_defs.mk || die
 	fi
 
 	if use custom-cflags ; then
@@ -491,6 +484,7 @@ src_configure() {
 		--disable-online-update
 		--disable-openssl
 		--disable-pdfium
+		--disable-qt6
 		--with-extra-buildid="${gentoo_buildid}"
 		--enable-extension-integration
 		--with-external-dict-dir="${EPREFIX}/usr/share/myspell"
@@ -499,19 +493,21 @@ src_configure() {
 		--with-external-tar="${DISTDIR}"
 		--with-lang=""
 		--with-parallelism=$(makeopts_jobs)
+		--with-system-abseil
+		--with-system-openjpeg
 		--with-system-ucpp
 		--with-tls=nss
 		--with-vendor="Gentoo Foundation"
-		--with-webdav
+		--with-webdav="neon"
 		--with-x
 		--without-fonts
 		--without-myspell-dicts
 		--with-help="html"
 		--without-helppack-integration
 		--with-system-gpgmepp
-		--without-system-cuckoo
+		--without-system-dragonbox
 		--without-system-jfreereport
-		--without-system-libcmis
+		--without-system-libfixmath
 		--without-system-sane
 		$(use_enable base report-builder)
 		$(use_enable bluetooth sdremote-bluetooth)
@@ -559,18 +555,14 @@ src_configure() {
 			--without-junit
 			--without-system-hsqldb
 			--with-ant-home="${ANT_HOME}"
+			--with-jdk-home="${JAVA_HOME}"
 		)
-		if has_version "dev-java/openjdk:11"; then
-			myeconfargs+=( -with-jdk-home="${EPREFIX}/usr/$(get_libdir)/openjdk-11" )
-		elif has_version "dev-java/openjdk-bin:11"; then
-			myeconfargs+=( --with-jdk-home="/opt/openjdk-bin-11" )
-		fi
 
 		use libreoffice_extensions_scripting-beanshell && \
 			myeconfargs+=( --with-beanshell-jar=$(java-pkg_getjar bsh bsh.jar) )
 
 		use libreoffice_extensions_scripting-javascript && \
-			myeconfargs+=( --with-rhino-jar=$(java-pkg_getjar rhino-1.6 js.jar) )
+			myeconfargs+=( --with-rhino-jar=$(java-pkg_getjar rhino-1.6 rhino.jar) )
 	fi
 
 	is-flagq "-flto*" && myeconfargs+=( --enable-lto )
@@ -586,20 +578,15 @@ src_compile() {
 	addpredict /dev/ati
 	addpredict /dev/nvidiactl
 
-	local target
-	use test && target="build" || target="build-nocheck"
-
-	# this is not a proper make script
-	make ${target} || die
+	default
 }
 
 src_test() {
-	make unitcheck || die
-	make slowcheck || die
+	emake unitcheck
+	emake slowcheck
 }
 
 src_install() {
-	# This is not Makefile so no buildserver
 	emake DESTDIR="${D}" distro-pack-install -o build -o check
 
 	# bug 593514
@@ -644,12 +631,15 @@ EOF
 	# link python bridge in site-packages, bug 667802
 	local py pyc loprogdir=/usr/$(get_libdir)/libreoffice/program
 	for py in uno.py unohelper.py officehelper.py; do
-		dosym8 -r ${loprogdir}/${py} $(python_get_sitedir)/${py}
+		dosym -r ${loprogdir}/${py} $(python_get_sitedir)/${py}
 		while IFS="" read -d $'\0' -r pyc; do
 			pyc=${pyc//*\/}
-			dosym8 -r ${loprogdir}/__pycache__/${pyc} $(python_get_sitedir)/__pycache__/${pyc}
+			dosym -r ${loprogdir}/__pycache__/${pyc} $(python_get_sitedir)/__pycache__/${pyc}
 		done < <(find "${D}"${lodir}/program -type f -name ${py/.py/*.pyc} -print0)
 	done
+
+	newinitd "${FILESDIR}/libreoffice.initd" libreoffice
+	newconfd "${FILESDIR}/libreoffice.confd" libreoffice
 }
 
 pkg_postinst() {

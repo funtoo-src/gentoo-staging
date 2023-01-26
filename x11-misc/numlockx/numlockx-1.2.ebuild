@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools
 
@@ -11,7 +11,7 @@ SRC_URI="mirror://gentoo/${P}.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
-KEYWORDS="~alpha amd64 ~arm ppc ppc64 sparc x86"
+KEYWORDS="~alpha amd64 ~arm ppc ppc64 ~riscv sparc x86"
 
 RDEPEND="
 	x11-libs/libX11
@@ -23,9 +23,10 @@ DEPEND="
 
 src_prepare() {
 	default
-	mv configure.{in,ac} || die
-	sed -i '/^K_/d; s/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' configure.ac || die
+
+	sed -i '/^K_/d; s/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' configure.in || die
 	sed -i 's/@X_.*@//g' Makefile.am || die
+
 	eautoreconf
 }
 

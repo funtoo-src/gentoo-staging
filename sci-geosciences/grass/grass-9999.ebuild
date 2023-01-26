@@ -1,26 +1,41 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8,9} )
+PYTHON_COMPAT=( python3_{9..10} )
 PYTHON_REQ_USE="sqlite"  # bug 572440
-WX_GTK_VER="3.0-gtk3"
 
-inherit autotools desktop git-r3 python-single-r1 toolchain-funcs wxwidgets xdg
-
-MY_P="${PN}8.0"
-MY_PM="${MY_P/.}"
+inherit desktop python-single-r1 toolchain-funcs xdg
 
 DESCRIPTION="A free GIS with raster and vector functionality, as well as 3D vizualization"
 HOMEPAGE="https://grass.osgeo.org/"
-EGIT_REPO_URI="https://github.com/OSGeo/grass.git"
 
 LICENSE="GPL-2"
-SLOT="0/7.9"
-IUSE="blas cxx fftw geos lapack liblas mysql netcdf nls odbc opencl openmp png postgres readline sqlite threads tiff truetype X zstd"
+
+GVERSION=${SLOT#*/}
+MY_PM="${PN}${GVERSION}"
+MY_PM="${MY_PM/.}"
+
+if [[ ${PV} =~ "9999" ]]; then
+	inherit git-r3
+	SLOT="0/8.3"
+	EGIT_REPO_URI="https://github.com/OSGeo/grass.git"
+else
+	MY_P="${P/_rc/RC}"
+	SLOT="0/$(ver_cut 1-2 ${PV})"
+	SRC_URI="https://grass.osgeo.org/${MY_PM}/source/${MY_P}.tar.gz"
+	if [[ ${PV} != *_rc* ]] ; then
+		KEYWORDS="~amd64 ~ppc ~x86"
+	fi
+
+	S="${WORKDIR}/${MY_P}"
+fi
+
+IUSE="blas cxx fftw geos lapack las mysql netcdf nls odbc opencl opengl openmp pdal png postgres readline sqlite threads tiff truetype X zstd"
 REQUIRED_USE="
-	${PYTHON_REQUIRED_USE}"
+	${PYTHON_REQUIRED_USE}
+	opengl? ( X )"
 
 RDEPEND="
 	${PYTHON_DEPS}
@@ -29,10 +44,10 @@ RDEPEND="
 		dev-python/numpy[${PYTHON_USEDEP}]
 		dev-python/six[${PYTHON_USEDEP}]
 	')
-	sci-libs/gdal
-	sys-libs/gdbm
-	sys-libs/ncurses:0=
-	sci-libs/proj
+	sci-libs/gdal:=
+	sys-libs/gdbm:=
+	sys-libs/ncurses:=
+	sci-libs/proj:=
 	sci-libs/xdrfile
 	sys-libs/zlib
 	media-libs/libglvnd
@@ -42,29 +57,31 @@ RDEPEND="
 		virtual/blas[eselect-ldso(+)]
 	)
 	fftw? ( sci-libs/fftw:3.0= )
-	geos? ( sci-libs/geos )
+	geos? ( sci-libs/geos:= )
 	lapack? ( virtual/lapack[eselect-ldso(+)] )
-	liblas? ( sci-geosciences/liblas )
+	las? ( sci-geosciences/liblas )
 	mysql? ( dev-db/mysql-connector-c:= )
-	netcdf? ( sci-libs/netcdf )
+	netcdf? ( sci-libs/netcdf:= )
 	odbc? ( dev-db/unixODBC )
 	opencl? ( virtual/opencl )
-	png? ( media-libs/libpng:0= )
+	opengl? ( virtual/opengl )
+	pdal? ( >=sci-libs/pdal-2.0.0:= )
+	png? ( media-libs/libpng:= )
 	postgres? ( >=dev-db/postgresql-8.4:= )
-	readline? ( sys-libs/readline:0= )
+	readline? ( sys-libs/readline:= )
 	sqlite? ( dev-db/sqlite:3 )
-	tiff? ( media-libs/tiff:0= )
+	tiff? ( media-libs/tiff:= )
 	truetype? ( media-libs/freetype:2 )
 	X? (
 		dev-python/wxpython:4.0
-		x11-libs/cairo[X,opengl]
+		x11-libs/cairo[X,opengl?]
 		x11-libs/libICE
 		x11-libs/libSM
 		x11-libs/libX11
 		x11-libs/libXext
 		x11-libs/libXt
 	)
-	zstd? ( app-arch/zstd )"
+	zstd? ( app-arch/zstd:= )"
 DEPEND="${RDEPEND}
 	X? ( x11-base/xorg-proto )"
 BDEPEND="
@@ -106,7 +123,11 @@ src_prepare() {
 	sed -e "s:= python3:= ${EPYTHON}:" -i "${S}/include/Make/Platform.make.in" || die
 
 	default
-	eautoreconf
+
+	# When patching the build system, avoid running autoheader here. The file
+	# config.in.h is maintained manually upstream. Changes to it may lead to
+	# undefined behavior. See bug #866554.
+	# AT_NOEAUTOHEADER=1 eautoreconf
 
 	ebegin "Fixing python shebangs"
 	python_fix_shebang -q "${S}"
@@ -127,11 +148,6 @@ src_prepare() {
 }
 
 src_configure() {
-	if use X; then
-		local WX_BUILD=yes
-		setup-wxwidgets
-	fi
-
 	addwrite /dev/dri/renderD128
 
 	local myeconfargs=(
@@ -150,6 +166,7 @@ src_configure() {
 		$(use_with mysql)
 		$(use_with mysql mysql-includes "${EPREFIX}"/usr/include/mysql)
 		$(use_with sqlite)
+		$(use_with opengl)
 		$(use_with odbc)
 		$(use_with fftw)
 		$(use_with blas)
@@ -162,8 +179,8 @@ src_configure() {
 		$(use_with threads pthread)
 		$(use_with openmp)
 		$(use_with opencl)
-		$(use_with liblas liblas "${EPREFIX}"/usr/bin/liblas-config)
-		$(use_with X wxwidgets "${WX_CONFIG}")
+		$(use_with pdal pdal "${EPREFIX}"/usr/bin/pdal-config)
+		$(use_with las liblas "${EPREFIX}"/usr/bin/liblas-config)
 		$(use_with netcdf netcdf "${EPREFIX}"/usr/bin/nc-config)
 		$(use_with geos geos "${EPREFIX}"/usr/bin/geos-config)
 		$(use_with X x)
@@ -215,13 +232,11 @@ src_install() {
 		sed -i "s|${ED}|/|g" "${scriptMakeDir}/${file}" || die
 	done
 
-	mv ${D}/usr/bin/grass ${D}/usr/bin/${MY_PM} || die
-
 	# get proper folder for grass path in script
 	local gisbase=/usr/$(get_libdir)/${MY_PM}
 	sed -e "s:GISBASE = os.path.normpath(\"${D}/usr/$(get_libdir)/${MY_PM}\"):\
 GISBASE = os.path.normpath(\"${gisbase}\"):" \
-		-i "${ED}"/usr/bin/${MY_PM} || die
+		-i "${ED}"/usr/bin/grass || die
 
 	# get proper fonts path for fontcap
 	sed -i \
@@ -231,16 +246,15 @@ GISBASE = os.path.normpath(\"${gisbase}\"):" \
 	# set proper python interpreter
 	sed -e "s:os.environ\[\"GRASS_PYTHON\"\] = \"python3\":\
 os.environ\[\"GRASS_PYTHON\"\] = \"${EPYTHON}\":" \
-		-i "${ED}"/usr/bin/${MY_PM} || die
+		-i "${ED}"/usr/bin/grass || die
 
-	# set proper GISDBASE directory path in the demolocation .grassrc80 file
+	# set proper GISDBASE directory path in the demolocation .grassrc${GVERSION//.} file
 	sed -e "s:GISDBASE\:.*$:GISDBASE\: ${gisbase}:" \
-		-i "${ED}"${gisbase}/demolocation/.grassrc80 || die
+		-i "${ED}"${gisbase}/demolocation/.grassrc${GVERSION//.} || die
 
 	if use X; then
-		local GUI="-gui"
-		[[ ${WX_BUILD} == yes ]] && GUI="-wxpython"
-		make_desktop_entry "/usr/bin/${MY_PM} ${GUI}" "${PN}" "${PN}-48x48" "Science;Education"
+		local GUI="--gui"
+		make_desktop_entry "/usr/bin/grass ${GUI}" "${PN}" "${PN}-48x48" "Science;Education"
 		doicon -s 48 gui/icons/${PN}-48x48.png
 	fi
 

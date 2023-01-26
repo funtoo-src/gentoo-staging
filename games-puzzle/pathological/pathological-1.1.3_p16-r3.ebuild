@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8,9} )
+PYTHON_COMPAT=( python3_{9..11} )
 inherit desktop optfeature python-single-r1
 
 MY_P="${PN}-$(ver_cut 1-3)"
@@ -36,14 +36,15 @@ PATCHES=(
 src_prepare() {
 	# debian's patches add python3 support and sanitize other aspects
 	# use_ogg_music: excluded given .xm files are fine
-	local debian=($(<"${WORKDIR}"/debian/patches/series))
+	local debian
+	debian=($(<"${WORKDIR}"/debian/patches/series)) || die
 	debian=(${debian[@]/60_use_ogg_music.patch/})
 	PATCHES+=("${debian[@]/#/${WORKDIR}/debian/patches/}")
 
 	default
 
-	sed -e "s|^cd .*/|cd ${EPREFIX}/usr/share/|" \
-		-e "s|^exec|exec ${EPYTHON}|" \
+	sed -e "s|^cd .*/|cd ${EPREFIX@Q}/usr/share/|" \
+		-e "s|^exec|exec ${EPYTHON@Q}|" \
 		-i ${PN} || die
 
 	gzip -d ${PN}.6.gz || die

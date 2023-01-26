@@ -1,21 +1,20 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
+DIST_TEST="do"
 inherit desktop optfeature perl-module git-r3 xdg-utils
 
 DESCRIPTION="A command line utility for viewing youtube-videos in Mplayer"
-HOMEPAGE="https://trizenx.blogspot.com/2012/03/gtk-youtube-viewer.html"
+HOMEPAGE="https://github.com/trizen/youtube-viewer"
 SRC_URI=""
 EGIT_REPO_URI="https://github.com/trizen/${PN}.git"
 
-LICENSE="|| ( Artistic GPL-1+ )"
+LICENSE="|| ( Artistic-2 GPL-1+ )"
 SLOT="0"
 KEYWORDS=""
-IUSE="gtk gtk2"
-
-REQUIRED_USE="gtk2? ( gtk )"
+IUSE="gtk"
 
 RDEPEND="
 	dev-perl/Data-Dump
@@ -40,9 +39,8 @@ RDEPEND="
 	)
 	|| ( media-video/ffmpeg[openssl] media-video/ffmpeg[gnutls] )
 	|| ( media-video/mpv media-video/mplayer media-video/vlc gtk? ( media-video/smplayer ) )"
-DEPEND="dev-perl/Module-Build"
-
-SRC_TEST="do"
+DEPEND="${RDEPEND}"
+BDEPEND="dev-perl/Module-Build"
 
 src_configure() {
 	local myconf
@@ -67,7 +65,7 @@ pkg_postinst() {
 	optfeature "local cache support" dev-perl/LWP-UserAgent-Cached
 	optfeature "faster JSON to HASH conversion" dev-perl/JSON-XS
 	optfeature "printing results in a fixed-width format (--fixed-width, -W)" dev-perl/Text-CharWidth
-	optfeature "live streams support" net-misc/youtube-dl
+	optfeature "live streams support" net-misc/yt-dlp
 	elog
 	elog "Check the configuration file in ~/.config/youtube-viewer/"
 	elog "and configure your video player backend."

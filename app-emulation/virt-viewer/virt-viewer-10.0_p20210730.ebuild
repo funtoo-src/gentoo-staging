@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit meson python-any-r1 xdg
 
@@ -15,7 +15,7 @@ S="${WORKDIR}/${PN}-${GIT_HASH}"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~x86"
+KEYWORDS="amd64 x86"
 IUSE="+libvirt sasl +spice +vnc"
 
 RDEPEND="dev-libs/glib:2
@@ -33,10 +33,13 @@ DEPEND="${RDEPEND}
 	spice? ( >=app-emulation/spice-protocol-0.12.10 )"
 BDEPEND="${PYTHON_DEPS}
 	dev-lang/perl
-	>=dev-util/intltool-0.35.0
 	virtual/pkgconfig"
 
 REQUIRED_USE="|| ( spice vnc )"
+
+PATCHES=(
+	"${FILESDIR}"/${PN}-10.0_p20210730-meson-0.61.patch
+)
 
 src_prepare() {
 	default

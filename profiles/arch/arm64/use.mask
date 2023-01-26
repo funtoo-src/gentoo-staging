@@ -1,8 +1,31 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # Unmask the flag which corresponds to ARCH.
 -arm64
+
+# Georgy Yakovlev <gyakovlev@gentoo.org> (2023-01-01)
+# unmask synaptics input driver
+-input_devices_synaptics
+
+# matoro <matoro_gentoo@matoro.tk> (2022-09-29)
+# dev-util/google-perftools is supported here
+-tcmalloc
+
+# Mike Gilbert <floppym@gentoo.org> (2022-08-31)
+# Requires the following packages to be keyworded/stable:
+# sys-libs/libapparmor
+# sys-apps/apparmor
+# sys-apps/apparmor-utils
+-apparmor
+
+# David Seifert <soap@gentoo.org> (2022-03-13)
+# NVENC works here
+-nvenc
+
+# Ionen Wolkens <ionen@gentoo.org> (2022-02-17)
+# x11-drivers/nvidia-drivers' binary blob works here
+-video_cards_nvidia
 
 # Michał Górny <mgorny@gentoo.org> (2021-01-07)
 # Prebuilt kernels are supported here.
@@ -41,11 +64,6 @@ cpu_flags_arm_neon
 -cpu_flags_arm_vfpv3
 -cpu_flags_arm_vfpv4
 -cpu_flags_arm_vfp-d32
-
-# Mattéo Rossillol‑‑Laruelle <beatussum@protonmail.com> (2019‑08‑31)
-# Dependency not keyworded (dev-libs/libindicate).
-appindicator
-ayatana
 
 # Michał Górny <mgorny@gentoo.org> (2018-07-09)
 # No OpenCL provider is available on arm64.
@@ -91,7 +109,6 @@ mssql
 # havent tested yet
 darcs
 afs
-scanner
 zvbi
 sid
 mms
@@ -105,12 +122,12 @@ lpsol
 zvbi
 gts
 anthy
+snapcast
 
 # Unmask ARM-only video-cards
 -video_cards_exynos
 -video_cards_freedreno
 -video_cards_lima
--video_cards_imx
 -video_cards_nouveau
 -video_cards_panfrost
 -video_cards_tegra
@@ -125,7 +142,6 @@ anthy
 # Modular X: mask for architectures on which they aren't available
 video_cards_glint
 video_cards_mga
-video_cards_nv
 video_cards_r128
 video_cards_radeon
 
@@ -137,8 +153,3 @@ video_cards_r200
 video_cards_r300
 video_cards_r600
 video_cards_radeonsi
-
-# USE=audit masked prior to testing on alpha, arm, hppa, ppc64, s390, sh.
-# Bug #184563, (2007-09-18)
-# Robin H. Johnson <robbat2@gentoo.org>
-audit

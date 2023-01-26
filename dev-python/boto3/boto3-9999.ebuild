@@ -1,13 +1,18 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
-inherit distutils-r1
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{9..11} )
+
+inherit distutils-r1 multiprocessing
 
 DESCRIPTION="The AWS SDK for Python"
-HOMEPAGE="https://github.com/boto/boto3"
+HOMEPAGE="
+	https://github.com/boto/boto3/
+	https://pypi.org/project/boto3/
+"
 LICENSE="Apache-2.0"
 SLOT="0"
 
@@ -16,8 +21,11 @@ if [[ "${PV}" == "9999" ]]; then
 	inherit git-r3
 	BOTOCORE_PV=${PV}
 else
-	SRC_URI="https://github.com/boto/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~sparc ~x86 ~amd64-linux ~x86-linux"
+	SRC_URI="
+		https://github.com/boto/boto3/archive/${PV}.tar.gz
+			-> ${P}.gh.tar.gz
+	"
+	KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~ppc64 ~riscv ~sparc ~x86 ~amd64-linux ~x86-linux"
 
 	# botocore is x.(y+3).z
 	BOTOCORE_PV="$(ver_cut 1).$(( $(ver_cut 2) + 3)).$(ver_cut 3-)"
@@ -26,17 +34,18 @@ fi
 RDEPEND="
 	>=dev-python/botocore-${BOTOCORE_PV}[${PYTHON_USEDEP}]
 	>=dev-python/jmespath-0.7.1[${PYTHON_USEDEP}]
-	>=dev-python/s3transfer-0.3.0[${PYTHON_USEDEP}]
+	>=dev-python/s3transfer-0.6.0[${PYTHON_USEDEP}]
 "
 BDEPEND="
 	test? (
 		dev-python/mock[${PYTHON_USEDEP}]
+		dev-python/pytest-xdist[${PYTHON_USEDEP}]
 	)
 "
 
 distutils_enable_sphinx docs/source \
 	'dev-python/guzzle_sphinx_theme'
-distutils_enable_tests nose
+distutils_enable_tests pytest
 
 python_prepare_all() {
 	# don't lock versions to narrow ranges
@@ -45,12 +54,15 @@ python_prepare_all() {
 		-e '/s3transfer/ d' \
 		-i setup.py || die
 
-	# prevent an infinite loop
-	rm tests/functional/docs/test_smoke.py || die
+	# do not rely on bundled deps in botocore (sic!)
+	find -name '*.py' -exec sed -i \
+		-e 's:from botocore[.]vendored import:import:' \
+		-e 's:from botocore[.]vendored[.]:from :' \
+		{} + || die
 
 	distutils-r1_python_prepare_all
 }
 
 python_test() {
-	nosetests -v tests/unit/ tests/functional/ || die "test failed under ${EPYTHON}"
+	epytest tests/{functional,unit} -n "$(makeopts_jobs)"
 }

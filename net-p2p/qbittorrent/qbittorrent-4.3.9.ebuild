@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -14,7 +14,7 @@ if [[ ${PV} == *9999 ]]; then
 	EGIT_REPO_URI="https://github.com/${PN}/qBittorrent.git"
 else
 	SRC_URI="https://github.com/qbittorrent/qBittorrent/archive/release-${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~ppc64 ~x86"
+	KEYWORDS="amd64 ~arm ~ppc64 x86"
 	S="${WORKDIR}/qBittorrent-release-${PV}"
 fi
 
@@ -24,7 +24,7 @@ IUSE="+dbus debug webui +X"
 REQUIRED_USE="dbus? ( X )"
 
 RDEPEND="
-	>=dev-libs/boost-1.62.0-r1:=
+	dev-libs/boost:=
 	dev-qt/qtcore:5
 	dev-qt/qtnetwork:5[ssl]
 	dev-qt/qtxml:5

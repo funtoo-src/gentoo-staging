@@ -1,4 +1,4 @@
-# Copyright 2006-2021 Gentoo Authors
+# Copyright 2006-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -9,8 +9,11 @@ if [[ ${PV} == 9999 ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/transmission/transmission"
 else
-	SRC_URI="https://github.com/transmission/transmission-releases/raw/master/${P}.tar.xz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~mips ~ppc ~ppc64 ~x86 ~amd64-linux"
+	MY_PV="${PV/_beta/-beta.}"
+	MY_P="${PN}-${MY_PV}+r634b1e8fc1"
+	S="${WORKDIR}/${MY_P}"
+	SRC_URI="https://github.com/transmission/transmission/releases/download/${MY_PV}/${MY_P}.tar.xz"
+	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
 fi
 
 DESCRIPTION="A fast, easy, and free BitTorrent client"
@@ -21,7 +24,7 @@ HOMEPAGE="https://transmissionbt.com/"
 # MIT is in several libtransmission/ headers
 LICENSE="|| ( GPL-2 GPL-3 Transmission-OpenSSL-exception ) GPL-2 MIT"
 SLOT="0"
-IUSE="appindicator cli gtk lightweight nls mbedtls qt5 static-libs systemd test web"
+IUSE="appindicator cli gtk nls mbedtls qt5 systemd test"
 RESTRICT="!test? ( test )"
 
 ACCT_DEPEND="
@@ -31,29 +34,24 @@ ACCT_DEPEND="
 BDEPEND="${ACCT_DEPEND}
 	virtual/pkgconfig
 	nls? (
-		gtk? (
-			dev-util/intltool
-			sys-devel/gettext
-		)
-		qt5? (
-			dev-qt/linguist-tools:5
-		)
+		gtk? ( sys-devel/gettext )
+		qt5? ( dev-qt/linguist-tools:5 )
 	)
 "
 COMMON_DEPEND="
-	>=dev-libs/libevent-2.0.10:=
+	>=dev-libs/libevent-2.1.0:=
 	!mbedtls? ( dev-libs/openssl:0= )
 	mbedtls? ( net-libs/mbedtls:0= )
 	net-libs/libnatpmp
+	>=net-libs/libpsl-0.21.1
 	>=net-libs/miniupnpc-1.7:=
-	>=net-misc/curl-7.16.3[ssl]
+	>=net-misc/curl-7.28.0[ssl]
 	sys-libs/zlib:=
 	nls? ( virtual/libintl )
 	gtk? (
-		>=dev-libs/dbus-glib-0.100
-		>=dev-libs/glib-2.32:2
-		>=x11-libs/gtk+-3.4:3
-		appindicator? ( >=dev-libs/libappindicator-0.4.30:3 )
+		>=dev-cpp/gtkmm-3.24.0:3.0
+		>=dev-cpp/glibmm-2.60.0:2
+		appindicator? ( dev-libs/libayatana-appindicator )
 	)
 	qt5? (
 		dev-qt/qtcore:5
@@ -65,46 +63,46 @@ COMMON_DEPEND="
 	systemd? ( >=sys-apps/systemd-209:= )
 "
 DEPEND="${COMMON_DEPEND}
-	nls? (
-		virtual/libintl
-		gtk? (
-			dev-util/intltool
-			sys-devel/gettext
-		)
-		qt5? (
-			dev-qt/linguist-tools:5
-		)
-	)
+	nls? ( virtual/libintl )
 "
 RDEPEND="${COMMON_DEPEND}
 	${ACCT_DEPEND}
 "
 
+src_prepare() {
+	cmake_src_prepare
+	# https://github.com/transmission/transmission/issues/3901
+	rm -f libtransmission/version.h || die
+}
+
 src_configure() {
 	local mycmakeargs=(
 		-DCMAKE_INSTALL_DOCDIR=share/doc/${PF}
 
-		-DENABLE_CLI=$(usex cli ON OFF)
 		-DENABLE_GTK=$(usex gtk ON OFF)
-		-DENABLE_LIGHTWEIGHT=$(usex lightweight ON OFF)
-		-DENABLE_NLS=$(usex nls ON OFF)
 		-DENABLE_QT=$(usex qt5 ON OFF)
+		-DENABLE_MAC=OFF
+		-DENABLE_WEB=OFF
+		-DENABLE_CLI=$(usex cli ON OFF)
 		-DENABLE_TESTS=$(usex test ON OFF)
-		-DENABLE_WEB=$(usex web ON OFF)
+		-DENABLE_NLS=$(usex nls ON OFF)
 
-		# https://bugs.gentoo.org/807993
-		-DINSTALL_LIB=$(usex static-libs ON OFF)
+		-DRUN_CLANG_TIDY=OFF
 
+		-DUSE_GTK_VERSION=3
 		-DUSE_SYSTEM_EVENT2=ON
+		-DUSE_SYSTEM_DEFLATE=OFF
 		-DUSE_SYSTEM_DHT=OFF
 		-DUSE_SYSTEM_MINIUPNPC=ON
 		-DUSE_SYSTEM_NATPMP=ON
 		-DUSE_SYSTEM_UTP=OFF
 		-DUSE_SYSTEM_B64=OFF
+		-DUSE_SYSTEM_PSL=ON
+		-DUSE_QT_VERSION=5
 
-		-DWITH_CRYPTO=$(usex mbedtls polarssl openssl)
+		-DWITH_CRYPTO=$(usex mbedtls mbedtls openssl)
 		-DWITH_INOTIFY=ON
-		-DWITH_LIBAPPINDICATOR=$(usex appindicator ON OFF)
+		-DWITH_APPINDICATOR=$(usex appindicator ON OFF)
 		-DWITH_SYSTEMD=$(usex systemd ON OFF)
 	)
 

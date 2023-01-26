@@ -1,9 +1,9 @@
-# Copyright 2019-2021 Gentoo Authors
+# Copyright 2019-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit meson
+inherit meson toolchain-funcs
 
 DESCRIPTION="compiz like 3D wayland compositor"
 HOMEPAGE="https://github.com/WayfireWM/wayfire"
@@ -18,11 +18,12 @@ fi
 
 LICENSE="MIT"
 SLOT="0"
-IUSE="+gles +system-wfconfig +system-wlroots X"
+IUSE="debug +gles +system-wfconfig +system-wlroots X"
 
 DEPEND="
 	dev-libs/libevdev
 	dev-libs/libinput
+	dev-libs/wayland
 	gui-libs/gtk-layer-shell
 	media-libs/glm
 	media-libs/mesa:=[gles2,wayland,X?]
@@ -32,7 +33,7 @@ DEPEND="
 	media-libs/freetype:=[X?]
 	x11-libs/libdrm
 	x11-libs/gtk+:3=[wayland,X?]
-	x11-libs/cairo:=[X?,svg]
+	x11-libs/cairo:=[X?,svg(+)]
 	x11-libs/libxkbcommon:=[X?]
 	x11-libs/pixman
 	X? (
@@ -65,7 +66,13 @@ src_configure() {
 		$(meson_feature system-wlroots use_system_wlroots)
 		$(meson_feature X xwayland)
 		$(meson_use gles enable_gles32)
+		$(usex debug --buildtype=debug "")
+		$(usex debug -Db_sanitize=address,undefined "")
 	)
+
+	# Clang will fail to link without this
+	tc-is-clang && emesonargs+=( $(usex debug -Db_lundef=false "") )
+
 	meson_src_configure
 }
 

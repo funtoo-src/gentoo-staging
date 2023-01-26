@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake xdg
 
@@ -40,6 +40,7 @@ CDEPEND="
 	alsa? ( media-libs/alsa-lib )
 	archive? ( app-arch/libarchive )
 	!archive? ( >=dev-libs/libtar-1.2.11-r3 )
+	doc? ( dev-texlive/texlive-fontutils )
 	jack? ( virtual/jack )
 	ladspa? ( media-libs/liblrdf )
 	lash? ( media-sound/lash )

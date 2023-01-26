@@ -1,14 +1,16 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: tree-sitter-grammar.eclass
 # @MAINTAINER:
-# Matthew Smith <matt@offtopica.uk>
+# Matthew Smith <matthew@gentoo.org>
 # Nick Sarnie <sarnex@gentoo.org>
 # @AUTHOR:
-# Matthew Smith <matt@offtopica.uk>
+# Matthew Smith <matthew@gentoo.org>
 # @SUPPORTED_EAPIS: 8
 # @BLURB: Common functions and variables for Tree Sitter grammars
+
+inherit edo
 
 if [[ -z ${_TREE_SITTER_GRAMMAR_ECLASS} ]]; then
 _TREE_SITTER_GRAMMAR_ECLASS=1
@@ -27,9 +29,13 @@ S="${WORKDIR}"/${PN}-${TS_PV:-${PV}}/src
 # Needed for tree_sitter/parser.h
 DEPEND="dev-libs/tree-sitter"
 
-EXPORT_FUNCTIONS src_compile src_install
+BDEPEND+=" test? ( dev-util/tree-sitter-cli )"
+IUSE+=" test"
+RESTRICT+=" !test? ( test )"
 
-# @ECLASS-VARIABLE: TS_PV
+EXPORT_FUNCTIONS src_compile src_test src_install
+
+# @ECLASS_VARIABLE: TS_PV
 # @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:
@@ -40,15 +46,13 @@ EXPORT_FUNCTIONS src_compile src_install
 # @INTERNAL
 # @DESCRIPTION:
 # This internal function determines the ABI version of a grammar library based
-# on the package version.
+# on a constant in the source file.
 _get_tsg_abi_ver() {
-	if ver_test -gt 0.21; then
-		die "Grammar too new; unknown ABI version"
-	elif ver_test -ge 0.19.0; then
-		echo 13
-	else
-		die "Grammar too old; unknown ABI version"
-	fi
+	# This sed script finds ABI definition string in parser source file,
+	# substitutes all the string until the ABI number, and prints remains
+	# (the ABI number itself)
+	sed -n 's/#define LANGUAGE_VERSION //p' "${S}"/parser.c ||
+		die "Unable to extract ABI version for this grammar"
 }
 
 # @FUNCTION: tree-sitter-grammar_src_compile
@@ -76,11 +80,27 @@ tree-sitter-grammar_src_compile() {
 	fi
 
 	local soname=lib${PN}$(get_libname $(_get_tsg_abi_ver))
-	${link} ${LDFLAGS} \
+
+	local soname_args="-Wl,--soname=${soname}"
+	if [[ ${CHOST} == *darwin* ]] ; then
+		soname_args="-Wl,-install_name,${EPREFIX}/usr/$(get_libdir)/${soname}"
+	fi
+
+	edo ${link} ${LDFLAGS} \
 			-shared \
 			*.o \
-			-Wl,-soname ${soname} \
-			-o "${WORKDIR}"/${soname} || die
+			${soname_args} \
+			-o "${WORKDIR}"/${soname}
+}
+
+# @FUNCTION: tree-sitter-grammar_src_test
+# @DESCRIPTION:
+# Runs the Tree Sitter parser's test suite.
+# See: https://tree-sitter.github.io/tree-sitter/creating-parsers#command-test
+tree-sitter-grammar_src_test() {
+	debug-print-function ${FUNCNAME} "${@}"
+
+	(cd .. && tree-sitter test) || die "Test suite failed"
 }
 
 # @FUNCTION: tree-sitter-grammar_src_install
@@ -89,8 +109,10 @@ tree-sitter-grammar_src_compile() {
 tree-sitter-grammar_src_install() {
 	debug-print-function ${FUNCNAME} "${@}"
 
-	dolib.so "${WORKDIR}"/lib${PN}$(get_libname $(_get_tsg_abi_ver))
-	dosym lib${PN}$(get_libname $(_get_tsg_abi_ver)) \
+	local soname=lib${PN}$(get_libname $(_get_tsg_abi_ver))
+
+	dolib.so "${WORKDIR}/${soname}"
+	dosym "${soname}" \
 		  /usr/$(get_libdir)/lib${PN}$(get_libname)
 }
 fi

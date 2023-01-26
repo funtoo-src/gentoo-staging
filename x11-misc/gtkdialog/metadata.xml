@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
-	<maintainer type="project">
-		<email>desktop-misc@gentoo.org</email>
-		<name>Gentoo Desktop Miscellaneous Project</name>
-	</maintainer>
+	<!-- maintainer-needed -->
 	<longdescription>
 		gtkdialog is a GUI-creation utility that can be used with an arbitrary
 		interpreter. It enables the programmer to describe a graphical user interface
@@ -17,7 +14,4 @@
 	<upstream>
 		<remote-id type="github">oshazard/gtkdialog</remote-id>
 	</upstream>
-	<use>
-		<flag name="gtk2">Build with GTK+2 instead of GTK+3</flag>
-	</use>
 </pkgmetadata>

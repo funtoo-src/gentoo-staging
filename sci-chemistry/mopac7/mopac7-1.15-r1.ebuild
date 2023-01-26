@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -14,7 +14,7 @@ SRC_URI="
 
 LICENSE="public-domain"
 SLOT="0"
-KEYWORDS="amd64 ppc x86 ~amd64-linux"
+KEYWORDS="amd64 ~ppc x86 ~amd64-linux"
 IUSE="gmxmopac7"
 
 DEPEND="dev-libs/libf2c"
@@ -52,7 +52,7 @@ src_compile() {
 		emake clean
 		cp -n "${DISTDIR}"/gmxmop.f "${DISTDIR}"/dcart.f . || die
 		sed "s:GENTOOVERSION:${PV}:g" -i Makefile || die
-		emake FC=$(tc-getFC)
+		emake FC="$(tc-getFC)"
 	fi
 }
 

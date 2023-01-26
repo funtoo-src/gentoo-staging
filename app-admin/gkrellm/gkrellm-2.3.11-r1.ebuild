@@ -1,24 +1,22 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit desktop multilib systemd toolchain-funcs
-
-MY_P="${P/_/-}"
+inherit desktop systemd toolchain-funcs
 
 DESCRIPTION="Single process stack of various system monitors"
-HOMEPAGE="http://www.gkrellm.net/"
+HOMEPAGE="http://gkrellm.srcbox.net/"
 if [[ "${PV}" == 9999 ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.srcbox.net/gkrellm"
 else
-	SRC_URI="http://gkrellm.srcbox.net/${MY_P}.tar.bz2"
-	KEYWORDS="~alpha amd64 arm ~arm64 ~hppa ~ia64 ~mips ppc ppc64 sparc x86 ~amd64-linux ~x86-linux"
+	SRC_URI="http://gkrellm.srcbox.net/releases/${P}.tar.bz2"
+	KEYWORDS="~alpha amd64 arm ~arm64 ~hppa ~ia64 ~mips ppc ppc64 ~riscv sparc x86 ~amd64-linux ~x86-linux"
 fi
-LICENSE="GPL-3"
+LICENSE="GPL-3+"
 SLOT="2"
-IUSE="gnutls hddtemp lm-sensors nls ntlm ssl kernel_FreeBSD X"
+IUSE="gnutls hddtemp lm-sensors nls ntlm ssl X"
 
 RDEPEND="
 	acct-group/gkrellmd
@@ -55,8 +53,6 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-2.3.5-sansfont.patch
 )
 
-S="${WORKDIR}/${MY_P}"
-
 DOCS=( Changelog CREDITS README )
 
 pkg_pretend() {
@@ -64,11 +60,6 @@ pkg_pretend() {
 		ewarn "You have enabled the \"gnutls\" USE flag but not the \"ssl\" USE flag."
 		ewarn "No ssl backend will be built!"
 	fi
-}
-
-pkg_setup() {
-	TARGET=
-	use kernel_FreeBSD && TARGET="freebsd"
 }
 
 src_prepare() {
@@ -85,6 +76,8 @@ src_prepare() {
 }
 
 src_compile() {
+	TARGET=
+
 	if use X ; then
 		emake \
 			${TARGET} \

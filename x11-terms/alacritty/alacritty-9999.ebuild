@@ -1,27 +1,27 @@
-# Copyright 2017-2021 Gentoo Authors
+# Copyright 2017-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 CRATES="
 "
 
 MY_PV="${PV//_rc/-rc}"
 # https://bugs.gentoo.org/725962
-PYTHON_COMPAT=( python3_{7..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 
 inherit bash-completion-r1 cargo desktop python-any-r1
 
 DESCRIPTION="GPU-accelerated terminal emulator"
-HOMEPAGE="https://github.com/alacritty/alacritty"
+HOMEPAGE="https://alacritty.org"
 
 if [ ${PV} == "9999" ] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/alacritty/alacritty"
 else
-	SRC_URI="https://github.com/alacritty/${PN}/archive/v${MY_PV}.tar.gz -> ${P}.tar.gz
-	$(cargo_crate_uris ${CRATES})"
-	KEYWORDS="~amd64 ~arm64 ~ppc64 ~x86"
+	SRC_URI="https://github.com/${PN}/${PN}/archive/refs/tags/v${MY_PV}.tar.gz -> ${P}.tar.gz
+		$(cargo_crate_uris)"
+	KEYWORDS="~amd64 ~arm64 ~ppc64 ~riscv ~x86"
 fi
 
 LICENSE="Apache-2.0 Apache-2.0-with-LLVM-exceptions Boost-1.0 BSD BSD-2 CC0-1.0 FTL ISC MIT MPL-2.0 Unlicense WTFPL-2 ZLIB"
@@ -34,7 +34,7 @@ COMMON_DEPEND="
 	media-libs/fontconfig:=
 	media-libs/freetype:2
 	x11-libs/libxkbcommon
-	X? ( x11-libs/libxcb:=[xkb] )
+	X? ( x11-libs/libxcb:= )
 "
 
 DEPEND="
@@ -54,7 +54,10 @@ RDEPEND="${COMMON_DEPEND}
 	)
 "
 
-BDEPEND="dev-util/cmake"
+BDEPEND="
+	dev-util/cmake
+	>=virtual/rust-1.57.0
+"
 
 QA_FLAGS_IGNORED="usr/bin/alacritty"
 
@@ -86,6 +89,7 @@ src_install() {
 	cargo_src_install --path alacritty
 
 	newman extra/alacritty.man alacritty.1
+	newman extra/alacritty-msg.man alacritty-msg.1
 
 	newbashcomp extra/completions/alacritty.bash alacritty
 
@@ -98,10 +102,8 @@ src_install() {
 	domenu extra/linux/Alacritty.desktop
 	newicon extra/logo/compat/alacritty-term.svg Alacritty.svg
 
-	newman extra/alacritty.man alacritty.1
-
 	insinto /usr/share/metainfo
-	doins extra/linux/io.alacritty.Alacritty.appdata.xml
+	doins extra/linux/org.alacritty.Alacritty.appdata.xml
 
 	insinto /usr/share/alacritty/scripts
 	doins -r scripts/*

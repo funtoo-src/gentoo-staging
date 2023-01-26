@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-inherit fcaps multilib toolchain-funcs flag-o-matic gnuconfig
+inherit fcaps toolchain-funcs flag-o-matic gnuconfig
 
 MY_P="${P/_alpha/a}"
 
@@ -13,7 +13,7 @@ SRC_URI="mirror://sourceforge/${PN}/$([[ -z ${PV/*_alpha*} ]] && echo 'alpha')/$
 
 LICENSE="GPL-2 LGPL-2.1 CDDL-Schily"
 SLOT="0"
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~sparc-solaris ~x86-solaris"
+KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~loong ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~sparc-solaris ~x86-solaris"
 IUSE="acl caps nls unicode selinux"
 
 BDEPEND="
@@ -24,7 +24,6 @@ RDEPEND="
 	acl? ( virtual/acl )
 	caps? ( sys-libs/libcap )
 	nls? ( virtual/libintl )
-	!app-cdr/cdrkit
 	selinux? ( sec-policy/selinux-cdrecord )
 "
 DEPEND="
@@ -42,20 +41,26 @@ FILECAPS=(
 cdrtools_os() {
 	local os="linux"
 	[[ ${CHOST} == *-darwin* ]] && os="mac-os10"
-	[[ ${CHOST} == *-freebsd* ]] && os="freebsd"
 	echo "${os}"
+}
+
+symlink_build_rules() {
+	local cputype="$1"
+	pushd "${S}"/RULES > /dev/null || die
+	ln -sf i586-linux-cc.rul       "${cputype}"-linux-cc.rul      || die
+	ln -sf i586-linux-clang.rul    "${cputype}"-linux-clang.rul   || die
+	ln -sf i586-linux-clang32.rul  "${cputype}"-linux-clang32.rul || die
+	ln -sf i586-linux-clang64.rul  "${cputype}"-linux-clang64.rul || die
+	ln -sf i586-linux-gcc.rul      "${cputype}"-linux-gcc.rul     || die
+	ln -sf i586-linux-gcc32.rul    "${cputype}"-linux-gcc32.rul   || die
+	ln -sf i586-linux-gcc64.rul    "${cputype}"-linux-gcc64.rul   || die
+	popd > /dev/null || die
 }
 
 src_prepare() {
 	default
 
 	gnuconfig_update
-
-	# This fixes a clash with clone() on uclibc.  Upstream isn't
-	# going to include this so let's try to carry it forward.
-	# Contact me if it needs updating.  Bug #486782.
-	# Anthony G. Basile <blueness@gentoo.org>.
-	use elibc_uclibc && eapply "${FILESDIR}"/${PN}-fix-clone-uclibc.patch
 
 	# Remove profiled make files.
 	find -name '*_p.mk' -delete || die "delete *_p.mk"
@@ -79,6 +84,11 @@ src_prepare() {
 		$(find ./ -type f -exec grep -l '^include.\+rules\.lib' '{}' '+') \
 		|| die "sed rules"
 
+	# Don't quote $(MAKE)
+	sed -i -e 's|"$(MAKE)"|$(MAKE)|' \
+		$(find ./RULES -type f -exec grep -l '"$(MAKE)"' '{}' '+') \
+		|| die "sed RULES/"
+
 	# Enable verbose build.
 	sed -i -e '/@echo.*==>.*;/s:@echo[^;]*;:&set -x;:' \
 		RULES/*.rul RULES/rules.prg RULES/rules.inc \
@@ -86,11 +96,8 @@ src_prepare() {
 
 	# Respect CC/CXX variables.
 	cd "${S}"/RULES || die
-	local tcCC=$(tc-getCC)
-	local tcCXX=$(tc-getCXX)
-	# fix RISC-V build err, bug 811375
-	ln -s i586-linux-cc.rul riscv-linux-cc.rul || die
-	ln -s i586-linux-cc.rul riscv64-linux-cc.rul || die
+	local tcCC="$(tc-getCC)"
+	local tcCXX="$(tc-getCXX)"
 
 	sed -i -e "/cc-config.sh/s|\$(C_ARCH:%64=%) \$(CCOM_DEF)|${tcCC} ${tcCC}|" \
 		rules1.top || die "sed rules1.top"
@@ -103,13 +110,14 @@ src_prepare() {
 		rules.cnf || die "sed rules.cnf"
 
 	# Add support for arm64
-	ln -sf i586-linux-cc.rul       aarch64_be-linux-cc.rul
-	ln -sf i586-linux-clang.rul    aarch64_be-linux-clang.rul
-	ln -sf i586-linux-clang32.rul  aarch64_be-linux-clang32.rul
-	ln -sf i586-linux-clang64.rul  aarch64_be-linux-clang64.rul
-	ln -sf i586-linux-gcc.rul      aarch64_be-linux-gcc.rul
-	ln -sf i586-linux-gcc32.rul    aarch64_be-linux-gcc32.rul
-	ln -sf i586-linux-gcc64.rul    aarch64_be-linux-gcc64.rul
+	symlink_build_rules aarch64_be
+
+	# fix RISC-V build err, bug 811375
+	symlink_build_rules riscv
+	symlink_build_rules riscv64
+
+	# Add support for loong
+	symlink_build_rules loongarch64
 
 	# Schily make setup.
 	cd "${S}"/DEFAULTS || die

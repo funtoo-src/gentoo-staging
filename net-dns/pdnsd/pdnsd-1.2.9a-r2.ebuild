@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit systemd tmpfiles
 
@@ -20,6 +20,10 @@ RDEPEND="
 	acct-user/pdnsd
 "
 DEPEND="test? ( net-dns/bind-tools )"
+
+PATCHES=(
+	"${FILESDIR}/${P}-linux-5.13_build_fix.patch" #801688
+)
 
 src_configure() {
 	local myeconfargs=(
@@ -80,7 +84,7 @@ src_test() {
 
 	dig @127.0.0.1 -p 33455 localhost > "${T}"/dig.output 2>&1
 	cat "${T}"/dig.output || die
-	fgrep -q "status: NOERROR" "${T}"/dig.output || fail_kill "www.gentoo.org lookup failed"
+	grep -F -q "status: NOERROR" "${T}"/dig.output || fail_kill "www.gentoo.org lookup failed"
 
 	kill $(<"${T}/pid") || fail_kill "failed to terminate daemon"
 }

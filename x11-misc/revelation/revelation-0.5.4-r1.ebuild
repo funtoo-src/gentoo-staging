@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_9 )
 
 inherit gnome2-utils python-single-r1 meson xdg
 
@@ -32,6 +32,8 @@ RDEPEND="${PYTHON_DEPS}
 "
 
 DEPEND="${RDEPEND}"
+
+PATCHES=( "${FILESDIR}"/revelation-0.5.4-issue87-fix-meson-0.60.patch )
 
 src_prepare() {
 	find -name '*.py' -exec \

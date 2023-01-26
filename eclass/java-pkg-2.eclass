@@ -6,7 +6,7 @@
 # java@gentoo.org
 # @AUTHOR:
 # Thomas Matthijs <axxo@gentoo.org>
-# @SUPPORTED_EAPIS: 5 6 7
+# @SUPPORTED_EAPIS: 5 6 7 8
 # @PROVIDES: java-utils-2
 # @BLURB: Eclass for Java Packages
 # @DESCRIPTION:
@@ -14,7 +14,7 @@
 # need to use Java.
 
 case ${EAPI:-0} in
-	[567]) ;;
+	[5678]) ;;
 	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
@@ -23,7 +23,7 @@ _JAVA_PKG_2_ECLASS=1
 
 inherit java-utils-2
 
-# @ECLASS-VARIABLE: JAVA_PKG_IUSE
+# @ECLASS_VARIABLE: JAVA_PKG_IUSE
 # @PRE_INHERIT
 # @DEFAULT_UNSET
 # @DESCRIPTION:

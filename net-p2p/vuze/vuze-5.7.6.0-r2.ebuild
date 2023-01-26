@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 JAVA_PKG_IUSE="source"
 
@@ -11,32 +11,35 @@ MY_PV=$(ver_rs 1- "")
 MY_SRC="Vuze_${MY_PV}"
 
 DESCRIPTION="BitTorrent client in Java, formerly called Azureus"
-HOMEPAGE="http://www.vuze.com/"
+HOMEPAGE="https://www.vuze.com/"
 SRC_URI="mirror://sourceforge/azureus/${PN}/${MY_SRC}/${MY_SRC}_source.zip"
 LICENSE="GPL-2 BSD"
 
 SLOT="0"
-KEYWORDS="amd64 ppc64"
+KEYWORDS="amd64 ppc64 x86"
 
 # bundles parts of http://www.programmers-friend.org/
 # bundles bcprov - 1.37 required but not in the tree
-CDEPEND="
-	dev-java/log4j:0
-	dev-java/swt:4.10[cairo]
+CP_DEPEND="
+	dev-java/log4j-12-api:2
+	dev-java/log4j-core:2
+	dev-java/swt:3.8[cairo]
 	dev-java/commons-cli:1
 	dev-java/commons-text:0
 	dev-java/json-simple:0"
 
 RDEPEND="
-	${CDEPEND}
+	${CP_DEPEND}
 	>=virtual/jre-1.8:*"
 
 # does not compile with java 11, uses classes deprecated even in java 8
 DEPEND="
-	${CDEPEND}
-	app-arch/unzip
-	dev-util/desktop-file-utils
+	${CP_DEPEND}
 	virtual/jdk:1.8"
+
+BDEPEND="app-arch/unzip"
+
+IDEPEND="dev-util/desktop-file-utils"
 
 PDEPEND="~net-p2p/vuze-coreplugins-${PV}"
 
@@ -48,6 +51,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.3.0.0-disable-updaters.patch
 	"${FILESDIR}"/${PN}-5.3.0.0-unbundle-json.patch
 	"${FILESDIR}"/${PN}-5.7.6.0-commons-lang.patch
+	"${FILESDIR}"/${PN}-5.7.6.0-log4j-12-api.patch
 )
 
 src_unpack() {
@@ -88,15 +92,14 @@ src_prepare() {
 }
 
 JAVA_ANT_REWRITE_CLASSPATH="true"
-EANT_GENTOO_CLASSPATH="swt-4.10,json-simple,log4j,commons-cli-1,commons-text"
 
 src_compile() {
 	local mem
-	use amd64 && mem="320"
-	use x86   && mem="256"
-	use ppc   && mem="192"
-	use ppc64 && mem="256"
-	use sparc && mem="320"
+	use amd64 && mem="512"
+	use x86   && mem="448"
+	use ppc   && mem="384"
+	use ppc64 && mem="448"
+	use sparc && mem="512"
 	export ANT_OPTS="-Xmx${mem}m"
 	java-pkg-2_src_compile
 

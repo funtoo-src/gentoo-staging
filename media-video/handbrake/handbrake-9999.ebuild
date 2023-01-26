@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit autotools python-any-r1 toolchain-funcs xdg
 
@@ -31,16 +31,16 @@ RDEPEND="
 	dev-libs/jansson:=
 	dev-libs/libxml2
 	media-libs/a52dec
-	>=media-libs/dav1d-0.5.1
+	>=media-libs/dav1d-0.5.1:=
 	media-libs/libjpeg-turbo:=
 	media-libs/libass:=
-	>=media-libs/libbluray-1.0
+	>=media-libs/libbluray-1.0:=
 	media-libs/libdvdnav
 	media-libs/libdvdread:=
 	media-libs/libsamplerate
 	media-libs/libtheora
 	media-libs/libvorbis
-	>=media-libs/libvpx-1.8
+	>=media-libs/libvpx-1.8:=
 	media-libs/opus
 	media-libs/speex
 	media-libs/x264:=
@@ -48,7 +48,7 @@ RDEPEND="
 	media-sound/lame
 	>=media-video/ffmpeg-4.2.1:0=[postproc,fdk?]
 	sys-libs/zlib
-	fdk? ( media-libs/fdk-aac )
+	fdk? ( media-libs/fdk-aac:= )
 	gstreamer? (
 		media-libs/gstreamer:1.0
 		media-libs/gst-plugins-base:1.0
@@ -73,10 +73,12 @@ RDEPEND="
 	nvenc? ( media-libs/nv-codec-headers )
 	x265? ( >=media-libs/x265-3.2:0=[10bit,12bit,numa?] )
 "
-DEPEND="
+DEPEND="${RDEPEND}"
+# cmake needed for custom script: bug #852701
+BDEPEND="
 	${PYTHON_DEPS}
-	${RDEPEND}
 	dev-lang/nasm
+	dev-util/cmake
 	dev-util/intltool
 "
 

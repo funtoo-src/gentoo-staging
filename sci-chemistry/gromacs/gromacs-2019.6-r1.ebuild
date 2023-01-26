@@ -1,22 +1,22 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
 CMAKE_MAKEFILE_GENERATOR="ninja"
 
-inherit bash-completion-r1 cmake cuda multilib readme.gentoo-r1 toolchain-funcs xdg-utils
+inherit bash-completion-r1 cmake cuda readme.gentoo-r1 toolchain-funcs xdg-utils
 
 SRC_URI="
-	http://ftp.gromacs.org/gromacs/${PN}-${PV/_/-}.tar.gz
-	doc? ( http://ftp.gromacs.org/manual/manual-${PV/_/-}.pdf )
-	test? ( http://ftp.gromacs.org/regressiontests/regressiontests-${PV/_/-}.tar.gz )"
+	https://ftp.gromacs.org/gromacs/${PN}-${PV/_/-}.tar.gz
+	doc? ( https://ftp.gromacs.org/manual/manual-${PV/_/-}.pdf )
+	test? ( https://ftp.gromacs.org/regressiontests/regressiontests-${PV/_/-}.tar.gz )"
 KEYWORDS="amd64 arm x86 ~amd64-linux ~x86-linux ~x64-macos"
 
 ACCE_IUSE="cpu_flags_x86_sse2 cpu_flags_x86_sse4_1 cpu_flags_x86_fma4 cpu_flags_x86_avx cpu_flags_x86_avx2"
 
 DESCRIPTION="The ultimate molecular dynamics simulation package"
-HOMEPAGE="http://www.gromacs.org/"
+HOMEPAGE="https://www.gromacs.org/"
 
 # see COPYING for details
 # https://repo.or.cz/w/gromacs.git/blob/HEAD:/COPYING
@@ -50,6 +50,7 @@ RDEPEND="${CDEPEND}"
 REQUIRED_USE="
 	|| ( single-precision double-precision )
 	cuda? ( single-precision )
+	opencl? ( single-precision )
 	cuda? ( !opencl )
 	mkl? ( !blas !fftw !lapack )
 	${PYTHON_REQUIRED_USE}"
@@ -61,9 +62,11 @@ RESTRICT="!test? ( test )"
 S="${WORKDIR}/${PN}-${PV/_/-}"
 
 pkg_pretend() {
-	[[ $(gcc-version) == "4.1" ]] && die "gcc 4.1 is not supported by gromacs"
-	use openmp && ! tc-has-openmp && \
-		die "Please switch to an openmp compatible compiler"
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
+}
+
+pkg_setup() {
+	[[ ${MERGE_TYPE} != binary ]] && use openmp && tc-check-openmp
 }
 
 src_prepare() {
@@ -107,11 +110,6 @@ src_configure() {
 
 	if use fftw; then
 		fft_opts=( -DGMX_FFT_LIBRARY=fftw3 )
-	elif use mkl && has_version "=sci-libs/mkl-10*"; then
-		fft_opts=( -DGMX_FFT_LIBRARY=mkl
-			-DMKL_INCLUDE_DIR="${MKLROOT}/include"
-			-DMKL_LIBRARIES="$(echo /opt/intel/mkl/10.0.5.025/lib/*/libmkl.so);$(echo /opt/intel/mkl/10.0.5.025/lib/*/libiomp*.so)"
-		)
 	elif use mkl; then
 		local bits=$(get_libdir)
 		fft_opts=( -DGMX_FFT_LIBRARY=mkl
@@ -160,7 +158,7 @@ src_configure() {
 			cuda=( "-DGMX_GPU=ON" )
 		local opencl=( "-DGMX_USE_OPENCL=OFF" )
 		use opencl && opencl=( "-DGMX_USE_OPENCL=ON" ) cuda=( "-DGMX_GPU=ON" )
-		mycmakeargs=(
+		local mycmakeargs=(
 			${mycmakeargs_pre[@]} ${p}
 			-DGMX_MPI=OFF
 			-DGMX_THREAD_MPI=$(usex threads)
@@ -176,7 +174,7 @@ src_configure() {
 		  sed -i '/SET(CMAKE_INSTALL_NAME_DIR/s/^/#/' "${WORKDIR}/${P}_${x}/gentoo_rules.cmake" || die
 		use mpi || continue
 		einfo "Configuring for ${x} precision with mpi"
-		mycmakeargs=(
+		local mycmakeargs=(
 			${mycmakeargs_pre[@]} ${p}
 			-DGMX_THREAD_MPI=OFF
 			-DGMX_MPI=ON
@@ -245,9 +243,8 @@ src_install() {
 
 pkg_postinst() {
 	einfo
-	einfo  "Please read and cite:"
-	einfo  "Gromacs 4, J. Chem. Theory Comput. 4, 435 (2008). "
-	einfo  "https://dx.doi.org/10.1021/ct700301q"
+	einfo  "Please read and cite gromacs related papers from list:"
+	einfo  "https://www.gromacs.org/Gromacs_papers"
 	einfo
 	readme.gentoo_print_elog
 }

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -12,10 +12,10 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://code.videolan.org/videolan/x264.git"
 	SRC_URI=""
 else
-	MY_P="x264-snapshot-$(ver_cut 3)-2245"
-	SRC_URI="http://download.videolan.org/pub/videolan/x264/snapshots/${MY_P}.tar.bz2"
+	# Download https://code.videolan.org/videolan/x264/-/archive/master/x264-master.tar.bz2
+	SRC_URI="https://dev.gentoo.org/~aballier/distfiles/x264-${PV}.tar.bz2"
 	KEYWORDS="~alpha ~amd64 ~ppc ~ppc64 ~sparc ~x86"
-	S="${WORKDIR}/${MY_P}"
+	S="${WORKDIR}/x264-master"
 fi
 
 LICENSE="GPL-2"
@@ -33,11 +33,8 @@ RDEPEND="
 ASM_DEP=">=dev-lang/nasm-2.13"
 DEPEND="${RDEPEND}
 	amd64? ( ${ASM_DEP} )
-	x86? ( ${ASM_DEP} )
-	x86-fbsd? ( ${ASM_DEP} )"
+	x86? ( ${ASM_DEP} )"
 BDEPEND="virtual/pkgconfig"
-
-PATCHES=( "${FILESDIR}/gpac.patch" )
 
 src_configure() {
 	tc-export CC

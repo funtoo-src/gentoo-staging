@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,13 +10,13 @@ if [[ ${PV} == "9999" ]] ; then
 	inherit git-r3
 else
 	SRC_URI="https://github.com/muennich/sxiv/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="amd64 arm64 ppc64 x86"
+	KEYWORDS="amd64 arm64 ppc64 ~riscv x86"
 fi
 
 DESCRIPTION="Simple (or small or suckless) X Image Viewer"
 HOMEPAGE="https://github.com/muennich/sxiv/"
 
-LICENSE="GPL-2"
+LICENSE="GPL-2+ public-domain"
 SLOT="0"
 IUSE="exif gif +jpeg +png webp"
 

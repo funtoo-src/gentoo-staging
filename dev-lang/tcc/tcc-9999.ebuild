@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
@@ -22,7 +22,7 @@ fi
 LICENSE="LGPL-2.1"
 SLOT="0"
 if [[ ${PV} != *9999* ]] ; then
-	KEYWORDS="~amd64 ~x86 ~amd64-linux"
+	KEYWORDS="~amd64 ~arm64 ~riscv ~x86 ~amd64-linux"
 fi
 
 BDEPEND="dev-lang/perl" # doc generation
@@ -45,6 +45,9 @@ src_prepare() {
 	}' examples/ex*.c || die
 	sed -i -e '1s/$/ -lX11/' examples/ex4.c || die
 
+	# bug 888115
+	sed -i -e "s|/usr/local/bin/tcc|/usr/bin/tcc|g" tcc-doc.texi || die
+
 	# Fix texi2html invocation
 	sed -i -e 's/-number//' Makefile || die
 	sed -i -e 's/--sections//' Makefile || die
@@ -57,7 +60,6 @@ src_configure() {
 					# better fixes welcome, it feels wrong to hack the env like this
 
 	use elibc_musl && libc=musl
-	use elibc_uclibc && libc=uClibc
 
 	# not autotools, so call configure directly
 	./configure --cc="$(tc-getCC)" \

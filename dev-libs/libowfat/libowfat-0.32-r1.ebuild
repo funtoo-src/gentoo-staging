@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -15,8 +15,7 @@ KEYWORDS="amd64 hppa sparc x86"
 IUSE="diet"
 
 RDEPEND="diet? ( >=dev-libs/dietlibc-0.33_pre20090721 )"
-DEPEND="${RDEPEND}
-	>=sys-apps/sed-4"
+DEPEND="${RDEPEND}"
 
 pkg_setup() {
 	# Required for mult/umult64.c to be usable
@@ -25,7 +24,7 @@ pkg_setup() {
 
 src_compile() {
 	emake \
-		CC=$(tc-getCC) \
+		CC="$(tc-getCC)" \
 		CFLAGS="-I. ${CFLAGS}" \
 		DIET="${EPREFIX}/usr/bin/diet -Os" \
 		prefix="${EPREFIX}/usr" \

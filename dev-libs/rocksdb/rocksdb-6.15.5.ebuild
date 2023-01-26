@@ -1,4 +1,4 @@
-# Copyright 2020-2021 Gentoo Authors
+# Copyright 2020-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -19,18 +19,18 @@ DEPEND="
 	app-arch/lz4:=
 	app-arch/snappy:=
 	dev-cpp/gflags
-	dev-python/zstandard:=
+	dev-python/python-zstandard:=
 	sys-libs/zlib:=
 	jemalloc? ( dev-libs/jemalloc:= )
 "
 RDEPEND="${DEPEND}"
 
 PATCHES=(
-	"${FILESDIR}"/${PN}-6.14.6-libatomic.patch
+	"${FILESDIR}"/${PN}-6.17.3-libatomic.patch
 )
 
 src_configure() {
-	mycmakeargs=(
+	local mycmakeargs=(
 		-DFAIL_ON_WARNINGS=OFF
 		-DFORCE_AVX2=$(usex cpu_flags_x86_avx2 ON OFF)
 		-DFORCE_AVX=$(usex cpu_flags_x86_avx ON OFF)

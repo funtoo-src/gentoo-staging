@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -10,7 +10,7 @@ LIBDVDNAV_VERSION="6.0.0-Leia-Alpha-3"
 FFMPEG_VERSION="4.3.2"
 CODENAME="Matrix"
 FFMPEG_KODI_VERSION="19.1"
-PYTHON_COMPAT=( python3_{8,9} )
+PYTHON_COMPAT=( python3_{9,10} )
 SRC_URI="https://github.com/xbmc/libdvdcss/archive/${LIBDVDCSS_VERSION}.tar.gz -> libdvdcss-${LIBDVDCSS_VERSION}.tar.gz
 	https://github.com/xbmc/libdvdread/archive/${LIBDVDREAD_VERSION}.tar.gz -> libdvdread-${LIBDVDREAD_VERSION}.tar.gz
 	https://github.com/xbmc/libdvdnav/archive/${LIBDVDNAV_VERSION}.tar.gz -> libdvdnav-${LIBDVDNAV_VERSION}.tar.gz
@@ -31,7 +31,7 @@ else
 	S=${WORKDIR}/xbmc-${MY_PV}
 fi
 
-inherit autotools cmake desktop linux-info pax-utils python-single-r1 xdg
+inherit autotools cmake desktop libtool linux-info pax-utils python-single-r1 xdg
 
 DESCRIPTION="A free and open source media-player and entertainment hub"
 HOMEPAGE="https://kodi.tv/ https://kodi.wiki/"
@@ -109,7 +109,7 @@ COMMON_TARGET_DEPEND="${PYTHON_DEPS}
 	>=media-libs/taglib-1.11.1
 	system-ffmpeg? (
 		>=media-video/ffmpeg-${FFMPEG_VERSION}:=[dav1d?,encode,postproc]
-		media-video/ffmpeg[openssl]
+		=media-video/ffmpeg-4*[openssl]
 	)
 	!system-ffmpeg? (
 		app-arch/bzip2
@@ -130,12 +130,10 @@ COMMON_TARGET_DEPEND="${PYTHON_DEPS}
 	udf? ( >=dev-libs/libudfread-1.0.0 )
 	udev? ( virtual/udev )
 	vaapi? (
-		x11-libs/libva:=
-		!gles? ( x11-libs/libva[opengl] )
+		media-libs/libva:=
 		system-ffmpeg? ( media-video/ffmpeg[vaapi] )
-		vdpau? ( x11-libs/libva-vdpau-driver )
-		wayland? ( x11-libs/libva[wayland] )
-		X? ( x11-libs/libva[X] )
+		wayland? ( media-libs/libva[wayland] )
+		X? ( media-libs/libva[X] )
 	)
 	virtual/libiconv
 	vdpau? (
@@ -329,6 +327,12 @@ src_compile() {
 }
 
 src_test() {
+	local myctestargs=(
+		# Known failing, unreliable test
+		# bug #743938
+		-E "(TestCPUInfo.GetCPUFrequency)"
+	)
+
 	# see https://github.com/xbmc/xbmc/issues/17860#issuecomment-630120213
 	KODI_HOME="${BUILD_DIR}" cmake_build check
 }

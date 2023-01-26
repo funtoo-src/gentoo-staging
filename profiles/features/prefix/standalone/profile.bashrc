@@ -26,7 +26,7 @@ if [[ ${CATEGORY}/${PN} == sys-devel/gcc && ${EBUILD_PHASE} == configure ]]; the
     EXTRA_ECONF="${EXTRA_ECONF} --with-sysroot=${EPREFIX}"
 
     ebegin "remove --sysroot call on ld for native toolchain"
-    sed -i 's/--sysroot=%R//' gcc/gcc.c
+    sed -i 's/--sysroot=%R//' gcc/gcc.c*
     eend $?
 elif [[ ${CATEGORY}/${PN} == sys-devel/clang && ${EBUILD_PHASE} == configure ]]; then
     ebegin "Use ${EPREFIX} as default sysroot"
@@ -73,17 +73,6 @@ elif [[ ${CATEGORY}/${PN} == sys-libs/glibc && ${EBUILD_PHASE} == configure ]]; 
     sed -i -r \
 	-e "s,/(etc|var),${EPREFIX}/\1,g" \
 	nss/db-Makefile
-    eend $?
-elif [[ ${CATEGORY}/${PN} == dev-lang/python && ${EBUILD_PHASE} == configure ]]; then
-    # Guide h2py to look into glibc of Prefix
-    ebegin "Guiding h2py to look into Prefix"
-    export include="${EPREFIX}"/usr/include
-    sed -i -r \
-	-e "s,/usr/include,\"${EPREFIX}\"/usr/include,g" "${S}"/Lib/plat-linux*/regen
-    eend $?
-    ebegin "Prefixifying distutils paths"
-    sed -re "s,([^[:alnum:]])(/usr[/[:alnum:]]*/(lib[[:alnum:]]*|include)|/lib[[:alnum:]]*),\1${EPREFIX}\2,g" \
-	-i "${S}"/setup.py
     eend $?
 elif [[ ${CATEGORY}/${PN} == dev-lang/perl && ${EBUILD_PHASE} == configure ]]; then
     ebegin "Prefixifying pwd path"

@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,26 +11,26 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://gitlab.freedesktop.org/plymouth/plymouth"
 else
 	SRC_URI="${SRC_URI} https://www.freedesktop.org/software/plymouth/releases/${P}.tar.xz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~sparc ~x86"
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~ia64 ~ppc ~ppc64 ~riscv ~sparc ~x86"
 fi
 
-inherit autotools readme.gentoo-r1 systemd toolchain-funcs
+inherit autotools readme.gentoo-r1 systemd
 
 DESCRIPTION="Graphical boot animation (splash) and logger"
 HOMEPAGE="https://cgit.freedesktop.org/plymouth/"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="debug +gtk +libkms +pango +split-usr static-libs +udev"
+IUSE="debug +drm +gtk +pango +split-usr static-libs +udev"
 
 CDEPEND="
 	>=media-libs/libpng-1.2.16:=
+	drm? ( x11-libs/libdrm )
 	gtk? (
 		dev-libs/glib:2
 		>=x11-libs/gtk+-3.14:3
 		x11-libs/cairo
 	)
-	libkms? ( x11-libs/libdrm[libkms] )
 	pango? ( >=x11-libs/pango-1.21 )
 "
 DEPEND="${CDEPEND}
@@ -71,8 +71,8 @@ src_configure() {
 		$(use_enable !static-libs shared)
 		$(use_enable static-libs static)
 		$(use_enable debug tracing)
-		$(use_enable gtk gtk)
-		$(use_enable libkms drm)
+		$(use_enable drm)
+		$(use_enable gtk)
 		$(use_enable pango)
 		$(use_with udev)
 	)
@@ -105,8 +105,8 @@ src_install() {
 
 pkg_postinst() {
 	readme.gentoo_print_elog
-	if ! has_version "sys-kernel/dracut" && ! has_version "sys-kernel/genkernel-next[plymouth]"; then
+	if ! has_version "sys-kernel/dracut"; then
 		ewarn "If you want initramfs builder with plymouth support, please emerge"
-		ewarn "sys-kernel/dracut or sys-kernel/genkernel-next[plymouth]."
+		ewarn "sys-kernel/dracut."
 	fi
 }

@@ -1,20 +1,21 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8,9} )
 DISTUTILS_SINGLE_IMPL=1
+PYTHON_COMPAT=( python3_{9..11} )
 
 inherit bash-completion-r1 distutils-r1 systemd tmpfiles
 
 DESCRIPTION="Scans log files and bans IPs that show malicious signs"
 HOMEPAGE="https://www.fail2ban.org/"
+
 if [[ ${PV} == *9999 ]] ; then
-	EGIT_REPO_URI="https://github.com/${PN}/${PN}"
+	EGIT_REPO_URI="https://github.com/fail2ban/fail2ban"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
+	SRC_URI="https://github.com/fail2ban/fail2ban/archive/${PV}.tar.gz -> ${P}.tar.gz"
 	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ppc ~ppc64 ~sparc ~x86"
 fi
 
@@ -31,8 +32,7 @@ RDEPEND="
 			|| (
 				dev-python/python-systemd[${PYTHON_USEDEP}]
 				sys-apps/systemd[python(-),${PYTHON_USEDEP}]
-			)
-		' 'python*')
+			)' 'python*' )
 	)
 "
 
@@ -43,13 +43,11 @@ PATCHES=(
 )
 
 python_prepare_all() {
+	distutils-r1_python_prepare_all
+
 	# Replace /var/run with /run, but not in the top source directory
 	find . -mindepth 2 -type f -exec \
 		sed -i -e 's|/var\(/run/fail2ban\)|\1|g' {} + || die
-
-	sed -i -e 's|runscript|openrc-run|g' files/gentoo-initd || die
-
-	distutils-r1_python_prepare_all
 }
 
 python_compile() {
@@ -62,6 +60,9 @@ python_test() {
 		--no-network \
 		--no-gamin \
 		--verbosity=4 || die "Tests failed with ${EPYTHON}"
+
+	# Workaround for bug #790251
+	rm -r fail2ban.egg-info || die
 }
 
 python_install_all() {
@@ -69,12 +70,13 @@ python_install_all() {
 
 	rm -rf "${ED}"/usr/share/doc/${PN} "${ED}"/run || die
 
-	# Not ${FILESDIR}
-	newconfd files/gentoo-confd ${PN}
-	newinitd files/gentoo-initd ${PN}
+	newconfd files/fail2ban-openrc.conf ${PN}
 
-	sed -e "s:@BINDIR@:${EPREFIX}/usr/bin:g" files/${PN}.service.in > "${T}"/${PN}.service || die
-	systemd_dounit "${T}"/${PN}.service
+	# These two are placed in the ${BUILD_DIR} after being "built"
+	# in install_scripts().
+	newinitd "${BUILD_DIR}/fail2ban-openrc.init" "${PN}"
+	systemd_dounit "${BUILD_DIR}/${PN}.service"
+
 	dotmpfiles files/${PN}-tmpfiles.conf
 
 	doman man/*.{1,5}
@@ -98,7 +100,7 @@ pkg_preinst() {
 pkg_postinst() {
 	tmpfiles_process ${PN}-tmpfiles.conf
 
-	if [[ ${previous_less_than_0_7} == 0 ]] ; then
+	if [[ ${previous_less_than_0_7} = 0 ]] ; then
 		elog
 		elog "Configuration files are now in /etc/fail2ban/"
 		elog "You probably have to manually update your configuration"

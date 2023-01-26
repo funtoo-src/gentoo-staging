@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit flag-o-matic libtool
+inherit flag-o-matic libtool multilib
 
 if [[ ${PV} == *9999* ]]; then
 	EHG_REPO_URI="http://hg.code.sf.net/p/xine/xine-lib-1.2"
@@ -12,7 +12,7 @@ if [[ ${PV} == *9999* ]]; then
 	NLS_DEPEND="sys-devel/gettext"
 	NLS_RDEPEND="virtual/libintl"
 else
-	KEYWORDS="~amd64 ~arm64 ~hppa ~ppc ~ppc64 ~x86"
+	KEYWORDS="~amd64 ~arm64 ~hppa ~ppc ~ppc64 ~riscv ~x86"
 	SRC_URI="mirror://sourceforge/xine/${P}.tar.xz"
 	NLS_IUSE="nls"
 	NLS_DEPEND="nls? ( sys-devel/gettext )"
@@ -24,17 +24,17 @@ HOMEPAGE="http://xine.sourceforge.net/"
 
 LICENSE="GPL-2"
 SLOT="1"
-IUSE="a52 aac aalib +alsa altivec bluray +css dts dvb dxr3 fbcon flac gtk imagemagick ipv6 jack jpeg libcaca mad +mmap mng modplug musepack nfs opengl oss pulseaudio samba sftp sdl speex theora truetype v4l vaapi vcd vdpau vdr vidix +vis vorbis vpx wavpack wayland +X xinerama +xv xvmc ${NLS_IUSE}"
+IUSE="a52 aac aalib +alsa bluray cpu_flags_ppc_altivec +css dav1d dts dvb dxr3 fbcon flac gtk imagemagick jack jpeg libcaca mad +mmap mng modplug musepack nfs opengl oss pulseaudio samba sftp sdl speex theora truetype v4l vaapi vcd vdpau vdr vidix +vis vorbis vpx wavpack wayland +X xinerama +xv xvmc ${NLS_IUSE}"
 
 BDEPEND="
 	app-arch/xz-utils
 	>=sys-devel/libtool-2.2.6b
 	virtual/pkgconfig
 "
-RDEPEND="${NLS_RDEPEND}
+RDEPEND="
 	dev-libs/libxdg-basedir
 	media-libs/libdvdnav
-	media-video/ffmpeg:0=
+	media-video/ffmpeg:=
 	sys-libs/zlib:=
 	virtual/libiconv
 	a52? ( media-libs/a52dec )
@@ -43,13 +43,14 @@ RDEPEND="${NLS_RDEPEND}
 	alsa? ( media-libs/alsa-lib )
 	bluray? ( >=media-libs/libbluray-0.2.1:= )
 	css? ( >=media-libs/libdvdcss-1.2.10 )
+	dav1d? ( media-libs/dav1d:= )
 	dts? ( media-libs/libdca )
 	dxr3? ( media-libs/libfame )
-	flac? ( media-libs/flac )
+	flac? ( media-libs/flac:= )
 	gtk? ( x11-libs/gdk-pixbuf:2 )
 	imagemagick? ( virtual/imagemagick-tools )
 	jack? ( virtual/jack )
-	jpeg? ( virtual/jpeg:0 )
+	jpeg? ( media-libs/libjpeg-turbo:= )
 	libcaca? ( media-libs/libcaca )
 	mad? ( media-libs/libmad )
 	mng? ( media-libs/libmng:= )
@@ -77,30 +78,29 @@ RDEPEND="${NLS_RDEPEND}
 		media-libs/freetype:2
 	)
 	v4l? ( media-libs/libv4l )
-	vaapi? ( x11-libs/libva:0=[X,opengl] )
+	vaapi? ( media-libs/libva:=[X] )
 	vcd? (
 		>=media-video/vcdimager-0.7.23
-		dev-libs/libcdio:0=[-minimal]
+		dev-libs/libcdio:=[-minimal]
 	)
 	vdpau? ( x11-libs/libvdpau )
 	vorbis? (
 		media-libs/libogg
 		media-libs/libvorbis
 	)
-	vpx? ( media-libs/libvpx:0= )
+	vpx? ( media-libs/libvpx:= )
 	wavpack? ( media-sound/wavpack )
 	wayland? ( dev-libs/wayland )
 	X? (
 		x11-libs/libX11
 		x11-libs/libXext
-		x11-libs/libxcb
+		x11-libs/libxcb:=
 	)
 	xinerama? ( x11-libs/libXinerama )
 	xv? ( x11-libs/libXv )
 	xvmc? ( x11-libs/libXvMC )
 "
 DEPEND="${RDEPEND}
-	${NLS_DEPEND}
 	oss? ( virtual/os-headers )
 	v4l? ( virtual/os-headers )
 	X? (
@@ -152,23 +152,25 @@ src_configure() {
 		--disable-v4l
 		--disable-w32dll
 		--enable-avformat
+		--enable-ipv6
 		--with-external-dvdnav
 		--with-real-codecs-path=/usr/$(get_libdir)/codecs
 		--with-w32-path=${win32dir}
 		--with-xv-path=/usr/$(get_libdir)
 		--without-esound
 		--without-fusionsound
+		# Added dav1d for now. Could support both? Does it need to be XOR?
+		--without-libaom
 		$(use_enable a52 a52dec)
 		$(use_enable aac faad)
 		$(use_enable aalib)
-		$(use_enable altivec)
+		$(use_enable cpu_flags_ppc_altivec altivec)
 		$(use_enable bluray)
 		$(use_enable dts)
 		$(use_enable dvb)
 		$(use_enable dxr3)
 		$(use_enable fbcon fb)
 		$(use_enable gtk gdkpixbuf)
-		$(use_enable ipv6)
 		$(use_enable jpeg libjpeg)
 		$(use_enable mad)
 		$(use_enable mmap)
@@ -194,6 +196,7 @@ src_configure() {
 		$(use_enable vpx)
 		$(use_enable wayland)
 		$(use_with alsa)
+		$(use_with dav1d)
 		$(use_with flac libflac)
 		$(use_with imagemagick)
 		$(use_with jack)

@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 
 inherit python-r1 verify-sig
 
@@ -25,7 +25,7 @@ RESTRICT="test"
 DEPEND="${PYTHON_DEPS}
 	hfst? ( >=dev-util/hfstospell-0.5.0 )"
 RDEPEND="${DEPEND}"
-BDEPEND="verify-sig? ( app-crypt/openpgp-keys-voikko )"
+BDEPEND="verify-sig? ( sec-keys/openpgp-keys-voikko )"
 
 VERIFY_SIG_OPENPGP_KEY_PATH=${BROOT}/usr/share/openpgp-keys/voikko.asc
 

@@ -1,11 +1,11 @@
-# Copyright 2020 Gentoo Authors
+# Copyright 2020-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit meson
 
-DESCRIPTION="event timer executor loop"
+DESCRIPTION="Event timer executor loop"
 HOMEPAGE="https://github.com/any1/aml/"
 
 if [[ ${PV} == 9999 ]]; then
@@ -13,16 +13,28 @@ if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/any1/aml.git"
 else
 	SRC_URI="https://github.com/any1/aml/archive/v${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64 ~x86"
+	KEYWORDS="~amd64 ~loong ~riscv ~x86"
 fi
 
 LICENSE="ISC"
 SLOT="0"
 IUSE="examples"
 
+DEPEND="elibc_musl? ( sys-libs/queue-standalone )"
+
+src_prepare() {
+	default
+
+	# The bundled copy includes cdefs which breaks on musl and
+	# this header is already available on glibc.
+	# bug #828806
+	rm include/sys/queue.h || die
+}
+
 src_configure() {
 	local emesonargs=(
 		$(meson_use examples)
 	)
+
 	meson_src_configure
 }

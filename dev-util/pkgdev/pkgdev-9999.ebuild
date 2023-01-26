@@ -1,18 +1,19 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
-DISTUTILS_IN_SOURCE_BUILD=1
-inherit distutils-r1
+DISTUTILS_USE_PEP517=standalone
+PYTHON_COMPAT=( python3_{9..11} )
+inherit distutils-r1 optfeature
 
 if [[ ${PV} == *9999 ]] ; then
-	EGIT_REPO_URI="https://github.com/pkgcore/pkgdev.git"
+	EGIT_REPO_URI="https://anongit.gentoo.org/git/proj/pkgcore/pkgdev.git
+		https://github.com/pkgcore/pkgdev.git"
 	inherit git-r3
 else
 	SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm64 ~ppc64 ~riscv ~sparc ~x64-macos"
+	KEYWORDS="~amd64 ~arm ~arm64 ~hppa ~ia64 ~loong ~ppc ~ppc64 ~riscv ~sparc ~x86 ~x64-macos"
 fi
 
 DESCRIPTION="Collection of tools for Gentoo development"
@@ -20,45 +21,52 @@ HOMEPAGE="https://github.com/pkgcore/pkgdev"
 
 LICENSE="BSD MIT"
 SLOT="0"
+IUSE="doc"
 
 if [[ ${PV} == *9999 ]] ; then
-	# https://github.com/pkgcore/pkgdev/blob/main/requirements/dev.txt
 	RDEPEND="
 		~dev-python/snakeoil-9999[${PYTHON_USEDEP}]
 		~dev-util/pkgcheck-9999[${PYTHON_USEDEP}]
 		~sys-apps/pkgcore-9999[${PYTHON_USEDEP}]
 	"
 else
-	# https://github.com/pkgcore/pkgdev/blob/main/requirements/install.txt
 	RDEPEND="
-		>=dev-python/snakeoil-0.9.6[${PYTHON_USEDEP}]
-		>=dev-util/pkgcheck-0.10.0[${PYTHON_USEDEP}]
-		>=sys-apps/pkgcore-0.12.0[${PYTHON_USEDEP}]
+		>=dev-python/snakeoil-0.10.3[${PYTHON_USEDEP}]
+		>=dev-util/pkgcheck-0.10.16[${PYTHON_USEDEP}]
+		>=sys-apps/pkgcore-0.12.16[${PYTHON_USEDEP}]
 	"
 fi
 
-# Uses pytest but we want to use the setup.py runner to get generated modules
-BDEPEND+="test? ( dev-python/pytest )"
-RDEPEND+="dev-vcs/git"
+RDEPEND+="
+	dev-vcs/git
+"
+BDEPEND="
+	>=dev-python/flit_core-3.8[${PYTHON_USEDEP}]
+	test? (
+		x11-misc/xdg-utils
+	)
+"
 
-distutils_enable_sphinx doc
-distutils_enable_tests setup.py
+distutils_enable_sphinx doc \
+	">=dev-python/snakeoil-0.10.3" \
+	dev-python/tomli
+distutils_enable_tests pytest
+
+python_compile_all() {
+	use doc && emake PYTHON="${EPYTHON}" man
+
+	sphinx_compile_all # HTML pages only
+}
 
 python_install_all() {
-	# We'll generate man pages ourselves
-	# Revisit when a release is made
-	# to pregenerate them, making USE=doc
-	# for generating the real HTML docs only.
-	if use doc ; then
-		cd doc || die
-		emake man
-		doman _build/man/*
+	# If USE=doc, there'll be newly generated docs which we install instead.
+	if use doc || [[ ${PV} != *9999 ]]; then
+		doman build/sphinx/man/*
 	fi
 
-	cd .. || die
-
-	# HTML pages only
-	sphinx_compile_all
-
 	distutils-r1_python_install_all
+}
+
+pkg_postinst() {
+	optfeature "sending email support" x11-misc/xdg-utils
 }

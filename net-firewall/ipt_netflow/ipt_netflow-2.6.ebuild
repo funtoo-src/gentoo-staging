@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -32,6 +32,8 @@ PATCHES=(
 	"${FILESDIR}/${PN}-2.0-configure.patch" # bug #455984
 	"${FILESDIR}/${PN}-2.6-gentoo.patch"
 	"${FILESDIR}/${P}-ref_module_fix.patch" # bug #781014
+	"${FILESDIR}/${P}-fix-linux-headers-5.14.patch" # bug #813993
+
 )
 
 pkg_setup() {
@@ -49,7 +51,7 @@ pkg_setup() {
 	fi
 
 	BUILD_TARGETS="all"
-	MODULE_NAMES="ipt_NETFLOW(ipt_netflow:${S})"
+	MODULE_NAMES="ipt_NETFLOW(ipt_netflow)"
 	IPT_LIB="/usr/$(get_libdir)/xtables"
 
 	linux-mod_pkg_setup

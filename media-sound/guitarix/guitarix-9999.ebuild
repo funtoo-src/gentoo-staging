@@ -1,10 +1,13 @@
-# Copyright 2019-2020 Gentoo Authors
+# Copyright 2019-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{9..10} )
 PYTHON_REQ_USE='threads(+)'
+
+EGIT_OVERRIDE_REPO_ENYOJS_BOOTPLATE="https://github.com/enyojs/bootplate.git"
+EGIT_OVERRIDE_BRANCH_ENYOJS_BOOTPLATE="master"
 
 inherit python-any-r1 waf-utils xdg git-r3
 
@@ -26,11 +29,11 @@ DEPEND="
 	dev-cpp/glibmm:2
 	dev-cpp/gtkmm:3.0
 	dev-libs/glib:2
-	>=media-libs/libsndfile-1.0.17
-	>=media-libs/zita-convolver-3:=
+	media-libs/libsndfile
+	media-libs/zita-convolver:=
 	media-libs/zita-resampler
-	>=net-misc/curl-7.26.0
-	>=sci-libs/fftw-3.3.8:3.0=
+	net-misc/curl
+	sci-libs/fftw:3.0=
 	x11-libs/gtk+:3
 	lv2? ( media-libs/lv2 )
 	standalone? (

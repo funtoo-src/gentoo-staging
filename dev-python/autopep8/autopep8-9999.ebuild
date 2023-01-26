@@ -1,15 +1,19 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{7..10} pypy3 )
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{9..11} pypy3 )
 PYTHON_REQ_USE="threads(+)"
 
 inherit distutils-r1
 
 DESCRIPTION="Automatically formats Python code to conform to the PEP 8 style guide"
-HOMEPAGE="https://github.com/hhatto/autopep8 https://pypi.org/project/autopep8/"
+HOMEPAGE="
+	https://github.com/hhatto/autopep8/
+	https://pypi.org/project/autopep8/
+"
 if [[ ${PV} == *9999* ]]; then
 	EGIT_REPO_URI="https://github.com/hhatto/${PN}.git"
 	inherit git-r3
@@ -22,7 +26,10 @@ LICENSE="MIT"
 SLOT="0"
 
 RDEPEND="
-	>=dev-python/pycodestyle-2.7.0[${PYTHON_USEDEP}]
-	dev-python/toml[${PYTHON_USEDEP}]"
+	>=dev-python/pycodestyle-2.10[${PYTHON_USEDEP}]
+	$(python_gen_cond_dep '
+		dev-python/tomli[${PYTHON_USEDEP}]
+	' 3.{8..10})
+"
 
-distutils_enable_tests setup.py
+distutils_enable_tests pytest

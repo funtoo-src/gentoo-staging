@@ -17,6 +17,8 @@ fi
 LICENSE="MIT"
 SLOT="0"
 
+IUSE="+dedupe lowmem hardened"
+
 # missing test.sh script
 # https://github.com/jbruchon/jdupes/issues/191
 RESTRICT="test"
@@ -28,7 +30,12 @@ src_prepare() {
 
 src_compile() {
 	tc-export CC
-	default
+	local myconf=(
+		$(usex dedupe 'ENABLE_DEDUPE=1' '')
+		$(usex lowmem 'LOW_MEMORY=1' '')
+		$(usex hardened 'HARDEN=1' '')
+	)
+	emake ${myconf[@]}
 }
 
 src_install() {

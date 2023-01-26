@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 ECM_HANDBOOK="forceoptional"
 ECM_TEST="forceoptional"
@@ -14,7 +14,7 @@ HOMEPAGE="https://calligra.org/plan/"
 
 if [[ ${KDE_BUILD_TYPE} == release ]]; then
 	SRC_URI="mirror://kde/stable/calligra/${PV}/${PN}-${PV}.tar.xz"
-	KEYWORDS="amd64 x86"
+	KEYWORDS="amd64 ~riscv x86"
 fi
 
 LICENSE="GPL-2"
@@ -74,7 +74,7 @@ RDEPEND="${DEPEND}
 	>=dev-qt/qtsvg-${QTMIN}:5
 "
 
-RESTRICT+=" test"
+RESTRICT="test"
 
 src_configure() {
 	local mycmakeargs=(

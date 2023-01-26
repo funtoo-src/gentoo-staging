@@ -1,8 +1,8 @@
-# Copyright 2010-2021 Gentoo Authors
+# Copyright 2010-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="7"
-PYTHON_COMPAT=(python{3_7,3_8,3_9})
+EAPI="8"
+PYTHON_COMPAT=( python3_{9..10} )
 
 inherit elisp-common multiprocessing python-any-r1 toolchain-funcs
 
@@ -134,7 +134,7 @@ src_unpack() {
 
 		if use fcitx4; then
 			unpack fcitx-${PN}-${PV%%_p*}-${FCITX_MOZC_DATE}.tar.gz
-			mv mozc-${FCITX_MOZC_GIT_REVISION} fcitx-${PN}
+			mv mozc-${FCITX_MOZC_GIT_REVISION} fcitx-${PN} || die
 		fi
 	fi
 }
@@ -159,7 +159,7 @@ src_prepare() {
 	sed \
 		-e "s/def GypMain(options, unused_args):/def GypMain(options, gyp_args):/" \
 		-e "s/RunOrDie(gyp_command + gyp_options)/RunOrDie(gyp_command + gyp_options + gyp_args)/" \
-		-e "s/RunOrDie(\[ninja/&, '-j$(makeopts_jobs)', '-l$(makeopts_loadavg "${MAKEOPTS}" 0)', '-v'/" \
+		-e "s/RunOrDie(\[ninja/&, '-j$(makeopts_jobs "${MAKEOPTS}" 999)', '-l$(makeopts_loadavg "${MAKEOPTS}" 0)', '-v'/" \
 		-i build_mozc.py || die
 
 	local ar=($(tc-getAR))

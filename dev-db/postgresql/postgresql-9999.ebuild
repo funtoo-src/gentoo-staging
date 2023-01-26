@@ -1,12 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-PYTHON_COMPAT=( python3_{8,9,10} )
+PYTHON_COMPAT=( python3_{9,10,11} )
 
-inherit flag-o-matic git-r3 linux-info multilib pam prefix python-single-r1 \
-		systemd tmpfiles
+inherit flag-o-matic git-r3 linux-info pam python-single-r1 systemd tmpfiles
 
 KEYWORDS=""
 
@@ -18,9 +17,9 @@ LICENSE="POSTGRESQL GPL-2"
 DESCRIPTION="PostgreSQL RDBMS"
 HOMEPAGE="https://www.postgresql.org/"
 
-IUSE="debug icu kerberos kernel_linux ldap llvm lz4
+IUSE="debug icu kerberos ldap llvm +lz4
 	nls pam perl python +readline selinux server systemd
-	ssl static-libs tcl threads uuid xml zlib"
+	ssl static-libs tcl threads uuid xml zlib zstd"
 
 REQUIRED_USE="python? ( ${PYTHON_REQUIRED_USE} )"
 
@@ -32,7 +31,7 @@ sys-apps/less
 virtual/libintl
 icu? ( dev-libs/icu:= )
 kerberos? ( virtual/krb5 )
-ldap? ( net-nds/openldap )
+ldap? ( net-nds/openldap:= )
 llvm? (
 	sys-devel/llvm:=
 	sys-devel/clang:=
@@ -48,13 +47,13 @@ tcl? ( >=dev-lang/tcl-8:0= )
 uuid? ( dev-libs/ossp-uuid )
 xml? ( dev-libs/libxml2 dev-libs/libxslt )
 zlib? ( sys-libs/zlib )
+zstd? ( app-arch/zstd )
 "
 
 # uuid flags -- depend on sys-apps/util-linux for Linux libcs, or if no
 # supported libc in use depend on dev-libs/ossp-uuid. For BSD systems,
 # the libc includes UUID functions.
-UTIL_LINUX_LIBC=( elibc_{glibc,uclibc,musl} )
-BSD_LIBC=( elibc_{Free,Net,Open}BSD )
+UTIL_LINUX_LIBC=( elibc_{glibc,musl} )
 
 nest_usedep() {
 	local front back
@@ -66,11 +65,10 @@ nest_usedep() {
 	echo "${front}${1}${back}"
 }
 
-IUSE+=" ${UTIL_LINUX_LIBC[@]} ${BSD_LIBC[@]}"
 CDEPEND+="
 uuid? (
 	${UTIL_LINUX_LIBC[@]/%/? ( sys-apps/util-linux )}
-	$(nest_usedep ${UTIL_LINUX_LIBC[@]/#/!} ${BSD_LIBC[@]/#/!} dev-libs/ossp-uuid)
+	$(nest_usedep ${UTIL_LINUX_LIBC[@]/#/!} dev-libs/ossp-uuid)
 )"
 
 DEPEND="${CDEPEND}
@@ -148,9 +146,6 @@ src_configure() {
 		for i in ${UTIL_LINUX_LIBC[@]}; do
 			use ${i} && uuid_config="--with-uuid=e2fs"
 		done
-		for i in ${BSD_LIBC[@]}; do
-			use ${i} && uuid_config="--with-uuid=bsd"
-		done
 		[[ -z $uuid_config ]] && uuid_config="--with-uuid=ossp"
 	fi
 
@@ -178,6 +173,7 @@ src_configure() {
 		$(use_with xml libxml) \
 		$(use_with xml libxslt) \
 		$(use_with zlib) \
+		$(use_with zstd ) \
 		$(use_with systemd) \
 		${uuid_config}"
 	if use alpha; then

@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
-source tests-common.sh
+source tests-common.sh || exit
 
 inherit qmail
 
@@ -13,7 +13,8 @@ test_low_numbers() {
 
 	for i in $(seq 0 6); do
 		if is_prime ${i}; then
-			return tend 1 "${i} badly accepted"
+			tend 1 "${i} badly accepted"
+			return
 		fi
 	done
 

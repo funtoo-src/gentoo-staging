@@ -1,4 +1,4 @@
-# Copyright 2016-2020 Gentoo Authors
+# Copyright 2016-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # This file contains descriptions of L10N USE_EXPAND flags.
@@ -34,9 +34,7 @@ az - Azerbaijani
 be - Belarusian
 bea - Beaver
 bg - Bulgarian
-bla - Siksika
 bn - Bengali
-bn-BD - Bengali (Bangladesh)
 bn-IN - Bengali (India)
 bo - Tibetan
 br - Breton
@@ -49,7 +47,6 @@ ceb - Cebuano
 ch - Chamorro
 chr - Cherokee
 ckb - Central Kurdish
-cnr - Montenegrin
 cop - Coptic
 co - Corsican
 cs - Czech
@@ -59,6 +56,7 @@ cy - Welsh
 da - Danish
 de - German
 de-1901 - German (traditional orthography)
+de-AT - German (Austria)
 de-CH - German (Switzerland)
 de-DE - German (Germany)
 dgo - Dogri (individual language)
@@ -71,7 +69,6 @@ en - English
 en-AU - English (Australia)
 en-CA - English (Canada)
 en-GB - English (United Kingdom)
-en-NZ - English (New Zealand)
 en-US - English (United States)
 en-ZA - English (South Africa)
 eo - Esperanto
@@ -209,7 +206,6 @@ syc - Classical Syriac
 syr - Syriac
 szl - Silesian
 ta - Tamil
-ta-LK - Tamil (Sri Lanka)
 te - Telugu
 tet - Tetum
 tg - Tajik
@@ -239,5 +235,6 @@ yi - Yiddish
 yo - Yoruba
 zh - Chinese
 zh-CN - Chinese (China)
+zh-HK - Chinese (Hong Kong)
 zh-TW - Chinese (Taiwan)
 zu - Zulu

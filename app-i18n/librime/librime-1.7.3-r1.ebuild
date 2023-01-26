@@ -1,4 +1,4 @@
-# Copyright 2012-2021 Gentoo Authors
+# Copyright 2012-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -22,7 +22,7 @@ fi
 
 LICENSE="BSD"
 SLOT="0/1-${PV}"
-KEYWORDS="amd64 arm64 ~ppc ~ppc64 x86"
+KEYWORDS="amd64 arm64 ppc ppc64 ~riscv x86"
 IUSE="debug test"
 RESTRICT="!test? ( test )"
 
@@ -30,7 +30,7 @@ BDEPEND="dev-libs/capnproto:0"
 RDEPEND="app-i18n/opencc:0=
 	>=dev-cpp/glog-0.3.5:0=
 	dev-cpp/yaml-cpp:0=
-	dev-libs/boost:0=[threads(+)]
+	dev-libs/boost:=
 	dev-libs/capnproto:0=
 	dev-libs/leveldb:0=
 	dev-libs/marisa:0="

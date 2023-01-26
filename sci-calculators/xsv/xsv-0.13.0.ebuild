@@ -1,4 +1,4 @@
-# Copyright 2021 Gentoo Authors
+# Copyright 2021-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -54,13 +54,13 @@ winapi-x86_64-pc-windows-gnu-0.4.0
 
 inherit cargo
 
-DESCRIPTION="A fast CSV command line toolkit written in Rust."
+DESCRIPTION="A fast CSV command line toolkit written in Rust"
 HOMEPAGE="https://github.com/BurntSushi/xsv"
 SRC_URI="$(cargo_crate_uris ${CRATES})
 	https://github.com/BurntSushi/xsv/archive/refs/tags/${PV}.tar.gz -> ${P}.tar.gz"
 LICENSE="|| ( MIT Unlicense ) Apache-2.0 Boost-1.0 MIT Unlicense"
 SLOT="0"
-KEYWORDS="~amd64"
+KEYWORDS="amd64"
 IUSE=""
 
 BDEPEND="${RUST_DEPEND}"

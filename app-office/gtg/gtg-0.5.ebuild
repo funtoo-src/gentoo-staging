@@ -1,8 +1,8 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
-PYTHON_COMPAT=( python3_{8..9} )
+PYTHON_COMPAT=( python3_{9..10} )
 PYTHON_REQ_USE="xml(+)"
 
 inherit meson python-single-r1 xdg
@@ -49,6 +49,7 @@ BDEPEND="
 PATCHES=(
 	# Fixes tests, and mouse cursor with some themes
 	"${FILESDIR}"/${PV}-mouse-cursor-fixes{1,2,3}.patch
+	"${FILESDIR}"/0.5-Revert-meson-plugin-translation-apply-thing.patch
 )
 
 src_install() {

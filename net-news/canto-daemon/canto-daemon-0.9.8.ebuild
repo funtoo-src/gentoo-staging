@@ -1,12 +1,12 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-DISTUTILS_USE_SETUPTOOLS=no
-PYTHON_COMPAT=( python3_{8..10} )
+DISTUTILS_USE_PEP517=setuptools
+PYTHON_COMPAT=( python3_{9..10} )
 PYTHON_REQ_USE="xml(+),threads(+)"
-inherit distutils-r1 multilib
+inherit distutils-r1
 
 DESCRIPTION="Daemon part of Canto-NG RSS reader"
 HOMEPAGE="https://codezen.org/canto-ng/"

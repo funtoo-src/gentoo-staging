@@ -1,13 +1,13 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( pypy3 python3_{7..10} )
+PYTHON_COMPAT=( pypy3 python3_{9..10} )
 
 inherit distutils-r1
 
-DESCRIPTION="Easily create navigation for Flask applications."
+DESCRIPTION="Easily create navigation for Flask applications"
 HOMEPAGE="https://pythonhosted.org/flask-nav/"
 # docs are missing from PyPI tarballs
 # https://github.com/mbr/flask-nav/pull/12

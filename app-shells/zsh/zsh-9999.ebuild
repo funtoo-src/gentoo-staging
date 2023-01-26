@@ -1,7 +1,7 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit autotools flag-o-matic prefix
 
@@ -9,7 +9,7 @@ if [[ ${PV} == 9999* ]] ; then
 	inherit git-r3
 	EGIT_REPO_URI="https://git.code.sf.net/p/zsh/code"
 else
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 	SRC_URI="https://www.zsh.org/pub/${P}.tar.xz
 		https://www.zsh.org/pub/old/${P}.tar.xz
 		mirror://sourceforge/${PN}/${P}.tar.xz
@@ -24,7 +24,7 @@ HOMEPAGE="https://www.zsh.org/"
 
 LICENSE="ZSH gdbm? ( GPL-2 )"
 SLOT="0"
-IUSE="caps debug doc examples gdbm maildir pcre static unicode"
+IUSE="caps debug doc examples gdbm maildir pcre static"
 
 RDEPEND="
 	>=sys-libs/ncurses-5.1:0=
@@ -35,14 +35,13 @@ RDEPEND="
 		static? ( >=dev-libs/libpcre-3.9[static-libs] )
 	)
 	gdbm? ( sys-libs/gdbm:= )
-	!<sys-apps/baselayout-2.4.1
 "
 DEPEND="sys-apps/groff
 	${RDEPEND}"
 PDEPEND="
 	examples? ( app-doc/zsh-lovers )
 "
-if [[ ${PV} == 9999* ]] ; then
+if [[ ${PV} == *9999 ]] ; then
 	DEPEND+=" app-text/yodl
 		doc? (
 			sys-apps/texinfo
@@ -52,21 +51,21 @@ if [[ ${PV} == 9999* ]] ; then
 fi
 
 src_prepare() {
-	if [[ ${PV} != 9999* ]]; then
+	if [[ ${PV} != *9999 ]]; then
 		# fix zshall problem with soelim
 		ln -s Doc man1 || die
 		mv Doc/zshall.1 Doc/zshall.1.soelim || die
 		soelim Doc/zshall.1.soelim > Doc/zshall.1 || die
-
-		# add openrc specific options for init.d completion
-		eapply "${FILESDIR}"/${PN}-5.3-init.d-gentoo.diff
 	fi
+
+	# add openrc specific options for init.d completion
+	eapply "${FILESDIR}"/${PN}-5.3-init.d-gentoo.diff
 
 	default
 
 	hprefixify configure.ac
-	if [[ ${PV} == 9999* ]] ; then
-		sed -i "/^VERSION=/s/=.*/=${PV}/" Config/version.mk || die
+	if [[ ${PV} == *9999 ]] ; then
+		sed -i "/^VERSION=/s@=.*@=${PV}@" Config/version.mk || die
 	fi
 	eautoreconf
 }
@@ -80,12 +79,12 @@ src_configure() {
 		--enable-fndir="${EPREFIX}"/usr/share/zsh/${PV%_*}/functions
 		--enable-site-fndir="${EPREFIX}"/usr/share/zsh/site-functions
 		--enable-function-subdirs
+		--enable-multibyte
 		--with-tcsetpgrp
-		--with-term-lib="$(usex unicode 'tinfow ncursesw' 'tinfo ncurses')"
+		--with-term-lib='tinfow ncursesw'
 		$(use_enable maildir maildir-support)
 		$(use_enable pcre)
 		$(use_enable caps cap)
-		$(use_enable unicode multibyte)
 		$(use_enable gdbm)
 	)
 
@@ -127,8 +126,8 @@ src_configure() {
 src_compile() {
 	default
 
-	if [[ ${PV} == 9999* ]] && use doc ; then
-		emake -C Doc everything
+	if [[ ${PV} == *9999 ]] && use doc ; then
+		emake -C Doc everything pdf dvi
 	fi
 }
 

@@ -2,11 +2,13 @@ acct-group
 acct-user
 app-accessibility
 app-admin
+app-alternatives
 app-antivirus
 app-arch
 app-backup
 app-benchmarks
 app-cdr
+app-containers
 app-crypt
 app-dicts
 app-doc
@@ -47,7 +49,6 @@ dev-perl
 dev-php
 dev-python
 dev-qt
-dev-ros
 dev-ruby
 dev-scheme
 dev-tcltk
@@ -121,7 +122,6 @@ net-voip
 net-vpn
 net-wireless
 perl-core
-ros-meta
 sci-astronomy
 sci-biology
 sci-calculators
@@ -133,6 +133,7 @@ sci-mathematics
 sci-misc
 sci-physics
 sci-visualization
+sec-keys
 sec-policy
 sys-apps
 sys-auth

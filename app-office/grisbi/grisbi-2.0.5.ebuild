@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -7,12 +7,12 @@ inherit gnome2
 
 DESCRIPTION="Grisbi is a personal accounting application for Linux"
 HOMEPAGE="http://www.grisbi.org https://github.com/grisbi/grisbi"
-SRC_URI="mirror://sourceforge/${PN}/grisbi%20stable/2.0.x/${P}.tar.bz2"
+SRC_URI="mirror://sourceforge/${PN}/grisbi%20stable/$(ver_cut 1-2).x/${P}.tar.bz2"
 IUSE="goffice nls ofx ssl"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86"
+KEYWORDS="amd64 ~ppc ~x86"
 
 RDEPEND="
 	dev-libs/glib:2

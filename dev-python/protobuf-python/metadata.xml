@@ -6,13 +6,14 @@
 		<name>Arfrever Frehtes Taifersar Arahesis</name>
 	</maintainer>
 	<maintainer type="project">
-		<email>python@gentoo.org</email>
-		<name>Python</name>
+		<email>cjk@gentoo.org</email>
+		<name>Cjk</name>
 	</maintainer>
 	<slots>
 		<subslots>Soname version number of Protobuf</subslots>
 	</slots>
 	<upstream>
 		<remote-id type="github">protocolbuffers/protobuf</remote-id>
+		<remote-id type="pypi">protobuf</remote-id>
 	</upstream>
 </pkgmetadata>

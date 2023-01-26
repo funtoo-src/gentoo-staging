@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ if [[ ${PV} != *9999* ]]; then
 		SRC_URI="https://github.com/quassel/quassel/archive/refs/tags/${PV/_/-}.tar.gz -> ${P}.tar.gz"
 	else
 		SRC_URI="https://quassel-irc.org/pub/${MY_P}.tar.bz2"
-		KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86 ~amd64-linux ~sparc-solaris"
+		KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86 ~amd64-linux ~sparc-solaris"
 	fi
 	S="${WORKDIR}/${MY_P}"
 else
@@ -24,15 +24,14 @@ HOMEPAGE="https://quassel-irc.org/"
 
 LICENSE="GPL-3"
 SLOT="0"
-IUSE="bundled-icons crypt +dbus debug kde ldap monolithic oxygen postgres +server snorenotify spell syslog test urlpreview X"
-# Can't seem to find itself (libraries)
-RESTRICT="!test? ( test ) test"
+IUSE="bundled-icons crypt +dbus debug gui kde ldap monolithic oxygen postgres +server snorenotify spell syslog test urlpreview"
+RESTRICT="!test? ( test )"
 
 SERVER_DEPEND="acct-group/quassel
 	acct-user/quassel
 	dev-qt/qtscript:5
 	crypt? ( app-crypt/qca:2[ssl] )
-	ldap? ( net-nds/openldap )
+	ldap? ( net-nds/openldap:= )
 	postgres? ( dev-qt/qtsql:5[postgres] )
 	!postgres? ( dev-qt/qtsql:5[sqlite] dev-db/sqlite:3[threadsafe(+),-secure-delete] )
 	syslog? ( virtual/logger )"
@@ -59,7 +58,7 @@ GUI_DEPEND="dev-qt/qtgui:5
 	snorenotify? ( >=x11-libs/snorenotify-0.7.0 )
 	spell? ( kde-frameworks/sonnet:5 )
 	urlpreview? ( dev-qt/qtwebengine:5[widgets] )"
-DEPEND=">=dev-libs/boost-1.54:=
+DEPEND="dev-libs/boost:=
 	dev-qt/qtcore:5
 	dev-qt/qtnetwork:5[ssl]
 	sys-libs/zlib
@@ -69,21 +68,23 @@ DEPEND=">=dev-libs/boost-1.54:=
 	)
 	!monolithic? (
 		server? ( ${SERVER_DEPEND} )
-		X? ( ${GUI_DEPEND} )
+		gui? ( ${GUI_DEPEND} )
 	)"
 RDEPEND="${DEPEND}"
 BDEPEND="dev-qt/linguist-tools:5
 	kde-frameworks/extra-cmake-modules:5"
 
+DEPEND+=" test? ( dev-cpp/gtest dev-qt/qttest )"
+
 DOCS=( AUTHORS ChangeLog README.md )
 
-REQUIRED_USE="|| ( X server monolithic )
+REQUIRED_USE="|| ( gui server monolithic )
 	crypt? ( || ( server monolithic ) )
 	kde? ( dbus spell )
 	ldap? ( || ( server monolithic ) )
 	postgres? ( || ( server monolithic ) )
-	snorenotify? ( || ( X monolithic ) )
-	spell? ( || ( X monolithic ) )
+	snorenotify? ( || ( gui monolithic ) )
+	spell? ( || ( gui monolithic ) )
 	syslog? ( || ( server monolithic ) )"
 
 src_configure() {
@@ -94,18 +95,25 @@ src_configure() {
 		-DEMBED_DATA=OFF
 		-DWITH_WEBKIT=OFF
 		-DWITH_BUNDLED_ICONS=$(usex bundled-icons)
-		$(cmake_use_find_package dbus dbusmenu-qt5)
-		$(cmake_use_find_package dbus Qt5DBus)
 		-DWITH_KDE=$(usex kde)
 		-DWITH_LDAP=$(usex ldap)
 		-DWANT_MONO=$(usex monolithic)
 		-DWITH_OXYGEN_ICONS=$(usex oxygen)
 		-DWANT_CORE=$(usex server)
-		$(cmake_use_find_package snorenotify LibsnoreQt5)
-		$(cmake_use_find_package spell KF5Sonnet)
 		-DWITH_WEBENGINE=$(usex urlpreview)
-		-DWANT_QTCLIENT=$(usex X)
+		-DWANT_QTCLIENT=$(usex gui)
 	)
+
+	if use gui || use monolithic ; then
+		# We can't always pass these (avoid "unused" warning)
+		# bug #830708
+		mycmakeargs+=(
+			$(cmake_use_find_package dbus dbusmenu-qt5)
+			$(cmake_use_find_package dbus Qt5DBus)
+			$(cmake_use_find_package snorenotify LibsnoreQt5)
+			$(cmake_use_find_package spell KF5Sonnet)
+		)
+	fi
 
 	if use server || use monolithic ; then
 		mycmakeargs+=( $(cmake_use_find_package crypt Qca-qt5) )
@@ -130,6 +138,10 @@ src_install() {
 		insinto /etc/logrotate.d
 		newins "${FILESDIR}"/quassel.logrotate quassel
 	fi
+}
+
+src_test() {
+	LD_LIBRARY_PATH="${BUILD_DIR}/lib:${LD_LIBRARY_PATH}" cmake_src_test
 }
 
 pkg_postinst() {

@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-PYTHON_COMPAT=( python3_{7,8,9} )
+PYTHON_COMPAT=( python3_{9,10} )
 inherit git-r3 meson python-any-r1 readme.gentoo-r1 xdg-utils
 
 DESCRIPTION="SPICE server"
@@ -21,14 +21,14 @@ RESTRICT="!test? ( test )"
 # the libspice-server only uses the headers of libcacard
 RDEPEND="
 	dev-lang/orc
-	>=dev-libs/glib-2.22:2
+	>=dev-libs/glib-2.38:2
 	sys-libs/zlib
 	virtual/jpeg:0=
 	>=x11-libs/pixman-0.17.7
 	dev-libs/openssl:0=
 	lz4? ( app-arch/lz4:0= )
 	opus? ( media-libs/opus )
-	smartcard? ( >=app-emulation/libcacard-0.1.2 )
+	smartcard? ( >=app-emulation/libcacard-2.5.1 )
 	sasl? ( dev-libs/cyrus-sasl )
 	gstreamer? (
 		media-libs/gstreamer:1.0
@@ -39,6 +39,7 @@ DEPEND="${RDEPEND}
 	smartcard? ( app-emulation/qemu[smartcard] )
 	test? ( net-libs/glib-networking )"
 BDEPEND="${PYTHON_DEPS}
+	sys-devel/autoconf-archive
 	virtual/pkgconfig
 	$(python_gen_any_dep '
 		>=dev-python/pyparsing-1.5.6-r2[${PYTHON_USEDEP}]

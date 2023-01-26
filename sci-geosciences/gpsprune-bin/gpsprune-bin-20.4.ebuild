@@ -1,9 +1,11 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-DESCRIPTION="An application for viewing, editing and converting GPS data."
+inherit desktop
+
+DESCRIPTION="An application for viewing, editing and converting GPS data"
 HOMEPAGE="http://activityworkshop.net/software/gpsprune/index.html"
 SRC_URI="http://activityworkshop.net/software/gpsprune/gpsprune_${PV}.jar"
 
@@ -20,8 +22,7 @@ gpsprune_desktop="${WORKDIR}/gpsprune.desktop"
 
 S="${WORKDIR}"
 
-src_prepare()
-{
+src_prepare() {
 	default
 
 	# Provide the necessary files
@@ -49,8 +50,7 @@ src_prepare()
 	EOF
 }
 
-src_install()
-{
+src_install() {
 	insinto /opt/gpsprune
 	doins "gpsprune_${PV}.jar"
 	exeinto /usr/bin
@@ -61,6 +61,5 @@ src_install()
 		doins "icons/${size}/gpsprune.png"
 	done
 
-	insinto /usr/share/applications
-	doins gpsprune.desktop
+	domenu gpsprune.desktop
 }

@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-PYTHON_COMPAT=( python3_{7..9} )
-PYTHON_REQ_USE="xml"
+PYTHON_COMPAT=( python3_9 )
+PYTHON_REQ_USE="xml(+)"
 
 inherit python-r1 toolchain-funcs
 
@@ -20,7 +20,7 @@ if [[ ${PV} == 9999 ]] ; then
 	S="${WORKDIR}/${P}/${PN#selinux-}"
 else
 	SRC_URI="https://github.com/SELinuxProject/selinux/releases/download/${PV}/${P}.tar.gz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~mips ~x86"
+	KEYWORDS="amd64 arm arm64 ~mips x86"
 fi
 
 LICENSE="GPL-2"

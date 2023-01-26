@@ -1,59 +1,69 @@
-# Copyright 2019-2021 Gentoo Authors
+# Copyright 2019-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
-inherit cmake llvm
+LLVM_MAX_SLOT=15
+inherit cmake llvm check-reqs
 
 DESCRIPTION="A robust, optimal, and maintainable programming language"
 HOMEPAGE="https://ziglang.org/"
-LICENSE="MIT"
-SLOT="0"
-IUSE="test"
-RESTRICT="!test? ( test )"
-
 if [[ ${PV} == 9999 ]]; then
 	EGIT_REPO_URI="https://github.com/ziglang/zig.git"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/ziglang/zig/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~amd64"
+	SRC_URI="https://ziglang.org/download/${PV}/${P}.tar.xz"
+	KEYWORDS="~amd64 ~arm ~arm64"
 fi
+
+LICENSE="MIT"
+SLOT="0"
 
 BUILD_DIR="${S}/build"
 
-# According to zig's author, zig builds that do not support all targets are not
-# supported by the upstream project.
-ALL_LLVM_TARGETS=(
-	AArch64 AMDGPU ARM AVR BPF Hexagon Lanai Mips MSP430 NVPTX
-	PowerPC RISCV Sparc SystemZ WebAssembly X86 XCore
-)
-ALL_LLVM_TARGETS=( "${ALL_LLVM_TARGETS[@]/#/llvm_targets_}" )
-LLVM_TARGET_USEDEPS="${ALL_LLVM_TARGETS[@]}"
-
-LLVM_MAX_SLOT=13
+# Zig requires zstd and zlib compression support in LLVM, if using LLVM backend.
+# (non-LLVM backends don't require these)
+# They are not required "on their own", so please don't add them here.
+# You can check https://github.com/ziglang/zig-bootstrap in future, to see
+# options that are passed to LLVM CMake building (excluding "static" ofc).
+DEPEND="
+	sys-devel/clang:${LLVM_MAX_SLOT}=
+	sys-devel/lld:${LLVM_MAX_SLOT}=
+	sys-devel/llvm:${LLVM_MAX_SLOT}=[zstd]
+"
 
 RDEPEND="
-	sys-devel/clang:${LLVM_MAX_SLOT}
-	>=sys-devel/lld-12.0.0
-	<sys-devel/lld-14.0.0
-	sys-devel/llvm:${LLVM_MAX_SLOT}[${LLVM_TARGET_USEDEPS// /,}]
+	${DEPEND}
+	!dev-lang/zig-bin
 "
-DEPEND="${RDEPEND}"
+
+# see https://github.com/ziglang/zig/issues/3382
+QA_FLAGS_IGNORED="usr/bin/zig"
+
+# Since commit https://github.com/ziglang/zig/commit/e7d28344fa3ee81d6ad7ca5ce1f83d50d8502118
+# Zig uses self-hosted compiler only
+CHECKREQS_MEMORY="4G"
 
 llvm_check_deps() {
 	has_version "sys-devel/clang:${LLVM_SLOT}"
 }
 
+pkg_setup() {
+	llvm_pkg_setup
+	check-reqs_pkg_setup
+}
+
 src_configure() {
 	local mycmakeargs=(
 		-DZIG_USE_CCACHE=OFF
-		-DZIG_PREFER_CLANG_CPP_DYLIB=ON
+		-DZIG_SHARED_LLVM=ON
+		-DCMAKE_PREFIX_PATH=$(get_llvm_prefix ${LLVM_MAX_SLOT})
 	)
+
 	cmake_src_configure
 }
 
 src_test() {
 	cd "${BUILD_DIR}" || die
-	./zig build test || die
+	./zig2 build test -Dstatic-llvm=false -Denable-llvm=true -Dskip-non-native=true || die
 }

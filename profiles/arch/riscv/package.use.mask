@@ -1,21 +1,99 @@
-# Copyright 2019-2021 Gentoo Authors
+# Copyright 2019-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-# Sam James <sam@gentoo.org> (2021-10-26)
-# sys-libs/libhugetlbfs is not keyworded on ~riscv right now
-sys-apps/nvme-cli hugepages
+# Mike Rivnak <rivnakm1@gmail.com> (2022-11-30)
+# luajit is currently not supported on riscv
+app-editors/neovim lua_single_target_luajit
 
-# Michael Seifert <m.seifert@digitalernachschub.de> (2021-10-23)
-# dev-python/furo isn't keyworded here
-dev-python/argon2-cffi doc
+# Yixun Lan <dlan@gentoo.org> (2022-11-24)
+# depend on dev-libs/libpcre2[jit] which not supported yet, bug #879511
+www-servers/varnish jit
 
-# Alex Fan <alexfanqi@yahoo.com> (2021-10-11)
-# sci-libs/sundials fails several tests #817680
-sci-mathematics/octave sundials
+# Sam James <sam@gentoo.org> (2022-10-29)
+# pandoc not keyworded here, bug #878355
+app-admin/conky doc
 
-# Alex Fan <alexfanqi@yahoo.com> (2021-09-27)
-# depends on mysql
-kde-apps/akonadi mysql
+# Xin Yang <yangmame@icloud.com> (2022-10-18)
+# requires qtwebengine, bug #876301
+app-i18n/fcitx-libpinyin dictionary-manager
+
+# Yixun Lan <dlan@gentoo.org> (2022-01-27)
+# This target supports ASAN/etc...
+# Andreas K. Hüttel <dilfridge@gentoo.org> (2022-09-25)
+# Moved here from default/linux/...
+sys-devel/gcc -sanitize
+
+# Alexey Shvetsov <alexxy@gentoo.org> (2022-09-15)
+# Mask nvml use flag for slurm
+sys-cluster/slurm nvml
+
+# Jakov Smolić <jsmolic@gentoo.org> (2022-09-07)
+# Unkeyworded dependencies (xen-tools, aws stack), masking to reduce
+# the dependency graph
+net-analyzer/netdata xen
+
+# Jakov Smolić <jsmolic@gentoo.org> (2022-08-27)
+# depends on <sys-libs/libfaketime-0.9.7 which is not available on riscv
+app-admin/rsyslog jemalloc
+
+# Yixun Lan <dlan@gentoo.org> (2022-08-11)
+# luajit is currently not supported on riscv
+dev-util/bcc lua
+
+# Yu Gu <guyu2876@gmail.com> (2022-07-26)
+# Xen does not work on riscv, ceph not tested, bug #859625
+app-emulation/libvirt xen rbd
+
+# Sam James <sam@gentoo.org> (2022-07-02)
+# The required sys-libs/db slot is not keyworded on riscv
+dev-libs/cyrus-sasl berkdb
+
+# Sam James <sam@gentoo.org> (2022-06-26)
+# Avoid dragging in "heavy"  parts of dev-qt/* unless/until
+# somebody needs them. bug #816981, bug #854261.
+# Unfortunately, tests demand qtwebengine too.
+dev-python/QtPy pyside2 webengine
+dev-python/QtPy test
+
+# Jakov Smolić <jsmolic@gentoo.org> (2022-06-07)
+# riscv has no sanitizers unmasked for the time being, so
+# mask to prevent emerge from erroring out by default
+sys-devel/clang-runtime sanitize
+
+# Marek Szuba <marecki@gentoo.org> (2022-04-30)
+# net-wireless/sdrplay contains prebuilt binaries, currently available
+# upstream only for amd64/x86 and arm
+net-wireless/gr-osmosdr sdrplay
+
+# Jakov Smolić <jsmolic@gentoo.org> (2022-04-24)
+# sys-libs/db is being deprecated (bug #837629)
+# so avoid keywording 4.8 slot
+dev-lisp/clisp berkdb
+
+# Jakov Smolić <jsmolic@gentoo.org> (2022-04-07)
+# Depends on sys-cluster/ceph which pulls in valgrind, which is
+# unavailable on riscv currently
+sys-block/fio rbd
+
+# Jakov Smolić <jsmolic@gentoo.org> (2022-03-25)
+# sys-process/criu doesn't support riscv (bug #835975)
+# Upstream bug for criu: https://github.com/checkpoint-restore/criu/issues/1702
+app-containers/crun criu
+
+# Yongxinag Liang <tanekliang@gmail.com> (2022-01-09)
+# app-emulation/xen-tools doesn't support riscv yet
+app-emulation/qemu xen
+# unkeyworded depdendency - sys-cluster/ceph
+app-emulation/qemu rbd
+
+# Alexey Sokolov <alexey+gentoo@asokolov.org> (2012-12-25)
+# Requires dev-qt/qtwebengine
+sci-astronomy/stellarium webengine
+
+# Alex Fan <alex.fan.q@gmail.com> (2021-12-12)
+# dev-python/uvloop fails test #806412
+# but with it installed, anyio passes all tests
+dev-python/anyio test
 
 # Marek Szuba <marecki@gentoo.org> (2021-09-23)
 # mkdocs ecosystem only partly keyworded on riscv, has rather messy
@@ -24,24 +102,13 @@ dev-python/backrefs doc
 dev-python/pyspelling doc
 dev-python/wcmatch doc
 
-# Marek Szuba <marecki@gentoo.org> (2021-09-19)
-# media-gfx/nvidia-texture-tools reports arch as unknown, fails to build
-media-libs/devil nvtt
-
-# Alex Fan <alexfanqi@yahoo.com> (2021-09-13)
+# Alex Fan <alex.fan.q@gmail.com> (2022-05-16)
 # These depend on Haskell:
 #  - dev-vcs/darcs
 app-portage/layman darcs
 #  - app-text/pandoc
 sys-cluster/ceph pmdk
-
-# Sam James <sam@gentoo.org> (2021-09-12)
-# Marek Szuba <marecki@gentoo.org> (2021-07-05)
-# dev-ruby/asciidoctor isn't keyworded here
-app-admin/keepassxc doc
-dev-libs/nanomsg doc
-dev-util/ccache doc
-net-misc/chrony html
+app-text/nuspell doc
 
 # Alex Fan <alexfanqi@yahoo.com> (2021-09-15)
 # Marek Szuba <marecki@gentoo.org> (2021-09-07)
@@ -52,34 +119,18 @@ dev-ruby/capybara test
 #  - dev-qt/qtwebengine (bdepend)
 dev-python/ipython qt5
 kde-apps/marble webengine
+kde-plasma/discover webengine
 kde-plasma/kdeplasma-addons webengine
 kde-plasma/libksysguard webengine
 net-irc/quassel urlpreview
-
-# Marek Szuba <marecki@gentoo.org> (2021-09-07)
-# net-misc/memcached not keyworded yet due to failing tests (Bug #811477)
-dev-ruby/dalli test
 
 # Jonathan Davies <jpds@protonmail.com> (2021-09-03)
 # Requires CPU with SSSE3 support
 net-analyzer/suricata hyperscan
 
-# Marek Szuba <marecki@gentoo.org> (2021-09-02)
-# dev-python/pebble not keyworded here due to failing tests.
-# That said, with pebble-4.6.3 installed manually
-# (and without testing) all nbconvert-6.0.7 tests passed.
-dev-python/nbconvert test
-
 # Yixun Lan <dlan@gentoo.org> (2021-08-29)
-#  sys-apps/fwupd not tested, USE=spi,uefi,dell
-#  sys-apps/flashrom no risc-v support, bug 810880
-#  sys-apps/flashrom USE=introspection fail to build, bug 811321
-sys-apps/fwupd flashrom introspection spi uefi
-
-# Marek Szuba <marecki@gentoo.org> (2021-08-25)
-# sys-fabric/infinipath-psm does not support riscv
-sys-cluster/openmpi openmpi_fabrics_psm
-sys-fabric/ofed ofed_drivers_psm
+# sys-apps/fwupd not tested, USE=spi,uefi
+sys-apps/fwupd spi uefi
 
 # Marek Szuba <marecki@gentoo.org> (2021-08-23)
 # sys-cluster/ceph not keyworded here yet due to several dependencies
@@ -95,23 +146,13 @@ dev-lang/ruby xemacs
 # Yixun Lan <dlan@gentoo.org> (2021-08-20)
 # dependencies not keyworded/tested
 gnome-extra/sushi office
-gnome-base/gnome-control-center v4l
-gnome-base/gnome-shell telepathy browser-extension
-gnome-base/gdm accessibility
+gnome-base/gnome-shell browser-extension
 
 # Alex Fan <alexfanqi@yahoo.com> (2021-08-17)
 # dependencies not keyworded/tested
-kde-plasma/plasma-meta accessibility grub plymouth pulseaudio
-
-# Marek Szuba <marecki@gentoo.org> (2021-08-17)
-# sys-libs/libfaketime does not work properly on this arch
-sys-auth/sssd test
+kde-plasma/plasma-meta plymouth
 
 # Marek Szuba <marecki@gentoo.org> (2021-08-11)
-# dev-ruby/httpclient not keyworded here due to failing tests
-# (Bug #807727). That said, with httpclient-2.8.3 installed manually
-# (and without testing) all webmock-3.13.0 tests passed.
-dev-ruby/webmock test
 # Currently requires dev-lang/spidermonkey:68, which explicitly
 # does not support riscv. Hopefully temporary, see Bug #807772.
 net-libs/libproxy spidermonkey
@@ -123,8 +164,6 @@ net-libs/libproxy spidermonkey
 app-text/texlive pdfannotextractor
 #  - JDK
 media-libs/rubberband jni
-#  - dev-java/jackcess
-sci-libs/gdal mdb
 
 # Yixun Lan <dlan@gentoo.org> (2021-08-05)
 # Boost.Context can be built on riscv
@@ -155,7 +194,7 @@ media-gfx/gimp lua
 www-servers/nginx nginx_modules_http_lua
 
 # Marek Szuba <marecki@gentoo.org> (2021-07-11)
-# Causes 35 tests to fail with "fatal llvm error"
+# Causes 35 tests to fail with "fatal llvm error", bug #844946
 dev-db/postgresql llvm
 
 # Marek Szuba <marecki@gentoo.org> (2021-07-05)
@@ -163,25 +202,12 @@ dev-db/postgresql llvm
 sys-cluster/slurm ucx
 
 # Marek Szuba <marecki@gentoo.org> (2021-07-05)
-# net-dialup/mgetty fails to compile on this arch
-mail-mta/courier fax
-
-# Marek Szuba <marecki@gentoo.org> (2021-07-05)
 # Dependencies not keyworded here yet:
-#  - dev-cpp/glog, sci-libs/vtk
-media-libs/opencv contribsfm glog vtk
-#  - dev-util/aruba
-sys-block/thin-provisioning-tools test
-#  - sys-fabric/ofed
-sys-cluster/slurm ofed
+#  - sci-libs/vtk
+media-libs/opencv vtk
+sci-libs/opencascade vtk
 
 # This doesn't work for (any) riscv yet.
 dev-libs/libpcre2 jit
 dev-libs/libpcre jit
-<dev-vcs/git-2.31.0 pcre-jit
 www-servers/nginx pcre-jit
-
-# app-shells/fish not keyworded due to failing tests (Bug #807742).
-# That said, with fish-3.3.1-r1 installed manually (and without testing)
-# all argcomplete-1.12.3 tests passed.
-dev-python/argcomplete test

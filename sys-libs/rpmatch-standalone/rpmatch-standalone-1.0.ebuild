@@ -1,4 +1,4 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=6
@@ -11,12 +11,10 @@ SRC_URI="https://github.com/pullmoll/musl-rpmatch/archive/v${PV}.tar.gz -> ${P}.
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="~amd64 ~arm ~mips ~ppc ~x86"
+KEYWORDS="amd64 arm arm64 ~mips ppc ppc64 ~riscv x86"
 IUSE="static-libs"
 
-DEPEND="
-	!sys-libs/glibc
-	!sys-libs/uclibc"
+RDEPEND="!sys-libs/glibc"
 
 S="${WORKDIR}/musl-rpmatch-${PV}"
 

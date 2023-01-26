@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=8
 
-PYTHON_COMPAT=( python3_{8..10} )
+PYTHON_COMPAT=( python3_{9..11} )
 
 inherit flag-o-matic meson-multilib python-any-r1 xdg-utils
 
@@ -14,14 +14,15 @@ if [[ ${PV} = 9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/harfbuzz/harfbuzz.git"
 	inherit git-r3
 else
-	SRC_URI="https://github.com/${PN}/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
-	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+	SRC_URI="https://github.com/harfbuzz/harfbuzz/releases/download/${PV}/${P}.tar.xz"
+	KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~loong ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 fi
 
 LICENSE="Old-MIT ISC icu"
 # 0.9.18 introduced the harfbuzz-icu split; bug #472416
 # 3.0.0 dropped some unstable APIs; bug #813705
-SLOT="0/3.0.0"
+# 6.0.0 changed libharfbuzz-subset.so ABI
+SLOT="0/6.0.0"
 
 IUSE="+cairo debug doc experimental +glib +graphite icu +introspection test +truetype"
 RESTRICT="!test? ( test )"
@@ -57,18 +58,19 @@ src_prepare() {
 
 	xdg_environment_reset
 
+	# bug #726120
 	sed -i \
 		-e '/tests\/macos\.tests/d' \
 		test/shape/data/in-house/Makefile.sources \
-		|| die # bug 726120
+		|| die
 
-	# bug 618772
+	# bug #618772
 	append-cxxflags -std=c++14
 
-	# bug 790359
+	# bug #790359
 	filter-flags -fexceptions -fthreadsafe-statics
 
-	# bug 762415
+	# bug #762415
 	local pyscript
 	for pyscript in $(find -type f -name "*.py") ; do
 		python_fix_shebang -q "${pyscript}"
@@ -76,7 +78,7 @@ src_prepare() {
 }
 
 multilib_src_configure() {
-	# harfbuzz-gobject only used for instrospection, bug #535852
+	# harfbuzz-gobject only used for introspection, bug #535852
 	local emesonargs=(
 		-Dcoretext="disabled"
 		-Dchafa="disabled"
@@ -94,5 +96,6 @@ multilib_src_configure() {
 
 		$(meson_use experimental experimental_api)
 	)
+
 	meson_src_configure
 }

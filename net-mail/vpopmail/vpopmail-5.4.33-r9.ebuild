@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ SRC_URI="mirror://sourceforge/${PN}/${P}.tar.gz"
 
 LICENSE="GPL-2"
 SLOT="0"
-KEYWORDS="amd64 arm ~hppa ~ia64 ppc ppc64 ~s390 sparc x86"
+KEYWORDS="amd64 arm ~hppa ~ia64 ~ppc ppc64 ~s390 sparc x86"
 IUSE="clearpasswd ipalias maildrop mysql postgres spamassassin"
 REQUIRED_USE="mysql? ( !postgres )"
 
@@ -41,6 +41,7 @@ PATCHES=(
 	"${FILESDIR}"/${PN}-5.4.33-check-crypt-return-value-for-NULL.patch
 	"${FILESDIR}"/${PN}-5.4.33-use-proper-printf-format-strings.patch
 	"${FILESDIR}"/${PN}-5.4.33-vpgsql-onchange.patch
+	"${FILESDIR}"/${PN}-5.4.33-avoid-duplicate-definitions-of-MYSQL_READ_-and-MYSQL.patch
 )
 DOCS=(
 	ChangeLog

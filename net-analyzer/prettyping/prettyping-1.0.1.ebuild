@@ -1,9 +1,9 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
 
-DESCRIPTION="Ping wrapper that produces coloured, easily readable output."
+DESCRIPTION="Ping wrapper that produces coloured, easily readable output"
 HOMEPAGE="http://denilson.sa.nom.br/prettyping/"
 SRC_URI="https://github.com/denilsonsa/prettyping/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
@@ -13,7 +13,7 @@ KEYWORDS="amd64 ~arm ~arm64 ~x86"
 
 RDEPEND="app-shells/bash
 	net-misc/iputils
-	virtual/awk"
+	app-alternatives/awk"
 
 src_install() {
 	dobin prettyping

@@ -1,9 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
+EAPI=8
 
-inherit flag-o-matic toolchain-funcs versionator java-pkg-opt-2
+inherit flag-o-matic toolchain-funcs java-pkg-opt-2
 
 DESCRIPTION="Artistic Style is a re-indenter and reformatter for C++, C and Java source code"
 HOMEPAGE="http://astyle.sourceforge.net/"
@@ -11,7 +11,7 @@ SRC_URI="mirror://sourceforge/astyle/astyle_${PV}_linux.tar.gz"
 
 LICENSE="MIT"
 SLOT="0/3.1"
-KEYWORDS="amd64 ~arm64 ppc ppc64 x86 ~amd64-linux ~x86-linux ~ppc-macos"
+KEYWORDS="amd64 arm64 ppc ppc64 ~riscv x86 ~amd64-linux ~x86-linux ~ppc-macos"
 IUSE="examples java static-libs"
 
 DEPEND="app-arch/xz-utils
@@ -57,11 +57,11 @@ src_install() {
 	local libdestdir="/usr/$(get_libdir)"
 
 	dolib.so "${libastylename}"
-	dosym "${libastylename}" "${libdestdir}/lib${PN}.so.$(get_major_version)"
+	dosym "${libastylename}" "${libdestdir}/lib${PN}.so.$(ver_cut 1)"
 	dosym "${libastylename}" "${libdestdir}/lib${PN}.so"
 	if use java ; then
 		dolib.so "${libastylejname}"
-		dosym "${libastylejname}" "${libdestdir}/lib${PN}j.so.$(get_major_version)"
+		dosym "${libastylejname}" "${libdestdir}/lib${PN}j.so.$(ver_cut 1)"
 		dosym "${libastylejname}" "${libdestdir}/lib${PN}j.so"
 	fi
 	if use static-libs ; then
@@ -75,15 +75,4 @@ src_install() {
 	fi
 	local HTML_DOCS=( doc/. )
 	einstalldocs
-}
-
-pkg_postinst() {
-	if [[ -n "$REPLACING_VERSIONS" && "$(get_major_version $REPLACING_VERSIONS)" -lt 3 ]]; then
-		elog "Artistic Style 3.0 introduces new configuration verbiage more fitting"
-		elog "for modern use. Some options that were valid in 2.06 or older are now"
-		elog "deprecated. For more information, consult astyle's release notes at"
-		elog "http://astyle.sourceforge.net/news.html. To view offline, see:"
-		elog
-		elog "${EROOT%/}/usr/share/doc/${P}/html"
-	fi
 }

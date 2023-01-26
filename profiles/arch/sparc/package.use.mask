@@ -1,13 +1,85 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Sam James <sam@gentoo.org> (2022-12-26)
+# Unkeyworded dependencies
+dev-util/diffoscope opendocument pascal pdf R
+
+# Matt Turner <mattst88@gentoo.org> (2022-12-16)
+# gui-libs/gtk is not keyworded here
+app-crypt/gcr:4 gtk
+
+# Sam James <sam@gentoo.org> (2022-11-24)
+# Pulls in gjs which is broken on sparc, bug #882071
+app-crypt/libsecret test-rust
+dev-util/glade gjs
+gnome-base/gnome-menus test
+gnome-base/nautilus previewer
+
+# Florian Schmaus <flow@gentoo.org> (2022-11-23)
+# avoid larger deptree, bug #882593
+dev-python/bracex doc
+
+# Sam James <sam@gentoo.org> (2022-10-29)
+# pandoc not keyworded here, bug #878355
+app-admin/conky doc
+
+# Andrey Grozin <grozin@gentoo.org> (2022-09-02)
+# dev-libs/capstone not keyworded
+dev-lisp/sbcl capstone
+
+# Arthur Zamarin <arthurzam@gentoo.org> (2022-08-15)
+# deps not keyworded
+dev-util/pkgcheck emacs
+
+# Sam James <sam@gentoo.org> (2022-07-27)
+# sys-devel/lld is not keyworded on sparc
+>=dev-lang/spidermonkey-78 lto
+
+# Matt Turner <mattst88@gentoo.org> (2022-06-25)
+# net-libs/libqrtr-glib not keyworded
+net-misc/modemmanager qrtr
+
+# Sam James <sam@gentoo.org> (2022-06-25)
+# sys-devel/lld lacks sparc support right now
+dev-lang/rust wasm
+
+# Sam James <sam@gentoo.org> (2022-06-25)
+# We're not (yet?) providing our own tarballs for these and
+# upstream don't offer them for this arch (see bug #769467).
+dev-lang/rust-bin clippy doc rustfmt rust-analyzer
+
+# Nickolas Raymond Kaczynski <nrk@disroot.org> (2022-04-24)
+# Dependencies are missing keywords
+media-libs/imlib2 svg heif
+
+# Matt Turner <mattst88@gentoo.org> (2022-04-18)
+# app-text/nuspell is not keyworded
+app-text/enchant nuspell
+
+# Matt Turner <mattst88@gentoo.org> (2022-04-16)
+# net-misc/freerdp is not keyworded
+dev-libs/weston rdp
+
+# Lars Wendler <polynomial-c@gentoo.org> (2022-04-01)
+# gnome-base/librsvg missing keywords
+media-libs/freetype svg
+
+# Adel Kara Slimane <adel.ks@zegrapher.com> (2022-03-14)
+# Untested useflag on other arches, needs keywording
+media-video/ffmpeg vmaf
+
+# Sam James <sam@gentoo.org> (2022-03-06)
+# Unkeyworded dependencies
+net-mail/cyrus-imapd http
+
+# Daniel Pielmeier <billie@gentoo.org> (2021-11-07)
+# gnome-base/librsvg is not keyworded here, bug #807130
+app-admin/conky lua-rsvg
 
 # Sam James <sam@gentoo.org> (2021-11-05)
 # Avoid keywording unnecessary depenencies for now, bug #804115
 dev-python/scipy pythran
-
-# Michael Seifert <m.seifert@digitalernachschub.de> (2021-10-23)
-# dev-python/furo isn't keyworded here
-dev-python/argon2-cffi doc
 
 # Sam James <sam@gentoo.org> (2021-10-16)
 # Requires dev-db/mariadb which, at last check, was broken on sparc.
@@ -44,9 +116,10 @@ dev-cpp/eigen test
 
 # Sam James <sam@gentoo.org> (2021-04-27)
 # Deps not yet tested/keyworded.
-sys-devel/clang default-compiler-rt default-libcxx default-lld
-sys-devel/clang-runtime compiler-rt libcxx
-sys-devel/llvm gold z3
+sys-devel/clang default-compiler-rt default-lld
+sys-devel/clang-common default-compiler-rt default-lld
+sys-devel/clang-runtime compiler-rt
+sys-devel/llvm z3
 
 # Sam James <sam@gentoo.org> (2021-03-19)
 # On sparc, we have to force sys-apps/grep[libsigsegv]
@@ -66,6 +139,7 @@ media-libs/rubberband jni
 # media-libs/libavif isn't keyworded here
 media-libs/gd avif heif
 net-libs/webkit-gtk avif
+media-gfx/graphicsmagick heif
 
 # Sam James <sam@gentoo.org> (2021-02-26)
 # dev-libs/efl not keyworded here
@@ -91,7 +165,7 @@ net-libs/webkit-gtk gamepad
 
 # Joonas Niilola <juippis@gentoo.org> (2020-11-16)
 # app-text/libgepub not yet keyworded on this arch. #754762
-xfce-extra/tumbler epub
+xfce-base/tumbler epub
 
 # Arfrever Frehtes Taifersar Arahesis <arfrever.fta@gmail.com> (2020-10-14)
 # app-i18n/fcitx:4 not keyworded.
@@ -100,10 +174,6 @@ media-libs/libsdl2 fcitx4
 # Matt Turner <mattst88@gentoo.org> (2020-08-11)
 # No drivers on this architecture support Vulkan
 media-libs/mesa vulkan vulkan-overlay zink
-
-# Mart Raudsepp <leio@gentoo.org> (2020-08-02)
-# sparc has no virtual/rust support, needed by newer gnome-base/librsvg, et al
->=media-gfx/eog-3.33.1 svg
 
 # Robin H. Johnson <robbat2@gentoo.org> (2020-07-02)
 # Mask io-uring & zbc pending keywording
@@ -142,10 +212,6 @@ dev-python/pyopengl test
 # Rolf Eike Beer <eike@sf-mail.de> (2020-04-22)
 # dev-libs/criterion not yet keyworded
 >=app-admin/syslog-ng-3.25 test
-
-# Rolf Eike Beer <eike@sf-mail.de> (2020-04-20)
-# Not keyworded on sparc
-net-misc/whois xcrypt
 
 # Rolf Eike Beer <eike@sf-mail.de> (2020-04-20)
 # test dependencies for USE=gstreamer not keyworded on sparc
@@ -214,7 +280,7 @@ net-misc/scponly unison
 
 # Rolf Eike Beer <eike@sf-mail.de> (2020-04-06)
 # hardware related dependencies are not keyworded
-net-analyzer/nagios-plugin-check_raid 3ware aacraid hpa hpsa megaraid-sas megaraid-scsi mpt-sas2 mpt
+net-analyzer/nagios-plugin-check_raid 3ware aacraid hpa hpsa megaraid-sas mpt-sas2 mpt
 
 # Rolf Eike Beer <eike@sf-mail.de> (2020-04-04)
 # dev-python/pymongo is not keyworded
@@ -240,10 +306,6 @@ dev-libs/dbus-c++ ecore
 # PPS should work on all arches, but only keyworded on some arches
 >=net-misc/ntp-4.2.6_p3-r1 -parse-clocks
 
-# Matt Turner <mattst88@gentoo.org> (2019-12-01)
-# Fails to build, bug #676060
-dev-libs/openssl asm
-
 # Eugene Bright <eugene@bright.gdn> (2019-09-09)
 # Missing keyword on dev-embedded/libjaylink
 sys-apps/flashrom jlink-spi
@@ -268,11 +330,6 @@ net-print/cups-filters pdf
 # dev-games/openscenegraph is a heavy unkeyworded dependency.
 # Skip keywording it for now.
 app-office/scribus osg
-
-# Sergei Trofimovich <slyfox@gentoo.org> (2018-06-17)
-# Mask broken HIPE support on sparc32 (bug #656618)
-dev-lang/erlang hipe
-net-im/ejabberd hipe
 
 # Sergei Trofimovich <slyfox@gentoo.org> (2018-05-08)
 # Mask USE=games to avoid unkeyworded games-util/qstat.
@@ -306,7 +363,8 @@ net-libs/gnutls test-full
 
 # Michał Górny <mgorny@gentoo.org> (2017-08-07)
 # Requires USE=bluetooth that is masked in this profile.
-media-sound/pulseaudio native-headset ofono-headset
+media-sound/pulseaudio ofono-headset
+media-sound/pulseaudio-daemon ofono-headset
 net-misc/ofono dundee
 
 # Michał Górny <mgorny@gentoo.org> (2017-08-07)
@@ -434,10 +492,6 @@ sci-visualization/gnuplot libcerf
 # Missing keywords, bug #507490
 net-misc/modemmanager mbim
 
-# Pacho Ramos <pacho@gentoo.org> (2014-03-15)
-# Missing keywords, bug #504672
->=net-misc/vinagre-3.10 rdp
-
 # Pacho Ramos <pacho@gentoo.org> (2014-02-22)
 # Missing keywords, bug #495250
 >=gnome-base/gnome-extra-apps-3.10 tracker
@@ -457,10 +511,6 @@ media-libs/libgphoto2 serial
 # Pacho Ramos <pacho@gentoo.org> (2013-11-28)
 # Missing keywords, bug #492820
 net-im/telepathy-connection-managers sipe
-
-# Mark Wright <gienah@gentoo.org> (2013-10-26)
-# template-haskell not yet available
-dev-haskell/dataenc test
 
 # Pacho Ramos <pacho@gentoo.org> (2013-07-20)
 # Keywords pending, bug #476710
@@ -493,9 +543,9 @@ media-libs/phonon gstreamer vlc
 
 # Robin H Johnson <robbat2@gentoo.org> (2012-11-01)
 # MySQL 5.5 wants systemtap, tcmalloc & jemalloc
->=dev-db/mysql-5.5 systemtap tcmalloc jemalloc
->=dev-db/mariadb-5.5 systemtap tcmalloc jemalloc
->=dev-db/percona-server-5.5 tcmalloc jemalloc
+>=dev-db/mysql-5.5 systemtap jemalloc
+>=dev-db/mariadb-5.5 systemtap jemalloc
+>=dev-db/percona-server-5.5 jemalloc
 
 # Diego Elio Pettenò <flameeyes@gentoo.org> (2012-06-24)
 # Requires libpcre with jit
@@ -516,7 +566,7 @@ net-vpn/tinc vde
 
 # Alexey Shvetsov <alexxy@gentoo.org> (2011-12-17)
 # Mask use numa for openmpi
-sys-cluster/openmpi openmpi_fabrics_psm openmpi_fabrics_knem openmpi_fabrics_ofed openmpi_fabrics_dapl openmpi_rm_slurm openmpi_ofed_features_rdmacm openmpi_ofed_features_control-hdr-padding openmpi_ofed_features_connectx-xrc openmpi_ofed_features_udcm openmpi_ofed_features_dynamic-sl openmpi_ofed_features_failover
+sys-cluster/openmpi openmpi_fabrics_knem openmpi_fabrics_ofed openmpi_rm_slurm openmpi_ofed_features_rdmacm openmpi_ofed_features_control-hdr-padding openmpi_ofed_features_udcm openmpi_ofed_features_dynamic-sl
 
 # Raúl Porcel <armin76@gentoo.org> (2011-10-08)
 # Needs media-sound/lilypond
@@ -529,7 +579,6 @@ media-video/x264-encoder ffmpegsource
 # Alexey Shvetsov <alexxy@gentoo.org> (2011-08-31)
 # Mask numa use flag per bug #381313
 sys-apps/hwloc numa
-sys-cluster/openmpi numa
 
 # Pacho Ramos <pacho@gentoo.org> (2011-01-27)
 # missing keywords on needed plugins

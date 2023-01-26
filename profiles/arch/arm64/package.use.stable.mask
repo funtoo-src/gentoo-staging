@@ -1,5 +1,19 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Sam James <sam@gentoo.org> (2022-07-06)
+# sci-libs/sundials is not marked stable on arm64
+sci-mathematics/octave sundials
+
+# Sam James <sam@gentoo.org> (2022-03-07)
+# sys-cluster/torque not marked stable on arm64
+# nor is sys-cluster/slurm yet
+sys-cluster/openmpi openmpi_rm_pbs openmpi_rm_slurm
+
+# Michał Górny <mgorny@gentoo.org> (2021-12-31)
+# Don't apply stable masks to python-exec since we're forcing every
+# impl there anyway. Please keep this in sync with use.stable.mask.
+dev-lang/python-exec -python_targets_pypy3
 
 # Sam James <sam@gentoo.org> (2021-10-25)
 # Has unstable dependencies we don't want to drag in yet
@@ -65,25 +79,15 @@ media-sound/jack2 ieee1394
 app-emulation/qemu smartcard rbd xen virgl
 app-emulation/qemu glusterfs io-uring
 app-emulation/spice smartcard
-
-# Sam James <sam@gentoo.org> (2020-07-30)
-# glslang is not yet stable on arm64
-media-libs/mesa vulkan-overlay
-
-# Sam James <sam@gentoo.org> (2020-07-16)
-# Needs unstable dev-python/networkx
-# bug #732492
-app-portage/nattka depgraph-order
+net-misc/spice-gtk smartcard
 
 # Sam James <sam@gentoo.org> (2020-06-29)
 # Deps not yet stable
 dev-python/pymongo test
-app-shells/bash-completion test
 net-misc/ntpsec rclock_oncore rclock_pps
 dev-util/bcc test
 dev-libs/libisoburn launch-frontend launch-frontend-setuid frontend-optional
 net-analyzer/rrdtool rados
-sys-fs/multipath-tools rbd
 www-servers/uwsgi uwsgi_plugins_rados
 dev-libs/boost mpi
 media-plugins/gst-plugins-meta aac dts dv lame libvisual taglib vcd wavpack
@@ -136,11 +140,6 @@ sys-auth/pambase pam_krb5 pam_ssh
 sys-block/thin-provisioning-tools test
 sys-devel/distcc gssapi
 
-# Michał Górny <mgorny@gentoo.org> (2018-02-28)
-# Requires masked dependent flags.
-net-fs/samba ads
-
 # Michał Górny <mgorny@gentoo.org> (2018-02-19)
 # Masked due to unstable deps.
-dev-db/redis tcmalloc
 net-analyzer/netcat crypt

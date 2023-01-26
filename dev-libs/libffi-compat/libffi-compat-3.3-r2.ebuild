@@ -1,8 +1,9 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-inherit libtool multilib-minimal
+
+inherit multilib-minimal
 
 DESCRIPTION="a portable, high level programming interface to various calling conventions"
 HOMEPAGE="https://sourceware.org/libffi/"
@@ -10,7 +11,7 @@ SRC_URI="https://github.com/libffi/libffi/releases/download/v${PV}/libffi-${PV}.
 
 LICENSE="MIT"
 SLOT="7" # SONAME=libffi.so.7
-KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc ~x86 ~x64-cygwin ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
+KEYWORDS="~alpha amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~riscv ~s390 ~sparc x86 ~x64-cygwin ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
 IUSE="debug pax-kernel test"
 
 RESTRICT="!test? ( test )"
@@ -46,7 +47,6 @@ src_prepare() {
 }
 
 multilib_src_configure() {
-	use userland_BSD && export HOST="${CHOST}"
 	# --includedir= path maintains a few properties:
 	# 1. have stable name across libffi versions: some packages like
 	#    dev-lang/ghc or kde-frameworks/networkmanager-qt embed

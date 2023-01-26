@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="7"
@@ -11,15 +11,13 @@ DESCRIPTION="Small C library to run an HTTP server as part of another applicatio
 HOMEPAGE="https://www.gnu.org/software/libmicrohttpd/"
 SRC_URI="mirror://gnu/${PN}/${MY_P}.tar.gz"
 
-PATCHES=( "${FILESDIR}"/${PN}-0.9.73-test-ssl3.patch )
-
 LICENSE="LGPL-2.1"
 SLOT="0/12"
 KEYWORDS="amd64 x86"
 IUSE="+epoll ssl static-libs test"
 RESTRICT="!test? ( test )"
 
-RDEPEND="ssl? ( >net-libs/gnutls-2.12.20:= )"
+RDEPEND="ssl? ( >net-libs/gnutls-2.12.20:=[${MULTILIB_USEDEP}] )"
 
 # We disable tests below because they're broken,
 # but if enabled, we'll need this.
@@ -29,6 +27,8 @@ DEPEND="${RDEPEND}
 S=${WORKDIR}/${MY_P}
 
 DOCS="AUTHORS NEWS README ChangeLog"
+
+PATCHES=( "${FILESDIR}"/${PN}-0.9.73-test-ssl3.patch )
 
 multilib_src_configure() {
 	ECONF_SOURCE="${S}" \

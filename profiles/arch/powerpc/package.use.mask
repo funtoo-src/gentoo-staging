@@ -1,5 +1,43 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
+
+# Sam James <sam@gentoo.org> (2022-11-19)
+# Drags in Rails (propshaft->rails)
+dev-ruby/actiontext test
+dev-ruby/actionmailbox test
+
+# Florian Schmaus <flow@gentoo.org> (2022-11-23)
+# avoid larger deptree, bug #882593
+dev-python/bracex doc
+
+# Sam James <sam@gentoo.org> (2022-10-29)
+# pandoc not keyworded here, bug #878355
+app-admin/conky doc
+
+# Bernard Cafarelli <voyageur@gentoo.org> (2022-10-17)
+# media-libs/libheif not keyworded
+media-gfx/geeqie heif
+
+# Sam James <sam@gentoo.org> (2022-10-16)
+# dev-cpp/notcurses not keyworded here
+media-sound/snd notcurses
+
+# Andrew Ammerlaan <andrewammerlaan@gentoo.org> (2022-09-23)
+# Only PyQt5 is keyworded on pcc64 at the moment.
+# Mask the other Qt4Python implementations
+dev-python/QtPy pyside2 pyqt6 pyside6
+
+# Matt Turner <mattst88@gentoo.org> (2022-04-18)
+# app-text/nuspell is not keyworded
+app-text/enchant nuspell
+
+# Adel Kara Slimane <adel.ks@zegrapher.com> (2022-03-14)
+# Untested useflag on other arches, needs keywording
+media-video/ffmpeg vmaf
+
+# Sam James <sam@gentoo.org> (2021-11-15)
+# librtas is available on (only) ppc*
+sys-apps/util-linux -rtas
 
 # Michael Seifert <m.seifert@digitalernachschub.de> (2021-10-23)
 # dev-python/furo isn't keyworded here
@@ -41,7 +79,7 @@ net-libs/webkit-gtk avif
 
 # Georgy Yakovlev <gyakovlev@gentoo.org> (2020-10-05)
 # criu is masked on big-endian ppc*
-app-emulation/crun criu
+app-containers/crun criu
 
 # Sergei Trofimovich <slyfox@gentoo.org> (2020-08-07)
 # dev-vcs/darcs is not keyworded on ppc/ppc64
@@ -62,14 +100,6 @@ media-video/obs-studio nvenc
 # Mikle Kolyada <zlogene@gentoo.org> (2020-05-06)
 # No deps keyworded
 dev-python/pbr test
-
-# Benda Xu <heroxbd@gentoo.org> (2020-04-27)
-# tests optionally depend on dev-python/hypothesis
-dev-python/numpy test
-
-# Lars Wendler <polynomial-c@gentoo.org> (2020-04-20)
-# Not keyworded on ppc
-net-misc/whois xcrypt
 
 # Georgy Yakovlev <gyakovlev@gentoo.org> (2020-04-19)
 # Unsupported on ppc/ppc64
@@ -97,7 +127,7 @@ sys-firmware/seabios -debug
 
 # Conrad Kostecki <conikost@gentoo.org> (2019-08-17)
 # app-misc/graphlcd-base won't work on PowerPC/PowerPC64
-app-misc/lcdproc freetype lcd_devices_glcd png
+app-misc/lcdproc lcd_devices_glcd png
 
 # Patrick McLean <chutzpah@gentoo.org> (2019-04-15)
 # deps not available on platform
@@ -106,7 +136,6 @@ sys-cluster/ceph babeltrace lttng
 # Patrick McLean <chutzpah@gentoo.org> (2019-04-15)
 # pending re-keyword request, bug 615400
 net-analyzer/rrdtool rados
-sys-fs/multipath-tools rbd
 www-servers/uwsgi uwsgi_plugins_rados
 
 # Thomas Deutschmann <whissi@gentoo.org> (2019-02-26)
@@ -145,6 +174,7 @@ app-emulation/qemu capstone
 # Amy Liffey <amynka@gentoo.org (2018-01-21)
 # dev-libs/cereal not keyworded for ppc
 media-libs/opencv contribdnn
+media-plugins/frei0r-plugins facedetect
 
 # Robin H. Johnson <robbat2@gentoo.org> (2017-11-10)
 # Masked for dependencies:
@@ -157,7 +187,7 @@ x11-themes/qtcurve plasma
 
 # Jonathan Scruggs <j.scruggs@gmail.com> (2017-09-23)
 # dependencies not keyworded yet
-media-libs/openimageio field3d ptex
+media-libs/openimageio ptex
 
 # Arfrever Frehtes Taifersar Arahesis <arfrever.fta@gmail.com> (2017-08-22)
 # Dictionary Manager requires unkeyworded dev-qt/qtwebengine.
@@ -182,11 +212,8 @@ app-portage/g-sorcery bson
 # Michał Górny <mgorny@gentoo.org> (2017-03-24)
 # libcxx fails to compile on ppc*, #595744.
 sys-devel/clang default-libcxx
+sys-devel/clang-common default-libcxx
 sys-devel/clang-runtime libcxx
-
-# Andreas Sturmlechner <asturm@gentoo.org> (2017-02-27)
-# Requires dev-qt/qtwebengine, not keyworded on ppc
-sci-geosciences/gpsbabel gui
 
 # James Le Cuirot <chewi@gentoo.org> (2016-12-14)
 # DOSBox + OpenGLide is untested on this arch.
@@ -197,11 +224,6 @@ games-emulation/dosbox glide
 dev-db/mysql -numa
 dev-db/percona-server -numa
 
-# Davide Pesavento <pesa@gentoo.org> (2016-07-28)
-# The corresponding Qt5 modules are not keyworded on ppc, and we don't want to
-# keyword them solely because of PyQt5 while there are no other in-tree users.
-dev-python/PyQt5 bluetooth location speech
-
 # Michael Palimaka <kensington@gentoo.org> (2016-07-07)
 # Requires unkeyworded dependencies
 dev-vcs/subversion kwallet
@@ -210,15 +232,10 @@ net-libs/libproxy kde
 sys-auth/polkit kde
 sys-block/gparted kde
 virtual/notification-daemon kde
-x11-wm/sawfish kde
 
 # Pacho Ramos <pacho@gentoo.org> (2015-11-15)
 # Missing keywords
 media-sound/rhythmbox upnp-av
-
-# Pacho Ramos <pacho@gentoo.org> (2015-10-27)
-# Missing keywords
-net-wireless/blueman appindicator
 
 # Chí-Thanh Christopher Nguyễn <chithanh@gentoo.org> (2015-10-26)
 # x11-drivers/xf86-video-amdgpu is not keyworded
@@ -240,11 +257,6 @@ gnome-extra/sushi office
 # test dependencies need keywording
 dev-haskell/dlist test
 dev-haskell/haskell-src-exts test
-dev-util/bnfc test
-
-# Anthony G. Basile <blueness@gentoo.org> (2014-08-17)
-# This pulls in qemu[smartcard] which is masked
-net-misc/spice-gtk smartcard
 
 # Anthony G. Basile <blueness@gentoo.org> (2014-08-16)
 # Ultimately pulls in nodejs which is broken.
@@ -267,7 +279,8 @@ dev-ruby/actionpack test
 sys-block/fio rbd
 
 # Andreas K. Huettel <dilfridge@gentoo.org> (2014-06-14)
-# dependency sci-libs/vtk not keyworded on ppc yet
+# dependency sci-libs/vtk not keyworded on ppc yet, bug #778293
+sci-mathematics/maxima vtk
 media-libs/opencv vtk
 
 # Pacho Ramos <pacho@gentoo.org> (2013-02-22)
@@ -281,10 +294,6 @@ net-im/telepathy-connection-managers sipe
 # Pacho Ramos <pacho@gentoo.org> (2013-10-31)
 # Missing keywords, bug #478254
 gnome-base/gnome classic extras
-
-# Mark Wright <gienah@gentoo.org> (2013-10-26)
-# template-haskell not yet available
-dev-haskell/dataenc test
 
 # Agostino Sarubbo <ago@gentoo.org> (2013-08-24)
 # Klibc does not work anymore on ppc
@@ -310,12 +319,6 @@ x11-misc/colord argyllcms extra-print-profiles
 # Mask telepathy, no stable net-libs/telepathy-qt, bug #441456
 net-im/choqok telepathy
 
-# Robin H Johnson <robbat2@gentoo.org> (2012-11-01)
-# MySQL 5.5 wants systemtap, tcmalloc & jemalloc
->=dev-db/mysql-5.5 tcmalloc
->=dev-db/mariadb-5.5 tcmalloc
->=dev-db/percona-server-5.5 tcmalloc
-
 # Samuli Suominen <ssuominen@gentoo.org> (2012-09-27)
 # I don't want to open this can of worms yet. Feel free
 # to do so.
@@ -335,15 +338,11 @@ net-misc/connman ofono
 
 # Alexey Shvetsov <alexxy@gentoo.org> (2012-01-20)
 # Mask some use flags for openmpi due to unkeyworded deps
-sys-cluster/openmpi openmpi_fabrics_psm openmpi_fabrics_knem openmpi_fabrics_ofed openmpi_fabrics_dapl openmpi_rm_slurm openmpi_ofed_features_rdmacm openmpi_ofed_features_control-hdr-padding openmpi_ofed_features_connectx-xrc openmpi_ofed_features_udcm openmpi_ofed_features_dynamic-sl openmpi_ofed_features_failover
+sys-cluster/openmpi openmpi_fabrics_knem openmpi_fabrics_ofed openmpi_rm_slurm openmpi_ofed_features_rdmacm openmpi_ofed_features_control-hdr-padding openmpi_ofed_features_udcm openmpi_ofed_features_dynamic-sl
 
 # Patrick McLean <chutzpah@gentoo.org> (2011-09-07)
 # missing keywords on dependencies
 media-video/x264-encoder ffmpegsource
-
-# Kacper Kowalik <xarthisius@gentoo.org> (2011-08-10)
-# mask cuda dep for opencv bug 365451
-media-libs/opencv cuda
 
 # Doug Goldstein <cardoe@gentoo.org> (2011-05-27)
 # app-emulation/spice, app-emulation/xen, and sys-cluster/ceph

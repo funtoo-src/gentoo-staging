@@ -2,10 +2,6 @@
 <!DOCTYPE pkgmetadata SYSTEM "https://www.gentoo.org/dtd/metadata.dtd">
 <pkgmetadata>
 	<maintainer type="person" proxied="yes">
-		<email>c@roessner.co</email>
-		<name>Christian Roessner</name>
-	</maintainer>
-	<maintainer type="person" proxied="yes">
 		<email>arkamar@atlas.cz</email>
 		<name>Petr Vaněk</name>
 	</maintainer>
@@ -14,6 +10,6 @@
 		<name>Proxy Maintainers</name>
 	</maintainer>
 	<upstream>
-		<remote-id type="github">01org/hyperscan</remote-id>
+		<remote-id type="github">intel/hyperscan</remote-id>
 	</upstream>
 </pkgmetadata>

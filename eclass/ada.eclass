@@ -1,4 +1,4 @@
-# Copyright 2019 Gentoo Authors
+# Copyright 2019-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 # @ECLASS: ada.eclass
@@ -6,7 +6,7 @@
 # Ada team <ada@gentoo.org>
 # @AUTHOR:
 # Tupone Alfredo <tupone@gentoo.org>
-# @SUPPORTED_EAPIS: 6 7
+# @SUPPORTED_EAPIS: 7 8
 # @BLURB: An eclass for Ada packages
 # @DESCRIPTION:
 # This eclass set the IUSE and REQUIRED_USE to request the ADA_TARGET
@@ -23,21 +23,14 @@
 #
 # Mostly copied from python-single-r1.eclass
 
-case "${EAPI:-0}" in
-	0|1|2|3|4|5)
-		die "Unsupported EAPI=${EAPI:-0} (too old) for ${ECLASS}"
-		;;
-	6|7)
-		# EAPI=5 is required for sane USE_EXPAND dependencies
-		;;
-	*)
-		die "Unsupported EAPI=${EAPI} (unknown) for ${ECLASS}"
-		;;
+case ${EAPI} in
+	7|8) ;;
+	*) die "${ECLASS}: EAPI ${EAPI:-0} not supported" ;;
 esac
 
 EXPORT_FUNCTIONS pkg_setup
 
-# @ECLASS-VARIABLE: ADA_DEPS
+# @ECLASS_VARIABLE: ADA_DEPS
 # @OUTPUT_VARIABLE
 # @DESCRIPTION:
 # This is an eclass-generated Ada dependency string for all
@@ -53,12 +46,12 @@ EXPORT_FUNCTIONS pkg_setup
 # @CODE
 #
 
-# @ECLASS-VARIABLE: _ADA_ALL_IMPLS
+# @ECLASS_VARIABLE: _ADA_ALL_IMPLS
 # @INTERNAL
 # @DESCRIPTION:
 # All supported Ada implementations, most preferred last.
 _ADA_ALL_IMPLS=(
-	gnat_2019 gnat_2020 gnat_2021
+	gnat_2021 gcc_12_2_0
 )
 readonly _ADA_ALL_IMPLS
 
@@ -83,10 +76,10 @@ _ada_impl_supported() {
 	# keep in sync with _ADA_ALL_IMPLS!
 	# (not using that list because inline patterns shall be faster)
 	case "${impl}" in
-		gnat_2019)
+		gnat_2021)
 			return 0
 			;;
-		gnat_202[01])
+		gcc_12_2_0)
 			return 0
 			;;
 		*)
@@ -180,11 +173,11 @@ ada_export() {
 	local impl var
 
 	case "${1}" in
-		gnat_201[789])
+		gnat_2021)
 			impl=${1}
 			shift
 			;;
-		gnat_202[01])
+		gcc_12_2_0)
 			impl=${1}
 			shift
 			;;
@@ -200,17 +193,13 @@ ada_export() {
 	local gcc_pv
 	local slot
 	case "${impl}" in
-		gnat_2019)
-			gcc_pv=8.3.1
-			slot=8.3.1
-			;;
-		gnat_2020)
-			gcc_pv=9.3.1
-			slot=9.3.1
-			;;
 		gnat_2021)
-			gcc_pv=10.3.1
+			gcc_pv=10
 			slot=10
+			;;
+		gcc_12_2_0)
+			gcc_pv=12.2.0
+			slot=12
 			;;
 		*)
 			gcc_pv="9.9.9"
@@ -257,7 +246,14 @@ ada_export() {
 				debug-print "${FUNCNAME}: GNATCHOP = ${GNATCHOP}"
 				;;
 			ADA_PKG_DEP)
-				ADA_PKG_DEP="dev-lang/gnat-gpl:${slot}"
+				case "${impl}" in
+					gnat_2021)
+						ADA_PKG_DEP="dev-lang/gnat-gpl:${slot}[ada]"
+						;;
+					*)
+						ADA_PKG_DEP="=sys-devel/gcc-${gcc_pv}*[ada]"
+						;;
+				esac
 
 				# use-dep
 				if [[ ${ADA_REQ_USE} ]]; then

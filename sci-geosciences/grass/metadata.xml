@@ -15,13 +15,14 @@
 	</maintainer>
 	<longdescription>
 		The original GIS, yes the first one, developed by the US
-		Army Corp of Engineers, now an active open source GIS. See the GRASS Documentation
-		Project for more info http://grass.itc.it/gdp/index.php
+		Army Corp of Engineers, now an active free and open source GIS. See the GRASS Documentation
+		Project for more info https://grass.osgeo.org/.
 	</longdescription>
 	<use>
 		<flag name="geos">Use <pkg>sci-libs/geos</pkg> for v.buffer and adds extended options to the v.select module</flag>
-		<flag name="liblas">Include support for LAS and LAZ encoded LiDAR files through <pkg>sci-geosciences/liblas</pkg></flag>
+		<flag name="las">Include support for LAS and LAZ encoded LiDAR files through <pkg>sci-geosciences/liblas</pkg></flag>
 		<flag name="opencl">Enable OpenCL support</flag>
+		<flag name="pdal">Enable support for PDAL for point clouds via <pkg>sci-libs/pdal</pkg></flag>
 	</use>
 	<upstream>
 		<remote-id type="github">OSGeo/grass</remote-id>

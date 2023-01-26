@@ -1,4 +1,4 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -11,7 +11,7 @@ SRC_URI="mirror://gnu/gforth/${P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
-KEYWORDS="~amd64 ~ppc ~x86 ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris"
+KEYWORDS="~amd64 ~arm ~arm64 ~ppc ~riscv ~x86 ~x86-linux ~ppc-macos ~x64-macos ~sparc-solaris"
 IUSE="+check emacs"
 
 DEPEND="dev-libs/ffcall
@@ -36,7 +36,7 @@ src_prepare() {
 		export GNU_LIBTOOL=$LIBTOOL
 		# ./configure does not generate it, but slibtool assumes
 		# it's around
-		ln -s ${EPREFIX}/usr/bin/libtool libtool || die
+		ln -s "${EPREFIX}"/usr/bin/libtool libtool || die
 	fi
 
 	# We patches both configure and configure.ac.

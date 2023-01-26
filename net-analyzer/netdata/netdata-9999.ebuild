@@ -1,10 +1,10 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
-PYTHON_COMPAT=( python{3_8,3_9} )
+EAPI=8
+PYTHON_COMPAT=( python{3_9,3_10} )
 
-inherit autotools fcaps linux-info python-single-r1 systemd
+inherit autotools fcaps flag-o-matic linux-info python-single-r1 systemd toolchain-funcs
 
 if [[ ${PV} == *9999 ]] ; then
 	EGIT_REPO_URI="https://github.com/netdata/${PN}.git"
@@ -20,7 +20,7 @@ HOMEPAGE="https://github.com/netdata/netdata https://my-netdata.io/"
 
 LICENSE="GPL-3+ MIT BSD"
 SLOT="0"
-IUSE="caps cloud +compression cpu_flags_x86_sse2 cups +dbengine ipmi +jsonc kinesis +lto mongodb mysql nfacct nodejs postgres prometheus +python tor xen"
+IUSE="caps cloud +compression cpu_flags_x86_sse2 cups +dbengine ipmi +jsonc +lto mongodb mysql nfacct nodejs postgres prometheus +python tor xen"
 REQUIRED_USE="
 	mysql? ( python )
 	python? ( ${PYTHON_REQUIRED_USE} )
@@ -40,28 +40,28 @@ RDEPEND="
 	net-misc/curl
 	net-misc/wget
 	sys-apps/util-linux
-	virtual/awk
+	app-alternatives/awk
 	caps? ( sys-libs/libcap )
 	cups? ( net-print/cups )
 	dbengine? (
-		app-arch/lz4
+		app-arch/lz4:=
 		dev-libs/judy
 		dev-libs/openssl:=
 	)
-	dev-libs/libuv
+	dev-libs/libuv:=
+	cloud? ( dev-libs/protobuf:= )
 	compression? ( sys-libs/zlib )
 	ipmi? ( sys-libs/freeipmi )
 	jsonc? ( dev-libs/json-c:= )
-	kinesis? ( dev-libs/aws-sdk-cpp[kinesis] )
 	mongodb? ( dev-libs/mongo-c-driver )
 	nfacct? (
 		net-firewall/nfacct
-		net-libs/libmnl
+		net-libs/libmnl:=
 	)
 	nodejs? ( net-libs/nodejs )
 	prometheus? (
+		app-arch/snappy:=
 		dev-libs/protobuf:=
-		app-arch/snappy
 	)
 	python? (
 		${PYTHON_DEPS}
@@ -92,20 +92,26 @@ src_prepare() {
 }
 
 src_configure() {
+	if use ppc64; then
+		# bundled dlib does not support vsx on big-endian
+		# https://github.com/davisking/dlib/issues/397
+		[[ $(tc-endian) == big ]] && append-flags -mno-vsx
+	fi
+
 	econf \
 		--localstatedir="${EPREFIX}"/var \
 		--with-user=netdata \
+		--without-bundled-protobuf \
 		$(use_enable cloud) \
-		$(use_with cloud aclk-ng) \
 		$(use_enable jsonc) \
 		$(use_enable cups plugin-cups) \
 		$(use_enable dbengine) \
 		$(use_enable nfacct plugin-nfacct) \
 		$(use_enable ipmi plugin-freeipmi) \
-		$(use_enable kinesis backend-kinesis) \
+		--disable-exporting-kinesis \
 		$(use_enable lto lto) \
-		$(use_enable mongodb backend-mongodb) \
-		$(use_enable prometheus backend-prometheus-remote-write) \
+		$(use_enable mongodb exporting-mongodb) \
+		$(use_enable prometheus exporting-prometheus-remote-write) \
 		$(use_enable xen plugin-xenstat) \
 		$(use_enable cpu_flags_x86_sse2 x86-sse) \
 		$(use_with compression zlib)

@@ -1,4 +1,4 @@
-# Copyright 1999-2016 Gentoo Foundation
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI="6"
@@ -7,8 +7,8 @@ inherit flag-o-matic toolchain-funcs
 
 IUSE=""
 DESCRIPTION="Netkit - timed"
-SRC_URI="ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/${P}.tar.gz"
-HOMEPAGE="ftp://ftp.uk.linux.org/pub/linux/Networking/netkit/"
+HOMEPAGE="https://wiki.linuxfoundation.org/networking/netkit"
+SRC_URI="http://ftp.linux.org.uk/pub/linux/Networking/netkit/${P}.tar.gz"
 KEYWORDS="amd64 ~mips ppc ppc64 sparc x86"
 LICENSE="BSD GPL-2"
 SLOT="0"
@@ -28,7 +28,7 @@ src_prepare() {
 src_configure() {
 	# Note this is not an autoconf configure script. econf fails
 	append-flags -DCLK_TCK=CLOCKS_PER_SEC
-	./configure --prefix=/usr --with-c-compiler=$(tc-getCC) || die "bad configure"
+	./configure --prefix=/usr --with-c-compiler="$(tc-getCC)" || die "bad configure"
 }
 
 src_install() {

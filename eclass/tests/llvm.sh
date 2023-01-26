@@ -3,7 +3,7 @@
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
-source tests-common.sh
+source tests-common.sh || exit
 
 inherit llvm
 
@@ -72,13 +72,6 @@ eindent
 	check_prefix /broot/usr/lib/llvm/11 -b
 	LLVM_INSTALLED_SLOT=11 \
 	check_prefix /sysroot/eprefix/usr/lib/llvm/11 -d
-eoutdent
-
-ebegin "Testing check_setup_path EAPI 6 API"
-eindent
-	EAPI=6 \
-	LLVM_INSTALLED_SLOT=11 \
-	check_prefix /usr/lib/llvm/11 -d
 eoutdent
 
 BASEPATH=/usr/lib/ccache/bin:/usr/bin:/usr/sbin:/bin:/sbin

@@ -1,37 +1,46 @@
-# Copyright 1999-2021 Gentoo Authors
+# Copyright 1999-2022 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=7
+EAPI=8
 
 inherit cmake xdg-utils
 
 DESCRIPTION="Qt-based multitab terminal emulator"
-HOMEPAGE="https://lxqt.github.io/"
+HOMEPAGE="https://lxqt-project.org/"
 
 if [[ ${PV} = *9999* ]]; then
 	inherit git-r3
 	EGIT_REPO_URI="https://github.com/lxqt/${PN}.git"
 else
 	SRC_URI="https://github.com/lxqt/${PN}/releases/download/${PV}/${P}.tar.xz"
-	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~x86"
+	KEYWORDS="~amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
 fi
 
 LICENSE="GPL-2 GPL-2+"
 SLOT="0"
+IUSE="test"
+RESTRICT="!test? ( test )"
 
-BDEPEND=">=dev-util/lxqt-build-tools-0.9.0"
+BDEPEND=">=dev-util/lxqt-build-tools-0.12.0"
 DEPEND="
-	dev-qt/qtcore:5
-	dev-qt/qtdbus:5
-	dev-qt/qtgui:5
-	dev-qt/qtwidgets:5
-	dev-qt/qtx11extras:5
+	>=dev-qt/qtcore-5.15:5
+	>=dev-qt/qtdbus-5.15:5
+	>=dev-qt/qtgui-5.15:5
+	>=dev-qt/qtwidgets-5.15:5
+	>=dev-qt/qtx11extras-5.15:5
 	x11-libs/libX11
-	~x11-libs/qtermwidget-${PV}
+	~x11-libs/qtermwidget-${PV}:=
+	test? ( dev-qt/qttest:5 )
 "
 RDEPEND="${DEPEND}"
 
-PATCHES=( "${FILESDIR}/${PN}-0.16.1-appdata.patch" )
+src_configure() {
+	local mycmakeargs=(
+		-DBUILD_TESTS=$(usex test)
+	)
+
+	cmake_src_configure
+}
 
 pkg_postinst() {
 	xdg_icon_cache_update

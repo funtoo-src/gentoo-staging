@@ -1,4 +1,4 @@
-# Copyright 1999-2020 Gentoo Authors
+# Copyright 1999-2023 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
 EAPI=7
@@ -57,7 +57,7 @@ src_prepare() {
 src_configure() {
 	append-ldflags $(no-as-needed)
 
-	mycmakeargs=(
+	local mycmakeargs=(
 		-DVMCS_INSTALL_PREFIX="${EPREFIX}/usr"
 		-DARM64=$(usex arm64)
 	)
@@ -68,4 +68,8 @@ src_configure() {
 src_install() {
 	cmake_src_install
 	udev_dorules "${FILESDIR}/92-local-vchiq-permissions.rules"
+}
+
+pkg_postinst() {
+	udev_reload
 }
